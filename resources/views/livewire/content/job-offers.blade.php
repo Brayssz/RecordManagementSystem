@@ -178,7 +178,7 @@
 
             $(document).on('click', '.apply-job', function() {
                 const jobId = $(this).data('jobid');
-                const url = `{{ url('/create-application') }}?job_id=${jobId}`;
+                const url = `{{ url('/apply') }}?job_id=${jobId}`;
                 window.location.href = url;
             });
         </script>

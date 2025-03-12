@@ -81,9 +81,10 @@ class ApplicationForm extends Component
     protected function educationalAttainmentRules()
     {
         return [
-            'educational_attainments.*.document' => 'nullable|image|max:1024',
+            'educational_attainments.*.document' => 'required|image|max:1024',
         ];
     }
+
     protected function rules()
     {
         $passwordRules = $this->applicant_id
@@ -120,7 +121,7 @@ class ApplicationForm extends Component
             'postal_code' => 'required|string|max:10',
             'citizenship' => 'required|string|max:255',
             'password' => $passwordRules,
-            'photo' => 'nullable|image|max:1024',
+            'photo' => 'required|image|max:1024',
             'status' => 'nullable|string|max:255',
             'suffix' => 'nullable|string|max:255',
             'branch_id' => 'required|exists:branches,branch_id', 

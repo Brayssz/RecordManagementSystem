@@ -70,7 +70,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employer_id')->nullable();
             $table->string('country');
             $table->string('job_title');
-            $table->decimal('salary', 10, 2);
+            $table->string('salary');
             $table->text('job_description');
             $table->string('status');
             $table->text('job_qualifications');

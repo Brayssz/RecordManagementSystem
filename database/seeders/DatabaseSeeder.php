@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
                 'password'      => Hash::make('password123'), 
                 'contact_number' => '09123456789',
                 'date_of_birth' => '1990-01-01',
-                'position'      => 'Administrator',
+                'position'      => 'Admin',
                 'region'        => 'NCR',
                 'province'      => 'Metro Manila',
                 'municipality'  => 'Manila',

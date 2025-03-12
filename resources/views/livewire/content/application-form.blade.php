@@ -38,6 +38,9 @@
                                     <h4>Change Image</h4>
                                 </div>
                             </div>
+                            @error('photo')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="row">
@@ -215,7 +218,7 @@
 
                     console.log(`${property}: ${value}`);
 
-                   
+
                 }
             }
         </script>

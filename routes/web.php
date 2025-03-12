@@ -7,6 +7,7 @@ use App\Http\Controllers\Content\AppController;
 use App\Http\Controllers\Auth\ApplicantRegisterController;
 use App\Http\Controllers\Content\ApplicantController;
 use App\Http\Controllers\Content\ApplicationController;
+use App\Http\Controllers\Content\BranchController;
 use App\Http\Controllers\Content\EmployeeController;
 use App\Http\Controllers\Content\EmployerController;
 use App\Http\Controllers\Content\JobOfferController;
@@ -15,13 +16,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware(['employee'])->group(function () {
+    
+});
+
+Route::middleware(['employer'])->group(function () {
+    
+});
+
+Route::middleware(['applicant'])->group(function () {
+    
+});
+
 Route::post('/verify-email', [PasswordResetController::class, 'sendResetLink'])->name('verify-email');
 Route::post('/password-reset', [PasswordResetController::class, 'resetPassword'])->name('password-reset');
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/verify-login-otp', [LoginController::class, 'verifyLoginOTP']);
 Route::post('/resend-otp', [LoginController::class, 'resendOTP']);
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::get('/verification', [LoginController::class, 'showVerification'])->name('verification');
@@ -41,6 +54,8 @@ Route::get('/employees', [EmployeeController::class, 'showEmployees'])->name('em
 
 Route::get('/applicants', [ApplicantController::class, 'showApplicants'])->name('applicants');
 
+Route::get('/branches', [BranchController::class, 'showBranches'])->name('branches');
+
 Route::get('/employers', [EmployerController::class, 'showEmployers'])->name('employers');
 
 Route::get('/jobs', [JobOfferController::class, 'showJobOffers'])->name('jobs');
@@ -48,3 +63,5 @@ Route::get('/jobs', [JobOfferController::class, 'showJobOffers'])->name('jobs');
 Route::get('/job-offers', [JobOfferController::class, 'listJobOffers'])->name('job-offers');
 
 Route::get('/apply', [ApplicationController::class, 'showApplicationForm'])->name('apply');
+
+Route::get('/my-applications', [ApplicationController::class, 'showMyApplications'])->name('my-applications');

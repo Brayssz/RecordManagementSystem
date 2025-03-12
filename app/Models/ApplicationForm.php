@@ -12,4 +12,24 @@ class ApplicationForm extends Model
     protected $fillable = [
         'applicant_id', 'branch_id', 'job_id', 'application_date', 'status'
     ];
+
+    public function applicant()
+    {
+        return $this->belongsTo(Applicant::class, 'applicant_id');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class, 'application_id');
+    }
+
+    public function job()
+    {
+        return $this->belongsTo(JobOffer::class, 'job_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }

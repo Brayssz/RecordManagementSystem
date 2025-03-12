@@ -9,6 +9,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\UploadedFile;
 
 class JobOfferManagement extends Component
 {
@@ -63,7 +64,7 @@ class JobOfferManagement extends Component
 
     protected function rules()
     {
-        return [
+        $rules = [
             'employer_id' => 'required|integer',
             'country' => 'required|string|max:255',
             'job_title' => 'required|string|max:255',
@@ -84,17 +85,22 @@ class JobOfferManagement extends Component
                 'min:10000',
                 'max:500000',
                 function ($attribute, $value, $fail) {
-                    $rangeFrom = request('range_from'); // Properly retrieve range_from
+                    $rangeFrom = request('range_from'); 
                     if ($rangeFrom && $value < $rangeFrom) {
                         $fail("The to value must be greater than or equal to the from value.");
                     }
                 },
             ],
             'job_description' => 'required|string',
-            'status' => 'required|string|max:255',
             'job_qualifications' => 'required|string',
             'available_slots' => 'required|integer',
         ];
+
+        if ($this->job_id !== null) {
+            $rules['status'] = 'required|string|max:255';
+        }
+
+        return $rules;
     }
     public function resetFields() {
         $this->reset([
@@ -105,6 +111,7 @@ class JobOfferManagement extends Component
 
     public function submit_job_offer()
     {
+        // dd();
         $this->validate();
 
         if ($this->submit_func == "add-job-offer") {
@@ -114,7 +121,7 @@ class JobOfferManagement extends Component
                 'job_title' => $this->job_title,
                 'salary' => $this->range_from . ' - ' . $this->range_to,
                 'job_description' => $this->job_description,
-                'status' => $this->status,
+                'status' => "Active",
                 'job_qualifications' => $this->job_qualifications,
                 'available_slots' => $this->available_slots,
             ]);
