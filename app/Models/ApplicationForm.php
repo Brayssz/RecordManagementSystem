@@ -32,4 +32,9 @@ class ApplicationForm extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
+
+    public function branchInterview()
+    {
+        return $this->hasOne(BranchInterview::class, 'application_id');
+    }
 }

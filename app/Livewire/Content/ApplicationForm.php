@@ -230,7 +230,7 @@ class ApplicationForm extends Component
     {
         $this->job_id = $job_id;
 
-        $this->getApplicant(1);
+        $this->getApplicant(Auth::guard('applicant')->user()->applicant_id);
         $this->getBranches();
     }
 

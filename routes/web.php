@@ -16,16 +16,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['employee'])->group(function () {
-    
-});
+Route::middleware(['employee'])->group(function () {});
 
 Route::middleware(['employer'])->group(function () {
-    
+
 });
 
 Route::middleware(['applicant'])->group(function () {
-    
+
+    Route::get('/job-offers', [JobOfferController::class, 'listJobOffers'])->name('job-offers');
+
+    Route::get('/apply', [ApplicationController::class, 'showApplicationForm'])->name('apply');
+
+    Route::get('/my-applications', [ApplicationController::class, 'showMyApplications'])->name('my-applications');
 });
 
 Route::post('/verify-email', [PasswordResetController::class, 'sendResetLink'])->name('verify-email');
@@ -60,8 +63,4 @@ Route::get('/employers', [EmployerController::class, 'showEmployers'])->name('em
 
 Route::get('/jobs', [JobOfferController::class, 'showJobOffers'])->name('jobs');
 
-Route::get('/job-offers', [JobOfferController::class, 'listJobOffers'])->name('job-offers');
-
-Route::get('/apply', [ApplicationController::class, 'showApplicationForm'])->name('apply');
-
-Route::get('/my-applications', [ApplicationController::class, 'showMyApplications'])->name('my-applications');
+Route::get('/branch-pending-applications', [ApplicationController::class, 'showPendingBranchApplications'])->name('branch-pending-applications');

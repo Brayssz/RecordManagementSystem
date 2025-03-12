@@ -14,9 +14,9 @@ class EmployeeController extends Controller
         if ($request->ajax()) {
             $query = Employee::with('branch');
 
-            // if (Auth::check() && Auth::user()->position == 'Manager') {
-            //     $query->where('branch_id', Auth::user()->branch_id);
-            // }
+            if (Auth::check() && Auth::user()->position == 'Manager') {
+                $query->where('branch_id', Auth::user()->branch_id)->where('position', '!=', 'Admin');
+            }
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);

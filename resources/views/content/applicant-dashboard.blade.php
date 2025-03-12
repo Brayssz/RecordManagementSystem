@@ -1,9 +1,8 @@
 @extends('layout.applicant-layout')
 
-@section('title', 'Job Offers')
+@section('title', 'MMML - Dashboard')
 
 @section('content')
-
-    @livewire('content.job-offers')
+    
 
 @endsection

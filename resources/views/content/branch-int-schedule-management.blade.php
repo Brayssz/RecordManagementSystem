@@ -1,6 +1,6 @@
-@extends('layout.applicant-layout')
+@extends('layout.app-layout')
 
-@section('title', 'My Transactions')
+@section('title', 'Branch Interview Schedule Management')
 
 @section('content')
 
@@ -9,9 +9,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Applicant Transactions</h4>
-                    <h6>Review your application transactions and stay updated with the latest status of your job
-                        applications.</h6>
+                    <h4>Applications</h4>
+                    <h6>Set interview schedules for each application for this branch.</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -36,35 +35,11 @@
                                     class="feather-search"></i></a>
                         </div>
 
-                        <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select status_filter form-control">
-                                        <option value="">Status</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Canceled">Canceled</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select branch_filter form-control">
-                                        <option value="">Branch</option>
-
-                                        @foreach($branches as $branch)
-                                            <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table my-application-table pb-3">
+                    <table class="table application-table pb-3">
                         <thead>
                             <tr>
                                 <th></th>
@@ -72,13 +47,8 @@
                                 <th>Job</th>
                                 <th>Country</th>
                                 <th>Branch</th>
-                                <th>Birth Certificate</th>
-                                <th>Passport</th>
-                                <th>Medical Certificate</th>
-                                <th>NBI Clearance</th>
-                                <th>Valid ID</th>
-                                <th class="no-sort">Status</th>
-                                <th class="no-sort">Cancel</th>
+                                <th>Interview Schedule</th>
+                                <th class="no-sort">Set Schedule</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,7 +61,7 @@
             </div>
         </div>
     </div>
-    {{-- @livewire('applicant.cancel-application') --}}
+    @livewire('content.set-branch-interview-schedule')
 
 @endsection
 
@@ -108,20 +78,8 @@
                 });
             @endif
 
-
-            const recquiredDocs = ['Birth Certificate', 'Passport', 'Medical Certificate', 'NBI Clearance',
-                'Valid ID'
-            ];
-
-            function checkDocsExist(documents, doc_type) {
-                console.log('Documents:', documents);
-                console.log('Document Type:', doc_type);
-                const result = documents.includes(doc_type);
-                console.log('Result:', result);
-                return result;
-            }
-            if ($('.my-application-table').length > 0) {
-                var table = $('.my-application-table').DataTable({
+            if ($('.application-table').length > 0) {
+                var table = $('.application-table').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "bFilter": true,
@@ -138,15 +96,13 @@
                         info: "_START_ - _END_ of _TOTAL_ items",
                     },
                     "ajax": {
-                        "url": "/my-applications",
+                        "url": "/branch-pending-applications",
                         "type": "GET",
                         "headers": {
                             "Accept": "application/json"
                         },
                         "data": function(d) {
                             d.status = $('.status_filter').val();
-                            d.branch_id = $('.branch_filter').val();
-                            d.country_id = $('.country_filter').val();
                         },
                         "dataSrc": "data"
                     },
@@ -235,87 +191,10 @@
                         {
                             "data": null,
                             "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Birth Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
+                                if (row.branch_interview && row.branch_interview.interview_date) {
+                                    return moment(row.branch_interview.interview_date).format('MMMM D, YYYY');
                                 } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Passport') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Medical Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'NBI Clearance') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Valid ID') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                if (row.status === "Pending") {
-                                    return `<span class="badge badge-linewarning">Pending for Manager Interview</span>`;
-                                } else if (row.status === "Interviewed") {
-                                    return `<span class="badge badge-lineprimary">Interviewed</span>`;
-                                } else if (row.status === "Submitting") {
-                                    return `<span class="badge badge-lineinfo">Submitting Documents</span>`;
-                                } else if (row.status === "Reviewing") {
-                                    return `<span class="badge badge-linesecondary">Reviewing Application</span>`;
-                                } else if (row.status === "ScheduledManager") {
-                                    return `<span class="badge badge-linesecondary">Scheduled for Manager Interview</span>`;
-                                } else if (row.status === "ScheduledBranchInterview") {
-                                    return `<span class="badge badge-linesuccess">Scheduled for Employer Interview</span>`;
-                                } else if (row.status === "Waiting") {
-                                    return `<span class="badge badge-lineyellow">Waiting to be Hired</span>`;
-                                } else if (row.status === "Hired") {
-                                    return `<span class="badge badge-linesuccess">Hired</span>`;
-                                } else if (row.status === "Canceled") {
-                                    return `<span class="badge badge-linedanger">Canceled Application</span>`;
-                                } else if (row.status === "Rejected") {
-                                    return `<span class="badge badge-linedanger">Rejected Application</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedark">Unknown</span>`;
+                                    return '<span class="text-muted">No schedule set</span>';
                                 }
                             }
                         },
@@ -323,26 +202,23 @@
                             "data": null,
                             "render": function(data, type, row) {
                                 return `
-                        <div class="edit-delete-action">
-                            <a class="me-2 p-2 cancel-application" data-applicationid="${row.application_id}">
-                                <i data-feather="x" class="feather-x"></i>
-                            </a>
-                        </div>
-                    `;
+                                <div class="edit-delete-action">
+                                    <a class="me-2 p-2 set-schedule" data-applicationid="${row.application_id}">
+                                        <i data-feather="calendar" class="feather-x"></i>
+                                    </a>
+                                </div>
+                            `;
                             }
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(10).addClass('action-table-data');
+                        $(row).find('td').eq(5).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                         feather.replace();
 
-                        $('.status_filter, .branch_filter, .country_filter').on('change', function() {
-                            table.draw();
-                        });
                     },
                     "drawCallback": function(settings) {
                         feather.replace();

@@ -34,7 +34,6 @@
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
 
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
-    {{-- @livewireStyles<!-- Styles - --}}
     @php
         use App\Utils\GetUsertype;
         use App\Utils\GetProfilePhoto;
@@ -45,7 +44,11 @@
 
         $user = Auth::guard($position)->user();
     @endphp
-
+    {{-- <!-- Fonts -->
+     <link rel="preconnect" href="https://fonts.bunny.net">
+     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+ --}}
+    <!-- Scripts -->
 
 </head>
 
@@ -59,15 +62,16 @@
         <!-- Header -->
         <div class="header">
             <!-- Logo -->
-            <div class="header-left active">
+            <!-- Logo -->
+            <div class="header-left active border-0">
                 <a href="index.html" class="logo logo-normal">
-                    <img src="img/logo.jpg" alt="" />
+                    <img src="assets/img/logo.jpg" alt="">
                 </a>
                 <a href="index.html" class="logo logo-white">
-                    <img src="assets/img/logo-white.png" alt="" />
+                    <img src="assets/img/logo-white.png" alt="">
                 </a>
                 <a href="index.html" class="logo-small">
-                    <img src="assets/img/logo-small.jpg" alt="" />
+                    <img src="assets/img/logo-small.png" alt="">
                 </a>
                 <a id="toggle_btn" href="javascript:void(0);">
                     <i data-feather="chevrons-left" class="feather-16"></i>
@@ -82,7 +86,6 @@
                     <span></span>
                 </span>
             </a>
-
             <!-- Header Menu -->
             <ul class="nav user-menu">
                 <!-- Search -->
@@ -178,159 +181,24 @@
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                 </div>
             </div>
-            <!-- /Mobile Menu -->
         </div>
         <!-- /Header -->
 
         <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-inner slimscroll">
-                <div id="sidebar-menu" class="sidebar-menu">
-                    <ul>
-                        <li class="submenu-open">
-                            <h6 class="submenu-hdr">Main</h6>
-                            <ul>
-                                <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
-                                    <a href="/dashboard"><i data-feather="grid"></i><span>Dashboard</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-open">
-                            <h6 class="submenu-hdr">Management</h6>
-                            <ul>
-                                @if ($position == 'employee')
-                                    @if ($user->position == 'Admin')
-                                        <li class="{{ Request::is('employees') ? 'active' : '' }}">
-                                            <a href="/employees"><i data-feather="user"></i><span>Employees</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('branches') ? 'active' : '' }}">
-                                            <a href="/branches"><i data-feather="home"></i><span>Branches</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('jobs') ? 'active' : '' }}">
-                                            <a href="/jobs"><i data-feather="briefcase"></i><span>Jobs</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('employers') ? 'active' : '' }}">
-                                            <a href="/employers"><i
-                                                    data-feather="user-check"></i><span>Employers</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('applicants') ? 'active' : '' }}">
-                                            <a href="applicants"><i
-                                                    data-feather="users"></i><span>Applicants</span></a>
-                                        </li>
-                                    @endif
+        <div class="sidebar horizontal-sidebar">
+            <div id="sidebar-menu-3" class="sidebar-menu">
+                <ul class="nav">
+                    <li class="{{ Request::is('applicant-dashboard') ? 'active' : '' }}">
+                        <a href="/dashboard"><i data-feather="grid"></i><span>Main Menu</span></a>
+                    </li>
+                    <li class="{{ Request::is('applicant-dashboard') ? 'active' : '' }}">
+                        <a href="/job-offers"><i data-feather="user"></i><span>Job Offers</span></a>
+                    </li>
+                    <li class="{{ Request::is('job-offers') ? 'active' : '' }}">
+                        <a href="/my-applications"><i data-feather="file-text"></i><span>My Transactions</span></a>
+                    </li>
 
-                                    @if ($user->position == 'Manager')
-                                        <li class="{{ Request::is('employees') ? 'active' : '' }}">
-                                            <a href="/employees"><i data-feather="user"></i><span>Employees</span></a>
-                                        </li>
-
-                                        <li>
-                                            <a href="category-list.html"><i
-                                                    data-feather="file-text"></i><span>Applications</span></a>
-                                        </li>
-
-                                        <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
-                                            <a href="/approve-applications"><i
-                                                    data-feather="check-circle"></i><span>Application
-                                                    Approval</span></a>
-                                        </li>
-
-                                        <li class="{{ Request::is('application-documents') ? 'active' : '' }}">
-                                            <a href="/application-documents"><i
-                                                    data-feather="file"></i><span>Documents
-                                                    Management</span></a>
-                                        </li>
-
-                                        <li class="{{ Request::is('archive-applications') ? 'active' : '' }}">
-                                            <a href="/archive-applications"><i
-                                                    data-feather="archive"></i><span>Archive
-                                                    Application</span></a>
-                                        </li>
-
-                                        <li class="{{ Request::is('branch-pending-applications') ? 'active' : '' }}">
-                                            <a href="/branch-pending-applications">
-                                                <i data-feather="calendar"></i>
-                                                <span>Interview Schedules</span>
-                                            </a>
-                                        </li>
-
-                                        <li class="{{ Request::is('scheduled-interviews') ? 'active' : '' }}">
-                                            <a href="/scheduled-interviews">
-                                                <i data-feather="briefcase"></i>
-                                                <span>Scheduled Interviews</span>
-                                                <span class="badge-notif">1</span>
-                                            </a>
-                                        </li>
-                                    @endif
-                                @else
-                                @endif
-
-                                @if ($user->position == 'Employer')
-                                    <li class="{{ Request::is('jobs') ? 'active' : '' }}">
-                                        <a href="/jobs"><i data-feather="briefcase"></i><span>Jobs</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
-                                        <a href="/approve-applications"><i
-                                                data-feather="check-circle"></i><span>Applicant Hiring</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('manager_schedules') ? 'active' : '' }}">
-                                        <a href="/manager_schedules">
-                                            <i data-feather="calendar"></i>
-                                            <span>Interview Schedules</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="{{ Request::is('scheduled-interviews') ? 'active' : '' }}">
-                                        <a href="/scheduled-interviews">
-                                            <i data-feather="briefcase"></i>
-                                            <span>Scheduled Interviews</span>
-                                            <span class="badge-notif">1</span>
-                                        </a>
-                                    </li>
-                                @endif
-
-                                @if ($user->position == 'Clerk')
-                                    <li>
-                                        <a href="category-list.html"><i
-                                                data-feather="file-text"></i><span>Applications</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('application-documents') ? 'active' : '' }}">
-                                        <a href="/application-documents"><i data-feather="file"></i><span>Documents
-                                                Management</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('archive-applications') ? 'active' : '' }}">
-                                        <a href="/archive-applications"><i data-feather="archive"></i><span>Archive
-                                                Application</span></a>
-                                    </li>
-                                @endif
-
-                            </ul>
-                        </li>
-                        <li class="submenu-open">
-                            <h6 class="submenu-hdr">Reports</h6>
-                            <ul>
-                                <li>
-                                    <a href="manage-stocks.html"><i data-feather="package"></i><span>Report
-                                            1</span></a>
-                                </li>
-                                <li>
-                                    <a href="stock-adjustment.html"><i data-feather="clipboard"></i><span>Report
-                                            2</span></a>
-                                </li>
-                                <li>
-                                    <a href="stock-transfer.html"><i data-feather="truck"></i><span>Report
-                                            3</span></a>
-                                </li>
-                            </ul>
-                        </li>
-
-
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
 
@@ -338,7 +206,10 @@
             @yield('content')
         </div>
 
-    </div >
+        {{-- @livewire('notification.notification-manager') --}}
+
+    </div>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
@@ -362,11 +233,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.3.3/js/bootstrap-datetimepicker.min.js">
     </script>
 
-
     <script>
-        localStorage.clear();
+        localStorage.setItem('layoutStyle', 'modern');
     </script>
-
     <!-- Feather Icon JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"></script>
 
@@ -393,9 +262,6 @@
     @livewireScripts
 
     @stack('scripts')
-
-
-
 </body>
 
 </html>

@@ -5,12 +5,29 @@ namespace App\Http\Controllers\Content;
 use App\Http\Controllers\Controller;
 use App\Utils\GetUserType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
     public function showDashboard()
     {
-        return view('content.dashboard');
+        if (!session()->has('auth_user_type')) {
+            return redirect()->route('login');
+        } else if (session('auth_user_type') == 'applicant') {
+            return view('content.applicant-dashboard');
+        } else if (session('auth_user_type') == 'employee') {
+            if(Auth::user()->position == 'Admin') {
+                return view('content.admin-dashboard');
+            } else if(Auth::user()->position == 'Manager'){
+                return view('content.manager-dashboard');
+            } else if(Auth::user()->position == 'Clerk'){
+                return view('content.staff-dashboard');
+            } 
+        } else if (session('auth_user_type') == 'employer') {
+            return view('content.employer-dashboard');
+        } else {
+            return redirect()->route('login');
+        }
     }
 
     public function showProfile()

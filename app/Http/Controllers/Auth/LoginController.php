@@ -55,16 +55,19 @@ class LoginController extends Controller
     {
         $applicant = Applicant::where('email', $email)->first();
         if ($applicant) {
+            $applicant->user_type = 'applicant';
             return $applicant;
         }
 
         $employee = Employee::where('email', $email)->first();
         if ($employee) {
+            $employee->user_type = 'employee';
             return $employee;
         }
 
         $employer = Employer::where('email', $email)->first();
         if ($employer) {
+            $employer->user_type = 'employer';
             return $employer;
         }
 
@@ -81,25 +84,31 @@ class LoginController extends Controller
 
         $user = $this->getUser($email);
 
-        if (!$user || $user->two_factor_code !== $request->otp) {
-            return response()->json(['message' => 'Invalid OTP' .  $email], 400);
-        }
+        
+        // if (!$user || $user->two_factor_code !== $request->otp) {
+        //     return response()->json(['message' => 'Invalid OTP' .  $email], 400);
+        // }
 
-        if (Carbon::now()->gt($user->two_factor_expires_at)) {
-            return response()->json(['message' => 'OTP expired'], 400);
-        }
+        // if (Carbon::now()->gt($user->two_factor_expires_at)) {
+        //     return response()->json(['message' => 'OTP expired'], 400);
+        // }
 
-        $user->two_factor_code = null;
-        $user->two_factor_expires_at = null;
-        $user->save(['two_factor_code', 'two_factor_expires_at']);
-    
+        
+        // dd($user->user_type);
+
+        session(['auth_user_type' => $user->user_type]);
+
         Auth::guard($user->user_type)->login($user);
 
         Session::forget('verification_email');
+        // unset($user->user_type);
+        // $user->two_factor_code = null;
+        // $user->two_factor_expires_at = null;
+        // $user->save(['two_factor_code', 'two_factor_expires_at']);
 
         return response()->json([
             'message' => 'Login successful',
-            'token' => $user
+            'token' => $user->user_type,
         ]);
     }
 
@@ -134,7 +143,9 @@ class LoginController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('applicant')->logout();
+        Auth::guard('employee')->logout();
+        Auth::guard('employer')->logout();
         return redirect()->route('login');
     }
 }
