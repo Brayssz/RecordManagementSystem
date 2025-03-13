@@ -122,7 +122,7 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Doe',
             'gender' => 'Male',
             'email' => 'johndoe@example.com',
-            'password' => bcrypt('securepassword'),
+            'password' => Hash::make('securepassword'),
             'industry' => 'IT',
             'company_name' => 'Tech Solutions',
             'contact_number' => '1234567890',

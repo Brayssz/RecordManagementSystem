@@ -155,7 +155,7 @@
                                 <i class="me-2" data-feather="user"></i> My Profile</a>
                             <a href="#" class="dropdown-item logout pb-0"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <img src="assets/img/icons/log-out.svg" class="me-2" alt="img" />Logout
+                                <img src="img/icons/log-out.svg" class="me-2" alt="img" />Logout
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"

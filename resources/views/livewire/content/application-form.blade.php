@@ -25,8 +25,7 @@
                         </div>
                         <div class="input-blocks mb-0">
                             <div class="image-upload mb-0">
-                                <input type="file" wire:model.live="photo" x-ref="photo"
-                                    x-on:change="
+                                <input type="file" wire:model.live="photo" x-ref="photo" x-on:change="
                                         photoName = $refs.photo.files[0].name;
                                         const reader = new FileReader();
                                         reader.onload = (e) => {
@@ -93,8 +92,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="email">Email</label>
-                                <input type="email" class="form-control" placeholder="e.g., name@mail.com"
-                                    id="email" wire:model.lazy="email">
+                                <input type="email" class="form-control" placeholder="e.g., name@mail.com" id="email"
+                                    wire:model.lazy="email">
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -140,8 +139,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="citizenship">Citizenship</label>
-                                <input type="text" class="form-control" placeholder="Enter citizenship"
-                                    id="citizenship" wire:model.lazy="citizenship">
+                                <input type="text" class="form-control" placeholder="Enter citizenship" id="citizenship"
+                                    wire:model.lazy="citizenship">
                                 @error('citizenship')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -162,8 +161,7 @@
                                         <label class="form-label"
                                             for="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</label>
                                         <input type="text" class="form-control" id="{{ $field }}"
-                                            wire:model.lazy="{{ $field }}"
-                                            placeholder="Enter your {{ $field }}">
+                                            wire:model.lazy="{{ $field }}" placeholder="Enter your {{ $field }}">
                                         @error($field)
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -194,6 +192,134 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="pass-info">
+                        <div class="card-title-head" wire:ignore>
+                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Educational
+                                Attainment
+                            </h6>
+                        </div>
+                        @foreach ($educational_attainments as $index => $attainment)
+                            <div class="card-title-head" wire:ignore>
+                                <h6><span> </span>{{ $attainment['level'] }}</h6>
+                            </div>
+
+                            <div class="row">
+                                <div class="row" x-data="{ docPhotoPreview: '', photoName: '' }">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div>
+                                                <label class="form-label" for="document_{{ $index }}">Document</label>
+                                                <input class="form-control" type="file" id="file-input" accept="image/*"
+                                                    x-ref="document_{{ $index }}" x-on:change="
+                                                                                            photoName = $refs.document_{{ $index }}.files[0].name;
+                                                                                            const reader = new FileReader();
+                                                                                            reader.onload = (e) => {
+                                                                                                docPhotoPreview = e.target.result;
+                                                                                            };
+                                                                                            reader.readAsDataURL($refs.document_{{ $index }}.files[0]);
+                                                                                            $wire.upload('educational_attainments.' + {{ $index }} + '.document', $refs.document_{{ $index }}.files[0]);
+                                                                                        ">
+                                                @error("educational_attainments.{$index}.document")
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-5">
+                                        <div class="product-list">
+                                            <ul class="row" id="product-list">
+                                                {{-- PREVIEW SELECTED IMAGE --}}
+                                                <template x-if="docPhotoPreview !== ''">
+                                                    <li class="ps-0 w-100">
+                                                        <div class="product-view-set">
+                                                            <div class="product-views-img" style="max-width: 100%;">
+                                                                <img :src="docPhotoPreview" alt="img">
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="pass-info">
+                        <div class="card-title-head" wire:ignore>
+                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Work Experience
+                            </h6>
+                        </div>
+                        @foreach ($work_experiences as $index => $work_experience)
+                            <div class="row">
+                                <div class="row col-lg-10 col-md-10">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <div class="row" x-data="{ docPhotoPreview: '', photoName: '' }">
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-lg-10 col-md-10">
+                                                        <div class="form-group">
+                                                            <div>
+                                                                <label class="form-label"
+                                                                    for="document_{{ $index }}">Document</label>
+                                                                <input class="form-control" type="file" id="file-input"
+                                                                    accept="image/*" x-ref="document_{{ $index }}" x-on:change="
+                                                                    photoName = $refs.document_{{ $index }}.files[0].name;
+                                                                    const reader = new FileReader();
+                                                                    reader.onload = (e) => {
+                                                                        docPhotoPreview = e.target.result;
+                                                                    };
+                                                                    reader.readAsDataURL($refs.document_{{ $index }}.files[0]);
+                                                                    $wire.upload('work_experiences.' + {{ $index }} + '.document', $refs.document_{{ $index }}.files[0]);">
+                                                                @error("work_experiences.{$index}.document")
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-2 col-12 d-flex align-items-end">
+                                                        <div class="mb-3 w-100">
+                                                            <button type="button" class="btn btn-danger w-100"
+                                                                wire:click="removeWorkExperience({{ $index }})">
+                                                                <i class="fas fa-trash me-2"></i>Remove
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
+                                            </div>
+                                            <div class="col-12 mb-5">
+                                                <div class="product-list">
+                                                    <ul class="row" id="product-list">
+                                                        {{-- PREVIEW SELECTED IMAGE --}}
+                                                        <template x-if="docPhotoPreview !== ''">
+                                                            <li class="ps-0 w-100">
+                                                                <div class="product-view-set">
+                                                                    <div class="product-views-img" style="max-width: 100%;">
+                                                                        <img :src="docPhotoPreview" alt="img">
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </template>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                               
+
+                            </div>
+                        @endforeach
+
+                        <button type="button" class="btn btn-success" wire:click="addWorkExperience">
+                            <i class="fas fa-plus me-2"></i>Add Work
+                            Experience</button>
+                    </div>
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end">
@@ -205,7 +331,7 @@
     </div>
     @push('scripts')
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $(document).on('change', '[id]', handleInputChange);
             });
 

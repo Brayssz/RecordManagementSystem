@@ -11,6 +11,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Branch;
 use App\Models\ApplicationForm as Application;
+use App\Models\Content;
+use App\Models\Document;
 
 class ApplicationForm extends Component
 {
@@ -36,6 +38,20 @@ class ApplicationForm extends Component
         ['level' => 'High School', 'document' => ''],
         ['level' => 'Higher', 'document' => '']
     ];
+
+
+    public function addWorkExperience()
+    {
+        $this->work_experiences[] = ['document' => ''];
+    }
+
+    public function removeWorkExperience($index)
+    {
+        unset($this->work_experiences[$index]);
+        $this->work_experiences = array_values($this->work_experiences);
+    }
+
+    public $work_experiences = [];
 
     public function getBranches()
     {
@@ -78,18 +94,12 @@ class ApplicationForm extends Component
         $this->total_applicant = Applicant::count();
     }
 
-    protected function educationalAttainmentRules()
-    {
-        return [
-            'educational_attainments.*.document' => 'required|image|max:1024',
-        ];
-    }
-
     protected function rules()
     {
         $passwordRules = $this->applicant_id
             ? 'nullable|string|min:8|confirmed'
             : 'required|string|min:8|confirmed';
+        $profilePhotoRules = $this->photoPreview ? 'nullable|image|max:1024' : 'required|image|max:1024';
 
         return [
             'first_name' => 'required|string|max:255',
@@ -116,15 +126,17 @@ class ApplicationForm extends Component
             'region' => 'required|string|max:255',
             'province' => 'required|string|max:255',
             'municipality' => 'required|string|max:255',
-            'barangay' => 'required|string|max:255',   
+            'barangay' => 'required|string|max:255',
             'street' => 'required|string|max:255',
             'postal_code' => 'required|string|max:10',
             'citizenship' => 'required|string|max:255',
             'password' => $passwordRules,
-            'photo' => 'required|image|max:1024',
+            'photo' => $profilePhotoRules,
             'status' => 'nullable|string|max:255',
             'suffix' => 'nullable|string|max:255',
-            'branch_id' => 'required|exists:branches,branch_id', 
+            'branch_id' => 'required|exists:branches,branch_id',
+            'educational_attainments.*.document' => 'nullable|image|max:1024',
+            'work_experiences.*.document' => 'nullable|image|max:1024',
         ];
     }
 
@@ -141,7 +153,7 @@ class ApplicationForm extends Component
     {
         $profilePhotoDisk = 'public';
 
-        $fileName = 'profile_' . $applicant->applicant_id . '_' . strtolower(str_replace(' ', '_', $applicant->first_name)) . '.' . $photo->getClientOriginalExtension();
+        $fileName = 'profile_applicant_' . $applicant->applicant_id . '_' . strtolower(str_replace(' ', '_', $applicant->first_name)) . '.' . $photo->getClientOriginalExtension();
 
         tap($applicant->profile_photo_path, function ($previous) use ($photo, $applicant, $fileName, $profilePhotoDisk, $storagePath) {
             $applicant->forceFill([
@@ -158,6 +170,7 @@ class ApplicationForm extends Component
         });
     }
 
+
     public function deleteProfilePhoto($applicant)
     {
         if (is_null($applicant->profile_photo_path)) {
@@ -171,18 +184,36 @@ class ApplicationForm extends Component
         ])->save();
     }
 
-    public function resetFields() {
+    public function resetFields()
+    {
         $this->reset([
-            'first_name', 'middle_name', 'last_name', 'email', 
-            'contact_number', 'date_of_birth', 'gender',
-            'region', 'province', 'municipality', 'barangay', 
-            'street', 'postal_code', 'password', 'photo', 
-            'status', 'suffix', 'citizenship', 'photoPreview', 'branch_id' // Reset branch_id
+            'first_name',
+            'middle_name',
+            'last_name',
+            'email',
+            'contact_number',
+            'date_of_birth',
+            'gender',
+            'region',
+            'province',
+            'municipality',
+            'barangay',
+            'street',
+            'postal_code',
+            'password',
+            'photo',
+            'status',
+            'suffix',
+            'citizenship',
+            'photoPreview',
+            'branch_id' // Reset branch_id
         ]);
     }
 
     public function submit_application()
     {
+        $this->validate();
+
         $this->applicant->first_name = $this->first_name;
         $this->applicant->middle_name = $this->middle_name;
         $this->applicant->last_name = $this->last_name;
@@ -209,10 +240,59 @@ class ApplicationForm extends Component
         $this->createApplication($this->applicant->applicant_id);
     }
 
-    public function createApplication($applicant_id) 
+    public function addEducationalAttainment($application_id)
     {
-        $this->validate();
 
+        foreach ($this->educational_attainments as $attainment) {
+            if ($attainment['document']) {
+                $this->updateDocumentPhoto($attainment['document'], $application_id, $attainment['level']);
+            }
+        }
+    }
+
+    public function addWorkExperienceDocument($application_id)
+    {
+        $index = 0; // Initialize the index variable
+
+        foreach ($this->work_experiences as $experience) {
+            if ($experience['document']) {
+                $this->updateDocumentPhoto($experience['document'], $application_id, 'Work Experience ' . $index);
+            }
+            $index++; // Increment the index variable
+        }
+    }
+
+    public function updateDocumentPhoto(UploadedFile $photo, $application_id, $document_type, $storagePath = 'document-photos')
+    {
+        $documentDisk = env('VAPOR_ARTIFACT_NAME') ? 's3' : 'public';
+
+        $fileName = 'document_' . $application_id . '_' . strtolower(str_replace(' ', '_', $document_type)) . '.' . $photo->getClientOriginalExtension();
+
+        $document = Document::where('application_id', $application_id)
+            ->where('document_type', $document_type)
+            ->first();
+
+        if ($document) {
+            // Delete the old file from storage
+            Storage::disk($documentDisk)->delete($document->file_name);
+        }
+
+        // Update or create the document record
+        Document::updateOrCreate(
+            [
+                'application_id' => $application_id,
+                'document_type' => $document_type,
+            ],
+            [
+                'file_name' => $photo->storeAs($storagePath, $fileName, ['disk' => $documentDisk]),
+                'upload_date' => now(),
+                'status' => 'Active',
+            ]
+        );
+    }
+
+    public function createApplication($applicant_id)
+    {
         $application = new Application();
         $application->applicant_id = $applicant_id;
         $application->branch_id = $this->branch_id; // Set branch_id
@@ -220,6 +300,9 @@ class ApplicationForm extends Component
         $application->application_date = now();
         $application->status = 'Pending';
         $application->save();
+
+        $this->addEducationalAttainment($application->application_id);
+        $this->addWorkExperienceDocument($application->application_id);
 
         session()->flash('message', 'Application successfully created.');
 

@@ -73,6 +73,8 @@ class ApplicantManagement extends Component
             ? 'nullable|string|min:8|confirmed'
             : 'required|string|min:8|confirmed';
 
+        $profilePhotoRules = $this->photoPreview ? 'nullable|image|max:1024' : 'required|image|max:1024';
+
         return [
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
