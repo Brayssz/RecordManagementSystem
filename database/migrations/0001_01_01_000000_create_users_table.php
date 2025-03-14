@@ -143,6 +143,8 @@ return new class extends Migration
             $table->unsignedBigInteger('employer_id')->nullable();
             $table->unsignedBigInteger('application_id')->nullable();
             $table->date('interview_date');
+            $table->time('interview_time');
+            $table->string('meeting_link')->nullable();
             $table->string('remarks')->nullable();
             $table->integer('rating')->nullable();
             $table->string('status');

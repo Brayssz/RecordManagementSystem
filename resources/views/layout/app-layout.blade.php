@@ -31,7 +31,7 @@
     <!-- Toatr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.min.css">
 
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
     {{-- @livewireStyles<!-- Styles - --}}
@@ -206,9 +206,6 @@
                                         <li class="{{ Request::is('branches') ? 'active' : '' }}">
                                             <a href="/branches"><i data-feather="home"></i><span>Branches</span></a>
                                         </li>
-                                        <li class="{{ Request::is('jobs') ? 'active' : '' }}">
-                                            <a href="/jobs"><i data-feather="briefcase"></i><span>Jobs</span></a>
-                                        </li>
                                         <li class="{{ Request::is('employers') ? 'active' : '' }}">
                                             <a href="/employers"><i
                                                     data-feather="user-check"></i><span>Employers</span></a>
@@ -224,20 +221,14 @@
                                             <a href="/employees"><i data-feather="user"></i><span>Employees</span></a>
                                         </li>
 
-                                        <li>
-                                            <a href="category-list.html"><i
-                                                    data-feather="file-text"></i><span>Applications</span></a>
-                                        </li>
-
                                         <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
                                             <a href="/approve-applications"><i
                                                     data-feather="check-circle"></i><span>Application
                                                     Approval</span></a>
                                         </li>
 
-                                        <li class="{{ Request::is('application-documents') ? 'active' : '' }}">
-                                            <a href="/application-documents"><i
-                                                    data-feather="file"></i><span>Documents
+                                        <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
+                                            <a href="/applicant-documents"><i data-feather="file"></i><span>Documents
                                                     Management</span></a>
                                         </li>
 
@@ -262,10 +253,9 @@
                                             </a>
                                         </li>
                                     @endif
-                                @else
                                 @endif
 
-                                @if ($user->position == 'Employer')
+                                @if ($position == 'employer')
                                     <li class="{{ Request::is('jobs') ? 'active' : '' }}">
                                         <a href="/jobs"><i data-feather="briefcase"></i><span>Jobs</span></a>
                                     </li>
@@ -275,15 +265,15 @@
                                                 data-feather="check-circle"></i><span>Applicant Hiring</span></a>
                                     </li>
 
-                                    <li class="{{ Request::is('manager_schedules') ? 'active' : '' }}">
-                                        <a href="/manager_schedules">
+                                    <li class="{{ Request::is('employer-pending-applications') ? 'active' : '' }}">
+                                        <a href="/employer-pending-applications">
                                             <i data-feather="calendar"></i>
                                             <span>Interview Schedules</span>
                                         </a>
                                     </li>
 
-                                    <li class="{{ Request::is('scheduled-interviews') ? 'active' : '' }}">
-                                        <a href="/scheduled-interviews">
+                                    <li class="{{ Request::is('scheduled-employer-interviews') ? 'active' : '' }}">
+                                        <a href="/scheduled-employer-interviews">
                                             <i data-feather="briefcase"></i>
                                             <span>Scheduled Interviews</span>
                                             <span class="badge-notif">1</span>
@@ -338,7 +328,7 @@
             @yield('content')
         </div>
 
-    </div >
+    </div>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
@@ -386,9 +376,13 @@
 
     <!-- Chart JS (Toastr) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.all.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+
+
+
+
 
     @vite(['resources/assets/js/script.js', 'resources/assets/js/custom-select2.js', 'resources/assets/js/mask.js', 'resources/assets/js/theme-script.js'])
     @livewireScripts

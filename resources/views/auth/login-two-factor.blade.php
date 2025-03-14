@@ -87,7 +87,7 @@
                         otp: otp
                     },
                     success: function(response) {
-                        // window.location.href = '{{ url('/dashboard') }}';
+                        window.location.href = '{{ url('/dashboard') }}';
                         console.log(response);
                     },
                     error: function(xhr) {

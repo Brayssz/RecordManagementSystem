@@ -2,19 +2,19 @@
 
 namespace App\Livewire\Content;
 
+use App\Models\EmployerInterview;
 use App\Models\ApplicationForm;
-use App\Models\BranchInterview;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
-class RecordBranchInterview extends Component
+class RecordEmployerInterview extends Component
 {
     public $submit_func;
     public $branch_interview;
     public $remarks;
     public $rating = 0;
     public $status;
-    public $b_interview_id;
+    public $e_interview_id;
 
     protected function rules()
     {
@@ -26,49 +26,48 @@ class RecordBranchInterview extends Component
 
     public function resetFields()
     {
-        $this->reset(['remarks', 'rating', 'status', 'b_interview_id']);
+        $this->reset(['remarks', 'rating', 'status', 'e_interview_id']);
     }
 
     public function getBranchInterview($bInterviewID)
     {
-        $this->branch_interview = BranchInterview::findOrFail($bInterviewID);
+        $this->branch_interview = EmployerInterview::findOrFail($bInterviewID);
         $this->remarks = $this->branch_interview->remarks;
         $this->rating = $this->branch_interview->rating;
-        $this->b_interview_id = $this->branch_interview->b_interview_id;
+        $this->e_interview_id = $this->branch_interview->e_interview_id;
     }
 
-    public function submitBranchInterview()
+    public function submitEmployerInterview()
     {
         $this->validate();
 
-        $employee = Auth::guard('employee')->user();
+        $employer = Auth::guard('employer')->user();
 
-        $branchInterview = BranchInterview::findOrFail($this->b_interview_id);
+        $employerInterview = EmployerInterview::findOrFail($this->e_interview_id);
 
-        $branchInterview->update([
+        $employerInterview->update([
             'remarks' => $this->remarks,
             'rating' => $this->rating,
-            'branch_id' => $employee->branch_id,
-            'employee_id' => $employee->employee_id,
+            'branch_id' => $employer->branch_id,
+            'employer_id' => $employer->employer_id,
             'status' => "Completed",
         ]);
 
         $this->resetFields();
         $this->setApplicationStatus();
-        session()->flash('message', 'Branch interview successfully submitted.');
+        session()->flash('message', 'Employer interview successfully submitted.');
 
-        return redirect()->route('scheduled-branch-interviews');
+        return redirect()->route('scheduled-employer-interviews');
     }
 
     public function setApplicationStatus()
     {
         $application = ApplicationForm::findOrFail($this->branch_interview->application_id);
-        $application->status = "Interviewed";
+        $application->status = "Waiting";
         $application->save();
     }
-
     public function render()
     {
-        return view('livewire.content.record-branch-interview');
+        return view('livewire.content.record-employer-interview');
     }
 }

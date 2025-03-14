@@ -1,6 +1,6 @@
 @extends('layout.app-layout')
 
-@section('title', 'My Transactions')
+@section('title', 'Employer Interview Schedule Management')
 
 @section('content')
 
@@ -9,9 +9,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Applicant Transactions</h4>
-                    <h6>Review your application transactions and stay updated with the latest status of your job
-                        applications.</h6>
+                    <h4>Applications</h4>
+                    <h6>Set interview schedules for each application.</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -36,30 +35,6 @@
                                     class="feather-search"></i></a>
                         </div>
 
-                        <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select status_filter form-control">
-                                        <option value="">Status</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Canceled">Canceled</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select branch_filter form-control">
-                                        <option value="">Branch</option>
-
-                                        @foreach($branches as $branch)
-                                            <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -72,12 +47,10 @@
                                 <th>Job</th>
                                 <th>Country</th>
                                 <th>Branch</th>
-                                <th>Valid ID</th>
-                                <th>Birth Certificate</th>
-                                <th>NBI Clearance</th>
-                                <th>Medical Certificate</th>
-                                <th>Passport</th>
-                                <th class="no-sort">Submit</th>
+                                <th>Interview Schedule</th>
+                                <th>Interview Time</th>
+                                <th>Meeting Link</th>
+                                <th class="no-sort">Set Schedule</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,7 +63,7 @@
             </div>
         </div>
     </div>
-    @livewire('content.submit-documents')
+    @livewire('content.set-employer-interview-schedule')
 
 @endsection
 
@@ -106,19 +79,6 @@
                     progressBar: true,
                 });
             @endif
-
-
-            const recquiredDocs = ['Birth Certificate', 'Passport', 'Medical Certificate', 'NBI Clearance',
-                'Valid ID'
-            ];
-
-            function checkDocsExist(documents, doc_type) {
-                console.log('Documents:', documents);
-                console.log('Document Type:', doc_type);
-                const result = documents.includes(doc_type);
-                console.log('Result:', result);
-                return result;
-            }
 
             if ($('.application-table').length > 0) {
                 var table = $('.application-table').DataTable({
@@ -138,15 +98,13 @@
                         info: "_START_ - _END_ of _TOTAL_ items",
                     },
                     "ajax": {
-                        "url": "/applicant-documents",
-                        "type": "GET",  
+                        "url": "employer-pending-applications",
+                        "type": "GET",
                         "headers": {
                             "Accept": "application/json"
                         },
                         "data": function(d) {
                             d.status = $('.status_filter').val();
-                            d.branch_id = $('.branch_filter').val();
-                            d.country_id = $('.country_filter').val();
                         },
                         "dataSrc": "data"
                     },
@@ -235,81 +193,54 @@
                         {
                             "data": null,
                             "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Valid ID') === true) {
-                                    return `<span class="badge badge-linesuccess valid-id" data-applicationid="${row.application_id}">✓</span>`;
+                                if (row.employer_interview && row.employer_interview.interview_date) {
+                                    return moment(row.employer_interview.interview_date).format('MMMM D, YYYY');
                                 } else {
-                                    return `<span class="badge badge-linedanger valid-id" data-applicationid="${row.application_id}">X</span>`;
+                                    return '<span class="text-muted">No schedule set</span>';
                                 }
                             }
                         },
                         {
                             "data": null,
                             "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Birth Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess birth-cert" data-applicationid="${row.application_id}">✓</span>`;
+                                if (row.employer_interview && row.employer_interview.interview_time) {
+                                    return moment(row.employer_interview.interview_time, 'HH:mm:ss').format('h:mm A');
                                 } else {
-                                    return `<span class="badge badge-linedanger birth-cert" data-applicationid="${row.application_id}">X</span>`;
+                                    return '<span class="text-muted">No time set</span>';
                                 }
                             }
                         },
                         {
-                            "data": null,
+                            "data": "employer_interview.meeting_link",
                             "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'NBI Clearance') === true) {
-                                    return `<span class="badge badge-linesuccess nbi" data-applicationid="${row.application_id}">✓</span>`;
+                                if (data) {
+                                    return `<a href="${data}" target="_blank">Join Meeting</a>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger nbi" data-applicationid="${row.application_id}">X</span>`;
+                                    return '<span class="text-muted">No link set</span>';
                                 }
                             }
                         },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Medical Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess med-cert" data-applicationid="${row.application_id}">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger med-cert" data-applicationid="${row.application_id}">X</span>`;
-                                }
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Passport') === true) {
-                                    return `<span class="badge badge-linesuccess passport" data-applicationid="${row.application_id}">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger passport" data-applicationid="${row.application_id}">X</span>`;
-                                }
-                            }
-                        },
-                      
                         {
                             "data": null,
                             "render": function(data, type, row) {
                                 return `
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2 submit-documents" data-applicationid="${row.application_id}">
-                                            <i data-feather="check" class="feather-check"></i>
-                                        </a>
-                                    </div>
-                                `;
+                                <div class="edit-delete-action">
+                                    <a class="me-2 p-2 set-schedule" data-applicationid="${row.application_id}">
+                                        <i data-feather="calendar" class="feather-x"></i>
+                                    </a>
+                                </div>
+                            `;
                             }
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(9).addClass('action-table-data');
+                        $(row).find('td').eq(7).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                         feather.replace();
 
-                        
                     },
                     "drawCallback": function(settings) {
                         feather.replace();

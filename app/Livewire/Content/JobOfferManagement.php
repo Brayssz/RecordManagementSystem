@@ -21,7 +21,7 @@ class JobOfferManagement extends Component
 
     public $total_job_offers;
 
-    public $job_id, $employer_id, $country, $job_title, $range_from, $range_to, $job_description, $status, $job_qualifications, $available_slots;
+    public $job_id, $country, $job_title, $range_from, $range_to, $job_description, $status, $job_qualifications, $available_slots;
 
     public $employers;
 
@@ -36,7 +36,6 @@ class JobOfferManagement extends Component
 
         if ($this->job_offer) {
             $this->job_id = $this->job_offer->job_id;
-            $this->employer_id = $this->job_offer->employer_id;
             $this->country = $this->job_offer->country;
             $this->job_title = $this->job_offer->job_title;
             $this->job_description = $this->job_offer->job_description;
@@ -65,7 +64,6 @@ class JobOfferManagement extends Component
     protected function rules()
     {
         $rules = [
-            'employer_id' => 'required|integer',
             'country' => 'required|string|max:255',
             'job_title' => 'required|string|max:255',
             'range_from' => [
@@ -104,7 +102,7 @@ class JobOfferManagement extends Component
     }
     public function resetFields() {
         $this->reset([
-            'employer_id', 'country', 'job_title', 'range_from', 'range_to', 
+            'country', 'job_title', 'range_from', 'range_to', 
             'job_description', 'status', 'job_id', 'job_qualifications', 'available_slots'
         ]);
     }
@@ -116,7 +114,7 @@ class JobOfferManagement extends Component
 
         if ($this->submit_func == "add-job-offer") {
             JobOffer::create([
-                'employer_id' => $this->employer_id,
+                'employer_id' => Auth::guard('employer')->user()->employer_id,
                 'country' => $this->country,
                 'job_title' => $this->job_title,
                 'salary' => $this->range_from . ' - ' . $this->range_to,
@@ -130,7 +128,6 @@ class JobOfferManagement extends Component
 
         } else if ($this->submit_func == "edit-job-offer") {
 
-            $this->job_offer->employer_id = $this->employer_id;
             $this->job_offer->country = $this->country;
             $this->job_offer->job_title = $this->job_title;
             $this->job_offer->salary = $this->range_from . ' - ' . $this->range_to;

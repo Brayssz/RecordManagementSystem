@@ -13,7 +13,7 @@ class DocumentController extends Controller
     public function showApplicantDocuments(Request $request)
     {
         if ($request->ajax()) {
-            $query = ApplicationForm::with('applicant', 'documents', 'job', 'branch')->where('branch_id', Auth::guard("employee")->user()->branch_id);
+            $query = ApplicationForm::with('applicant', 'documents', 'job', 'branch')->where('branch_id', Auth::guard("employee")->user()->branch_id)->where('status', 'Submitting');
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
@@ -50,7 +50,7 @@ class DocumentController extends Controller
                 "data" => $applications
             ]);
         }
-        $applications = ApplicationForm::with('applicant', 'documents', 'job', 'branch')->where('branch_id', Auth::guard("employee")->user()->branch_id)->get();
+        $applications = ApplicationForm::with('applicant', 'documents', 'job', 'branch')->where('branch_id', Auth::guard("employee")->user()->branch_id)->where('status', 'Submitting')->get();
         $branches = Branch::where('status', 'Active')->get();
         // return($applications);
         return view('content.document-management', compact('applications', 'branches'));

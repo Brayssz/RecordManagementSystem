@@ -28,6 +28,8 @@ class AppController extends Controller
         } else {
             return redirect()->route('login');
         }
+
+        // return view('content.admin-dashboard');
     }
 
     public function showProfile()

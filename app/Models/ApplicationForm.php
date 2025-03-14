@@ -37,4 +37,8 @@ class ApplicationForm extends Model
     {
         return $this->hasOne(BranchInterview::class, 'application_id');
     }
+    public function employerInterview()
+    {
+        return $this->hasOne(EmployerInterview::class, 'application_id');
+    }
 }

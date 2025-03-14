@@ -3,12 +3,12 @@ Author       : Dreamguys
 Template Name: POS - Bootstrap Admin Template
 */
 
-function showLoader() {
-    $('#global-loader').fadeIn("fast"); // Show the loader with a fade-in effect
+window.showLoader = function() {
+	$('#global-loader').fadeIn("fast"); // Show the loader with a fade-in effect
 }
 
-function hideLoader() {
-    $('#global-loader').fadeOut("slow"); // Hide the loader with a fade-out effect
+window.hideLoader = function() {
+	$('#global-loader').fadeOut("slow"); // Hide the loader with a fade-out effect
 }
 
 window.messageAlert = function(title, message) {
@@ -24,7 +24,7 @@ window.messageAlert = function(title, message) {
 	});
 };
 
-function confirmAlert(title, message, operation, confirmbtn) {
+window.confirmAlert = function(title, message, operation, confirmbtn) {
 
 	Swal.fire({
 		title: title,
@@ -39,7 +39,6 @@ function confirmAlert(title, message, operation, confirmbtn) {
 			popup: 'rounded-lg' // Add this line to modify the border radius
 		}
 	}).then((result) => {
-		/* Read more about isConfirmed, isDenied below */
 		if (result.isConfirmed) {
 			operation();
 		}

@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JobOffer;
+use Illuminate\Support\Facades\Auth;
 
 class JobOfferController extends Controller
 {
     public function showJobOffers(Request $request)
     {
         if ($request->ajax()) {
-            $query = JobOffer::query();
+            $query = JobOffer::where('employer_id', Auth::guard("employer")->user()->employer_id);
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
@@ -48,7 +49,7 @@ class JobOfferController extends Controller
                 "data" => $jobOffers
             ]);
         }
-        $jobOffers = JobOffer::all();
+        $jobOffers = JobOffer::where('employer_id', Auth::guard("employer")->user()->employer_id)->get();
         // return($jobOffers);
         return view('content.job-offer-management', compact('jobOffers'));
     }
