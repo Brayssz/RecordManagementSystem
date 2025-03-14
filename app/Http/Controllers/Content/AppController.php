@@ -44,4 +44,9 @@ class AppController extends Controller
             return redirect()->route('login');
         }
     }
+
+    public function showCapture(Request $request)
+    {
+        return view('content.capture');
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\ApplicantRegisterController;
 use App\Http\Controllers\Content\ApplicantController;
 use App\Http\Controllers\Content\ApplicationController;
 use App\Http\Controllers\Content\BranchController;
+use App\Http\Controllers\Content\DocumentController;
 use App\Http\Controllers\Content\EmployeeController;
 use App\Http\Controllers\Content\EmployerController;
 use App\Http\Controllers\Content\JobOfferController;
@@ -64,3 +65,9 @@ Route::get('/employers', [EmployerController::class, 'showEmployers'])->name('em
 Route::get('/jobs', [JobOfferController::class, 'showJobOffers'])->name('jobs');
 
 Route::get('/branch-pending-applications', [ApplicationController::class, 'showPendingBranchApplications'])->name('branch-pending-applications');
+
+Route::get('/scheduled-branch-interviews', [ApplicationController::class, 'showScheduledBranchInterviews'])->name('scheduled-branch-interviews');
+
+Route::get('/capture ', [AppController::class, 'showCapture'])->name('capture');
+
+Route::get('/applicant-documents', [DocumentController::class, 'showApplicantDocuments'])->name('applicant-documents');

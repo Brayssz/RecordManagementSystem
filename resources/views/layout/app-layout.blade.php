@@ -254,8 +254,8 @@
                                             </a>
                                         </li>
 
-                                        <li class="{{ Request::is('scheduled-interviews') ? 'active' : '' }}">
-                                            <a href="/scheduled-interviews">
+                                        <li class="{{ Request::is('scheduled-branch-interviews') ? 'active' : '' }}">
+                                            <a href="/scheduled-branch-interviews">
                                                 <i data-feather="briefcase"></i>
                                                 <span>Scheduled Interviews</span>
                                                 <span class="badge-notif">1</span>
@@ -388,6 +388,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
 
     @vite(['resources/assets/js/script.js', 'resources/assets/js/custom-select2.js', 'resources/assets/js/mask.js', 'resources/assets/js/theme-script.js'])
     @livewireScripts
