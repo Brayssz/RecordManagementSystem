@@ -32,7 +32,7 @@ class SetEmployerInterviewSchedule extends Component
 
         session()->flash('message', 'Interview schedule set successfully.');
 
-        return redirect()->route('branch-pending-applications');
+        return redirect()->route('employer-pending-applications');
     }
 
     public function updateApplicationStatus()

@@ -46,7 +46,7 @@ class SubmitDocuments extends Component
 
         session()->flash('message', 'Documents submitted successfully.');
 
-        return redirect()->route('application-documents');
+        return redirect()->route('applicant-documents');
     }
 
     public function isDocumentsComplete($application_id)
