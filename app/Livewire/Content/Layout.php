@@ -10,11 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class Layout extends Component
 {
-    public $position = GetUsertype::getUserType();
+    public $position;
+    public $profilePhoto;
+    public $user;
 
-    public $profilePhoto = GetProfilePhoto::getProfilePhotoUrl();
-
-    public $user = Auth::guard($position)->user();
+    public function __construct()
+    {
+        $this->position = GetUsertype::getUserType();
+        $this->profilePhoto = GetProfilePhoto::getProfilePhotoUrl();
+        $this->user = Auth::guard($this->position)->user();
+    }
 
     public function render()
     {
