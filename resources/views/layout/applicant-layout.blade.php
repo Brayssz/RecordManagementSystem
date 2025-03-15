@@ -35,10 +35,10 @@
 
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
     @php
-        use App\Utils\GetUsertype;
+        use App\Utils\GetUserType;
         use App\Utils\GetProfilePhoto;
 
-        $position = GetUsertype::getUserType();
+        $position = GetUserType::getUserType();
 
         $profilePhoto = GetProfilePhoto::getProfilePhotoUrl();
 
