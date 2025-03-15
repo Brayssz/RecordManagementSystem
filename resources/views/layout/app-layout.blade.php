@@ -35,16 +35,7 @@
 
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
     {{-- @livewireStyles<!-- Styles - --}}
-    @php
-        use App\Utils\GetUsertype;
-        use App\Utils\GetProfilePhoto;
-
-        $position = GetUsertype::getUserType();
-
-        $profilePhoto = GetProfilePhoto::getProfilePhotoUrl();
-
-        $user = Auth::guard($position)->user();
-    @endphp
+   @livewire('content.layout')
 
 
 </head>
