@@ -3,8 +3,7 @@
 namespace App\Livewire\Content;
 
 use Livewire\Component;
-use
-    App\Utils\GetUsertype;
+use App\Utils\GetUserType;
 use App\Utils\GetProfilePhoto;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +15,7 @@ class Layout extends Component
 
     public function __construct()
     {
-        $this->position = GetUsertype::getUserType();
+        $this->position = GetUserType::getUserType();
         $this->profilePhoto = GetProfilePhoto::getProfilePhotoUrl();
         $this->user = Auth::guard($this->position)->user();
     }
