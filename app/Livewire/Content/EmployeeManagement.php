@@ -92,7 +92,6 @@ class EmployeeManagement extends Component
                 'string',
                 'max:255',
                 Rule::unique('employees', 'username')->ignore($this->employee_id, 'employee_id'),
-                Rule::unique('applicants', 'username'),
                 Rule::unique('employers', 'username'),
             ],
             'contact_number' => [
