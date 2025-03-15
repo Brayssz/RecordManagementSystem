@@ -91,8 +91,7 @@ class EmployeeManagement extends Component
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('employees', 'username')->ignore($this->employee_id, 'employee_id'),
-                Rule::unique('employers', 'username'),
+                Rule::unique('employees', 'username')->ignore($this->employee_id, 'employee_id')
             ],
             'contact_number' => [
                 'required',
