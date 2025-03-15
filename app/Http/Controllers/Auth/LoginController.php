@@ -53,19 +53,19 @@ class LoginController extends Controller
     }
     private function getUser($email)
     {
-        $applicant = Applicant::where('email', $email)->where('status', 'Active')->first();
+        $applicant = Applicant::where('email', $email)->first();
         if ($applicant) {
             $applicant->user_type = 'applicant';
             return $applicant;
         }
 
-        $employee = Employee::where('email', $email)->where('status', 'Active')->first();
+        $employee = Employee::where('email', $email)->first();
         if ($employee) {
             $employee->user_type = 'employee';
             return $employee;
         }
 
-        $employer = Employer::where('email', $email)->where('status', 'Active')->first();
+        $employer = Employer::where('email', $email)->first();
         if ($employer) {
             $employer->user_type = 'employer';
             return $employer;
