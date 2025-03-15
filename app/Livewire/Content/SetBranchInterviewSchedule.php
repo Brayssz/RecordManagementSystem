@@ -19,7 +19,7 @@ class SetBranchInterviewSchedule extends Component
     public function setInterviewSchedule()
     {
         $this->validate([
-            'interview_date' => 'required|date|after:today',
+            'interview_date' => 'required|date|after_or_equal:today',
         ]);
 
         $branchInterview = BranchInterview::firstOrNew(['application_id' => $this->application_id]);

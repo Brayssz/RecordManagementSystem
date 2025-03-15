@@ -16,7 +16,7 @@ class SetEmployerInterviewSchedule extends Component
     public function setInterviewSchedule()
     {
         $this->validate([
-            'interview_date' => 'required|date|after:today',
+            'interview_date' => 'required|date|after_or_equal:today',
             'interview_time' => 'required|date_format:H:i',
             'meeting_link' => 'required|url',
         ]);
