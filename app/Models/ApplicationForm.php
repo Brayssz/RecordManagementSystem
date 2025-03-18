@@ -10,7 +10,7 @@ class ApplicationForm extends Model
     use HasFactory;
     protected $primaryKey = 'application_id';
     protected $fillable = [
-        'applicant_id', 'branch_id', 'job_id', 'application_date', 'status'
+        'applicant_id', 'branch_id', 'job_id', 'application_date', 'status', 'marital_status', 'schedule_id'
     ];
 
     public function applicant()
@@ -37,8 +37,14 @@ class ApplicationForm extends Model
     {
         return $this->hasOne(BranchInterview::class, 'application_id');
     }
+
     public function employerInterview()
     {
         return $this->hasOne(EmployerInterview::class, 'application_id');
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(BranchSchedule::class, 'schedule_id');
     }
 }

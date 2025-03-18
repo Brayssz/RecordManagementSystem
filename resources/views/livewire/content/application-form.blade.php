@@ -178,7 +178,7 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <div wire:ignore>
-                                    <select class="select" id="branch_id" name="branch_id" wire:model="branch_id">
+                                    <select class="select branch" id="branch_id" name="branch_id" wire:model="branch_id">
                                         <option value="">Choose</option>
                                         @foreach ($branches as $branch)
                                             <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}
@@ -187,6 +187,20 @@
                                     </select>
                                 </div>
                                 @error('branch_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label" for="branch_id">Interview Schedule</label>
+                                <div wire:ignore>
+                                    <select class="select schedule" id="schedule_id" name="schedule_id"
+                                        wire:model="schedule_id">
+                                        <option value="" selected>Please Select a branch first</option>
+                                    </select>
+                                </div>
+                                @error('schedule_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -343,9 +357,40 @@
                     @this.set(property, value);
 
                     console.log(`${property}: ${value}`);
-
-
+                    
                 }
+                getBranchSchedules(e);
+            }
+
+            const getBranchSchedules = (e) => {
+                console.log("hello" + e.target);
+                if ($(e.target).is('.branch')) {
+                        @this.call('getSchedules').then(schedules => {
+                            console.log(schedules);
+
+                            let scheduleSelect = $('.schedule');
+                            scheduleSelect.empty();
+
+                            scheduleSelect.append('<option value="" selected>Choose an interview schedule</option>');
+
+                            schedules.forEach(schedule => {
+                                let formattedDate = new Date(schedule.interview_date).toLocaleDateString(
+                                    'en-US', {
+                                        month: 'long',
+                                        day: '2-digit',
+                                        year: 'numeric',
+                                        weekday: 'long'
+                                    });
+
+                                scheduleSelect.append(
+                                    `<option value="${schedule.schedule_id}">${formattedDate}</option>`);
+                            });
+
+                            // Reinitialize Select2 if needed
+                            scheduleSelect.trigger(
+                                'change'); // If using Select2, replace with scheduleSelect.select2();
+                        });
+                    }
             }
         </script>
     @endpush

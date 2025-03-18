@@ -11,10 +11,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Branch;
 use App\Models\ApplicationForm as Application;
+use App\Models\BranchSchedule;
 use App\Models\Content;
 use App\Models\Document;
 use App\Models\Employee;
 use App\Notifications\NewApplicationNotification;
+use Carbon\Carbon;
 
 class ApplicationForm extends Component
 {
@@ -33,6 +35,7 @@ class ApplicationForm extends Component
 
     public $job_id;
     public $branch_id; // Added branch_id attribute
+    public $schedule_id; // Added schedule_id attribute
 
     public $educational_attainments = [
         ['level' => 'Elementary', 'document' => ''],
@@ -40,7 +43,6 @@ class ApplicationForm extends Component
         ['level' => 'High School', 'document' => ''],
         ['level' => 'Higher', 'document' => '']
     ];
-
 
     public function addWorkExperience()
     {
@@ -137,6 +139,7 @@ class ApplicationForm extends Component
             'status' => 'nullable|string|max:255',
             'suffix' => 'nullable|string|max:255',
             'branch_id' => 'required|exists:branches,branch_id',
+            'schedule_id' => 'required|exists:branch_schedules,schedule_id', // Added validation rule for schedule_id
             'educational_attainments.*.document' => 'nullable|image|max:1024',
             'work_experiences.*.document' => 'nullable|image|max:1024',
         ];
@@ -171,7 +174,6 @@ class ApplicationForm extends Component
             }
         });
     }
-
 
     public function deleteProfilePhoto($applicant)
     {
@@ -208,7 +210,8 @@ class ApplicationForm extends Component
             'suffix',
             'citizenship',
             'photoPreview',
-            'branch_id' // Reset branch_id
+            'branch_id', // Reset branch_id
+            'schedule_id' // Reset schedule_id
         ]);
     }
 
@@ -244,12 +247,19 @@ class ApplicationForm extends Component
 
     public function addEducationalAttainment($application_id)
     {
-
         foreach ($this->educational_attainments as $attainment) {
             if ($attainment['document']) {
                 $this->updateDocumentPhoto($attainment['document'], $application_id, $attainment['level']);
             }
         }
+    }
+
+    public function getSchedules()
+    {
+        return BranchSchedule::where('available_slots', '>', 0)
+            ->whereDate('interview_date', '>=', Carbon::now('Asia/Manila'))
+            ->where('branch_id', $this->branch_id)
+            ->get();
     }
 
     public function addWorkExperienceDocument($application_id)
@@ -298,6 +308,7 @@ class ApplicationForm extends Component
         $application = new Application();
         $application->applicant_id = $applicant_id;
         $application->branch_id = $this->branch_id; // Set branch_id
+        $application->schedule_id = $this->schedule_id; // Set schedule_id
         $application->job_id = $this->job_id;
         $application->application_date = now();
         $application->status = 'Pending';
@@ -308,9 +319,18 @@ class ApplicationForm extends Component
 
         // $this->notifyEmployees($application);
 
+        $this->decreaseScheduleSlot();
+
         session()->flash('message', 'Application successfully created.');
 
         return redirect()->route('job-offers');
+    }
+
+    public function decreaseScheduleSlot()
+    {
+        $branch_schedule = BranchSchedule::find($this->schedule_id);
+        $branch_schedule->available_slots -= 1;
+        $branch_schedule->save();
     }
 
     public function notifyEmployees($application) {

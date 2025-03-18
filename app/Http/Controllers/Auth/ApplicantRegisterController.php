@@ -33,7 +33,7 @@ class ApplicantRegisterController extends Controller
             'street' => 'required|string|max:255',
             'postal_code' => 'required|string|max:10',
             'citizenship' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
+            'marital_status' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -56,7 +56,8 @@ class ApplicantRegisterController extends Controller
             'street' => $request->street,
             'postal_code' => $request->postal_code,
             'citizenship' => $request->citizenship,
-            'status' => $request->status,
+            'status' => 'Active',
+            'marital_status' => $request->marital_status,
         ]);
 
         // Optionally, log the user in after registration

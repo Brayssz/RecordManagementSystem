@@ -112,13 +112,13 @@ class ApplicationController extends Controller
     {
         if ($request->ajax()) {
             $query = ApplicationForm::with('applicant', 'job.employer', 'branch', 'EmployerInterview')
-                ->whereHas('job.employer', function ($q) {
-                    $q->where('employer_id', Auth::guard("employer")->user()->employer_id);
-                })
                 ->whereIn('status', ['Reviewing', 'ScheduledEmployerInterview']);
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
+            }
+            if ($request->filled('branch_id')) {
+                $query->where('branch_id', 'like', '%' . $request->branch_id . '%');
             }
 
             if ($request->filled('search') && !empty($request->input('search')['value'])) {
@@ -153,13 +153,11 @@ class ApplicationController extends Controller
             ]);
         }
         $applications = ApplicationForm::with('applicant', 'job.employer', 'branch', 'EmployerInterview')
-            ->whereHas('job.employer', function ($q) {
-                $q->where('employer_id', Auth::guard("employer")->user()->employer_id);
-            })
-            ->whereIn('status', ['Reviewing', 'ScheduledEmployerInterview'])->get();
 
+            ->whereIn('status', ['Reviewing', 'ScheduledEmployerInterview'])->get();
+        $branches = Branch::where('status', 'Active')->get();
         // return($applications);
-        return view('content.employer-int-schedule-management', compact('applications'));
+        return view('content.employer-int-schedule-management', compact('applications', 'branches'));
     }
 
 
@@ -212,10 +210,10 @@ class ApplicationController extends Controller
     public function showScheduledBranchInterviews(Request $request)
     {
         if ($request->ajax()) {
-            $query = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview')
+            $query = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview', 'schedule', 'job.employer')
                 ->where('branch_id', Auth::guard("employee")->user()->branch_id)
-                ->where('status', 'ScheduledBranchInterview')
-                ->whereHas('branchInterview', function ($q) {
+                ->where('status', 'Pending')
+                ->whereHas('schedule', function ($q) {
                     $q->whereDate('interview_date', now()->toDateString());
                 });
 
@@ -254,10 +252,10 @@ class ApplicationController extends Controller
                 "data" => $applications
             ]);
         }
-        $applications = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview')
+        $applications = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview', 'schedule', 'job.employer')
             ->where('branch_id', Auth::guard("employee")->user()->branch_id)
-            ->where('status', 'ScheduledBranchInterview')
-            ->whereHas('branchInterview', function ($q) {
+            ->where('status', 'Pending')
+            ->whereHas('schedule', function ($q) {
                 $q->whereDate('interview_date', now()->toDateString());
             })
             ->get();
@@ -270,9 +268,6 @@ class ApplicationController extends Controller
     {
         if ($request->ajax()) {
             $query = ApplicationForm::with('applicant', 'job.employer', 'branch', 'employerInterview')
-                ->whereHas('job.employer', function ($q) {
-                    $q->where('employer_id', Auth::guard("employer")->user()->employer_id);
-                })
                 ->where('status', 'ScheduledEmployerInterview')
                 ->whereHas('employerInterview', function ($q) {
                     $q->whereDate('interview_date', now()->toDateString());
@@ -314,9 +309,6 @@ class ApplicationController extends Controller
             ]);
         }
         $applications = ApplicationForm::with('applicant', 'job.employer', 'branch', 'employerInterview')
-            ->whereHas('job.employer', function ($q) {
-                $q->where('employer_id', Auth::guard("employer")->user()->employer_id);
-            })
             ->where('status', 'ScheduledEmployerInterview')
             ->whereHas('employerInterview', function ($q) {
                 $q->whereDate('interview_date', now()->toDateString());

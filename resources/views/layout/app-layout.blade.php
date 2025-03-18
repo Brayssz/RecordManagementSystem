@@ -46,6 +46,7 @@
         $user = Auth::guard($position)->user();
     @endphp
 
+    
 
 </head>
 
@@ -203,12 +204,35 @@
                                         <li class="{{ Request::is('employees') ? 'active' : '' }}">
                                             <a href="/employees"><i data-feather="user"></i><span>Employees</span></a>
                                         </li>
+                                        <li class="{{ Request::is('jobs') ? 'active' : '' }}">
+                                            <a href="/jobs"><i data-feather="briefcase"></i><span>Jobs</span></a>
+                                        </li>
                                         <li class="{{ Request::is('branches') ? 'active' : '' }}">
                                             <a href="/branches"><i data-feather="home"></i><span>Branches</span></a>
                                         </li>
                                         <li class="{{ Request::is('employers') ? 'active' : '' }}">
                                             <a href="/employers"><i
                                                     data-feather="user-check"></i><span>Employers</span></a>
+                                        </li>
+
+                                        <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
+                                            <a href="/approve-applications"><i
+                                                    data-feather="check-circle"></i><span>Applicant Hiring</span></a>
+                                        </li>
+    
+                                        <li class="{{ Request::is('employer-pending-applications') ? 'active' : '' }}">
+                                            <a href="/employer-pending-applications">
+                                                <i data-feather="calendar"></i>
+                                                <span>Interview Schedules</span>
+                                            </a>
+                                        </li>
+    
+                                        <li class="{{ Request::is('scheduled-employer-interviews') ? 'active' : '' }}">
+                                            <a href="/scheduled-employer-interviews">
+                                                <i data-feather="briefcase"></i>
+                                                <span>Scheduled Interviews</span>
+                                                <span class="badge-notif">1</span>
+                                            </a>
                                         </li>
                                         <li class="{{ Request::is('applicants') ? 'active' : '' }}">
                                             <a href="applicants"><i
@@ -238,8 +262,8 @@
                                                     Application</span></a>
                                         </li>
 
-                                        <li class="{{ Request::is('branch-pending-applications') ? 'active' : '' }}">
-                                            <a href="/branch-pending-applications">
+                                        <li class="{{ Request::is('branch-schedules') ? 'active' : '' }}">
+                                            <a href="/branch-schedules">
                                                 <i data-feather="calendar"></i>
                                                 <span>Interview Schedules</span>
                                             </a>
@@ -253,32 +277,6 @@
                                             </a>
                                         </li>
                                     @endif
-                                @endif
-
-                                @if ($position == 'employer')
-                                    <li class="{{ Request::is('jobs') ? 'active' : '' }}">
-                                        <a href="/jobs"><i data-feather="briefcase"></i><span>Jobs</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
-                                        <a href="/approve-applications"><i
-                                                data-feather="check-circle"></i><span>Applicant Hiring</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('employer-pending-applications') ? 'active' : '' }}">
-                                        <a href="/employer-pending-applications">
-                                            <i data-feather="calendar"></i>
-                                            <span>Interview Schedules</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="{{ Request::is('scheduled-employer-interviews') ? 'active' : '' }}">
-                                        <a href="/scheduled-employer-interviews">
-                                            <i data-feather="briefcase"></i>
-                                            <span>Scheduled Interviews</span>
-                                            <span class="badge-notif">1</span>
-                                        </a>
-                                    </li>
                                 @endif
 
                                 @if ($user->position == 'Clerk')
@@ -327,6 +325,8 @@
         <div class="page-wrapper">
             @yield('content')
         </div>
+
+        @livewire('content.layout')
 
     </div>
     <!-- jQuery -->

@@ -26,8 +26,25 @@
                                                 Information</h6>
                                         </div>
                                         <div class="row">
-                                            
-                                            <div class="col-lg-12 col-md-12">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="employer_id">Employer</label>
+                                                    <div wire:ignore>
+                                                        <select class="select" id="employer_id" name="employer_id"
+                                                            wire:model="employer_id">
+                                                            <option value="">Choose</option>
+                                                            @foreach ($employers as $employer)
+                                                                <option value="{{ $employer->employer_id }}">
+                                                                    {{ $employer->company_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    @error('employer_id')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="country">Country</label>
                                                     <input type="text" class="form-control"

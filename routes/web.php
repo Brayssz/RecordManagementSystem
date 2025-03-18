@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\ApplicantRegisterController;
 use App\Http\Controllers\Content\ApplicantController;
 use App\Http\Controllers\Content\ApplicationController;
 use App\Http\Controllers\Content\BranchController;
+use App\Http\Controllers\Content\BranchScheduleController;
 use App\Http\Controllers\Content\DocumentController;
 use App\Http\Controllers\Content\EmployeeController;
 use App\Http\Controllers\Content\EmployerController;
@@ -21,15 +22,17 @@ Route::middleware(['employee'])->group(function () {
     Route::get('/applicant-documents', [DocumentController::class, 'showApplicantDocuments'])->name('applicant-documents');
 
     Route::get('/approve-applications', [ApplicationController::class, 'showToApproveApplications'])->name('approve-applications');
-});
 
-Route::middleware(['employer'])->group(function () {
-    
+     
     Route::get('/jobs', [JobOfferController::class, 'showJobOffers'])->name('jobs');
 
     Route::get('/employer-pending-applications', [ApplicationController::class, 'showPendingEmployerApplications'])->name('employer-pending-applications');
 
     Route::get('/scheduled-employer-interviews', [ApplicationController::class, 'showScheduledEmployerInterviews'])->name('scheduled-employer-interviews');
+});
+
+Route::middleware(['employer'])->group(function () {
+   
 });
 
 Route::middleware(['applicant'])->group(function () {
@@ -78,3 +81,5 @@ Route::get('/branch-pending-applications', [ApplicationController::class, 'showP
 Route::get('/scheduled-branch-interviews', [ApplicationController::class, 'showScheduledBranchInterviews'])->name('scheduled-branch-interviews');
 
 Route::get('/capture ', [AppController::class, 'showCapture'])->name('capture');
+
+Route::get('/branch-schedules ', [BranchScheduleController::class, 'showBranchSchedule'])->name('branch-schedules');

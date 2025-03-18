@@ -12,7 +12,7 @@ class JobOfferController extends Controller
     public function showJobOffers(Request $request)
     {
         if ($request->ajax()) {
-            $query = JobOffer::where('employer_id', Auth::guard("employer")->user()->employer_id);
+            $query = JobOffer::where('status', 'Active');
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
@@ -49,7 +49,7 @@ class JobOfferController extends Controller
                 "data" => $jobOffers
             ]);
         }
-        $jobOffers = JobOffer::where('employer_id', Auth::guard("employer")->user()->employer_id)->get();
+        $jobOffers = JobOffer::where('status', 'Active')->get();
         // return($jobOffers);
         return view('content.job-offer-management', compact('jobOffers'));
     }

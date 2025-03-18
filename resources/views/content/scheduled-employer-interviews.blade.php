@@ -199,13 +199,14 @@
                             "render": function(data, type, row) {
                                 return `
                                 <div class="edit-delete-action">
-                                    <a class="me-2 p-2 record_interview" data-interviewid="${row.employer_interview.e_interview_id}">
+                                    <a class="me-2 p-2 record_interview" data-interviewid="${row.employer_interview.e_interview_id}" data-employerid="${row.job.employer.employer_id}">
                                         <i data-feather="file-text" class="feather-file-text"></i>
                                     </a>
                                 </div>
-                            `;
+                                `;
                             }
                         }
+
                     ],
                     "createdRow": function(row, data, dataIndex) {
                         $(row).find('td').eq(4).addClass('action-table-data');

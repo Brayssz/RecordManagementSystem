@@ -12,4 +12,10 @@ class EmployerInterview extends Model
     protected $fillable = [
         'employer_id', 'application_id', 'interview_date', 'remarks', 'rating', 'status', 'meeting_link', 'interview_time'
     ];
+
+    public function application()
+    {
+        return $this->belongsTo(ApplicationForm::class, 'application_id');
+    }
 }
+

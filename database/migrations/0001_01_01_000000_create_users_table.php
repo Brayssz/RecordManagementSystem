@@ -80,18 +80,31 @@ return new class extends Migration
             $table->foreign('employer_id')->references('employer_id')->on('employers')->onDelete('set null');
         });
 
+        Schema::create('branch_schedules', function (Blueprint $table) {
+            $table->id('schedule_id');
+            $table->dateTime('interview_date');
+            $table->integer('available_slots')->default(0);
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
+        });
+
         Schema::create('application_forms', function (Blueprint $table) {
             $table->id('application_id');
             $table->unsignedBigInteger('applicant_id')->nullable();
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->unsignedBigInteger('job_id')->nullable();
+            $table->unsignedBigInteger('schedule_id')->nullable();
             $table->date('application_date');
+            $table->string('marital_status');
             $table->string('status');
             $table->timestamps();
 
             $table->foreign('applicant_id')->references('applicant_id')->on('applicants')->onDelete('set null');
             $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
             $table->foreign('job_id')->references('job_id')->on('job_offers')->onDelete('set null');
+            $table->foreign('schedule_id')->references('schedule_id')->on('branch_schedules')->onDelete('set null');
         });
 
         Schema::create('employees', function (Blueprint $table) {
@@ -121,22 +134,13 @@ return new class extends Migration
             $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
         });
 
-        Schema::create('branch_schedules', function (Blueprint $table) {
-            $table->id('schedule_id');
-            $table->dateTime('interview_date');
-            $table->integer('available_slots')->default(0);
-            $table->unsignedBigInteger('branch_id')->nullable();
-            $table->timestamps();
-
-            $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
-        });
+       
 
         Schema::create('branch_interviews', function (Blueprint $table) {
             $table->id('b_interview_id');
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->unsignedBigInteger('application_id')->nullable();
-            $table->date('interview_date');
             $table->string('remarks')->nullable();
             $table->integer('rating')->nullable();
             $table->string('status');

@@ -6,6 +6,7 @@ use App\Models\EmployerInterview;
 use App\Models\ApplicationForm;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Employer;
 
 class RecordEmployerInterview extends Component
 {
@@ -15,7 +16,7 @@ class RecordEmployerInterview extends Component
     public $rating = 0;
     public $status;
     public $e_interview_id;
-
+    public $employer_id;
     protected function rules()
     {
         return [
@@ -40,8 +41,8 @@ class RecordEmployerInterview extends Component
     public function submitEmployerInterview()
     {
         $this->validate();
-
-        $employer = Auth::guard('employer')->user();
+        
+        $employer = Employer::findOrFail($this->employer_id);
 
         $employerInterview = EmployerInterview::findOrFail($this->e_interview_id);
 

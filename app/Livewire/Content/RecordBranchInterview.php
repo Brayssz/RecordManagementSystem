@@ -16,6 +16,8 @@ class RecordBranchInterview extends Component
     public $status;
     public $b_interview_id;
 
+    public $application_id;
+
     protected function rules()
     {
         return [
@@ -43,26 +45,39 @@ class RecordBranchInterview extends Component
 
         $employee = Auth::guard('employee')->user();
 
-        $branchInterview = BranchInterview::findOrFail($this->b_interview_id);
+        if ($this->b_interview_id !== null) {
+            $branchInterview = BranchInterview::findOrFail($this->b_interview_id);
 
-        $branchInterview->update([
-            'remarks' => $this->remarks,
-            'rating' => $this->rating,
-            'branch_id' => $employee->branch_id,
-            'employee_id' => $employee->employee_id,
-            'status' => "Completed",
-        ]);
+            $branchInterview->update([
+                'remarks' => $this->remarks,
+                'rating' => $this->rating,
+                'branch_id' => $employee->branch_id,
+                'employee_id' => $employee->employee_id,
+                'status' => "Completed",
+            ]);
+
+            session()->flash('message', 'Branch interview successfully updated.');
+        } else {
+            BranchInterview::create([
+                'remarks' => $this->remarks,
+                'rating' => $this->rating,
+                'branch_id' => $employee->branch_id,
+                'employee_id' => $employee->employee_id,
+                'status' => "Completed",
+            ]);
+
+            session()->flash('message', 'Branch interview successfully created.');
+        }
 
         $this->resetFields();
         $this->setApplicationStatus();
-        session()->flash('message', 'Branch interview successfully submitted.');
 
         return redirect()->route('scheduled-branch-interviews');
     }
 
     public function setApplicationStatus()
     {
-        $application = ApplicationForm::findOrFail($this->branch_interview->application_id);
+        $application = ApplicationForm::findOrFail($this->application_id);
         $application->status = "Interviewed";
         $application->save();
     }

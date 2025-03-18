@@ -44,6 +44,7 @@
                         <thead>
                             <tr>
                                 <th></th>
+                                <th>Employer</th>
                                 <th>Applicant</th>
                                 <th>Job</th>
                                 <th>Country</th>
@@ -107,6 +108,72 @@
                             "data": "application_id",
                             "visible": false,
                             "searchable": false
+                        },
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                let avatarSrc = 'assets/img/no-profile.png';
+                                if (row.job.employer.profile_photo_path) {
+                                    avatarSrc = `/storage/${row.job.employer.profile_photo_path}`;
+                                    return `
+                                        <div class="userimgname">
+                                            <a href="javascript:void(0);" class="product-img">
+                                                <img src="${avatarSrc}" alt="product" loading="lazy">
+                                            </a>
+                                            <div>
+                                                <a href="javascript:void(0);">${row.job.employer.company_name}</a>
+                                                <span class="emp-team">${row.job.employer.first_name || "Unknown"} ${row.job.employer.middle_name ? `${row.job.employer.middle_name} ` : ""}${row.job.employer.last_name || "User"}</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    const colors = {
+                                        A: 'bg-primary',
+                                        B: 'bg-success',
+                                        C: 'bg-info',
+                                        D: 'bg-warning',
+                                        E: 'bg-danger',
+                                        F: 'bg-secondary',
+                                        G: 'bg-dark',
+                                        H: 'bg-light',
+                                        I: 'bg-primary',
+                                        J: 'bg-success',
+                                        K: 'bg-info',
+                                        L: 'bg-warning',
+                                        M: 'bg-danger',
+                                        N: 'bg-secondary',
+                                        O: 'bg-dark',
+                                        P: 'bg-light',
+                                        Q: 'bg-primary',
+                                        R: 'bg-success',
+                                        S: 'bg-info',
+                                        T: 'bg-warning',
+                                        U: 'bg-danger',
+                                        V: 'bg-secondary',
+                                        W: 'bg-dark',
+                                        X: 'bg-light',
+                                        Y: 'bg-primary',
+                                        Z: 'bg-success',
+                                    };
+
+                                    const firstLetter = (row.job.employer.first_name ? row.job.employer.first_name.charAt(0).toUpperCase() : 'U');
+                                    const bgColor = colors[firstLetter] || 'bg-secondary';
+
+                                    return `
+                                        <div class="userimgname">
+                                            <a href="javascript:void(0);" class="product-img">
+                                                <span class="avatar ${bgColor} avatar-rounded">
+                                                    <span class="avatar-title">${row.job.employer.first_name ? row.job.employer.first_name.charAt(0).toUpperCase() : 'U'}${row.job.employer.last_name ? row.job.employer.last_name.charAt(0).toUpperCase() : 'U'}</span>
+                                                </span>
+                                            </a>
+                                            <div>
+                                                 <a href="javascript:void(0);">${row.job.employer.company_name}</a>
+                                                <span class="emp-team">${row.job.employer.first_name || "Unknown"} ${row.job.employer.middle_name ? `${row.job.employer.middle_name} ` : ""}${row.job.employer.last_name || "User"}</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            }
                         },
                         {
                             "data": null,
@@ -188,7 +255,7 @@
                             "render": function(data, type, row) {
                                 return `
                                 <div class="edit-delete-action">
-                                    <a class="me-2 p-2 record_interview" data-interviewid="${row.branch_interview.b_interview_id}">
+                                    <a class="me-2 p-2 record_interview" data-interviewid="${row.branch_interview ? row.branch_interview.b_interview_id : null}" data-applicationid="${row.application_id}">
                                         <i data-feather="file-text" class="feather-file-text"></i>
                                     </a>
                                 </div>
@@ -197,7 +264,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(3).addClass('action-table-data');
+                        $(row).find('td').eq(4).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');

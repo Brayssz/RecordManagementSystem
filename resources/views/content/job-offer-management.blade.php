@@ -62,6 +62,7 @@
                         <thead>
                             <tr>
                                 <th>Job Title</th>
+                                <th>Employer</th>
                                 <th>Country</th>
                                 <th>Salary</th>
                                 <th>Available Slots</th>
@@ -125,6 +126,9 @@
                             "data": "job_title"
                         },
                         {
+                            "data": "employer_id"
+                        },
+                        {
                             "data": "country"
                         },
                         {
@@ -157,7 +161,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(5).addClass('action-table-data');
+                        $(row).find('td').eq(6).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
