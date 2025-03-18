@@ -53,6 +53,7 @@ class RecordBranchInterview extends Component
                 'rating' => $this->rating,
                 'branch_id' => $employee->branch_id,
                 'employee_id' => $employee->employee_id,
+                'application_id' => $this->application_id,
                 'status' => "Completed",
             ]);
 
@@ -63,6 +64,7 @@ class RecordBranchInterview extends Component
                 'rating' => $this->rating,
                 'branch_id' => $employee->branch_id,
                 'employee_id' => $employee->employee_id,
+                'application_id' => $this->application_id,
                 'status' => "Completed",
             ]);
 

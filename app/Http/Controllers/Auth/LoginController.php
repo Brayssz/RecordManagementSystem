@@ -37,9 +37,9 @@ class LoginController extends Controller
         $user->two_factor_expires_at = Carbon::now()->addMinutes(5);
         $user->save(); 
     
-        // Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
-        //     $message->to($request->email)->subject('Your OTP Code');
-        // });
+        Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
+            $message->to($request->email)->subject('Your OTP Code');
+        });
 
         Session::put('verification_email', $user->email);
     
@@ -102,10 +102,10 @@ class LoginController extends Controller
 
         Session::forget('verification_email');
 
-        // unset($user->user_type);
-        // $user->two_factor_code = null;
-        // $user->two_factor_expires_at = null;
-        // $user->save(['two_factor_code', 'two_factor_expires_at']);
+        unset($user->user_type);
+        $user->two_factor_code = null;
+        $user->two_factor_expires_at = null;
+        $user->save(['two_factor_code', 'two_factor_expires_at']);
 
         return response()->json([
             'message' => 'Login successful',

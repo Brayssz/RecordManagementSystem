@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('barangay');
             $table->string('street');
             $table->string('postal_code');
+            $table->string('marital_status');
             $table->string('profile_photo_path')->nullable();
             $table->string('status');
             $table->timestamps();
@@ -97,7 +98,6 @@ return new class extends Migration
             $table->unsignedBigInteger('job_id')->nullable();
             $table->unsignedBigInteger('schedule_id')->nullable();
             $table->date('application_date');
-            $table->string('marital_status');
             $table->string('status');
             $table->timestamps();
 

@@ -34,7 +34,7 @@ class RecordEmployerInterview extends Component
     {
         $this->branch_interview = EmployerInterview::findOrFail($bInterviewID);
         $this->remarks = $this->branch_interview->remarks;
-        $this->rating = $this->branch_interview->rating;
+        $this->rating = $this->branch_interview->rating? $this->branch_interview->rating : 0;
         $this->e_interview_id = $this->branch_interview->e_interview_id;
     }
 

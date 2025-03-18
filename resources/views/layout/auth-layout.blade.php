@@ -40,12 +40,13 @@
     
      <!-- Sweetalert 2 -->
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <!-- Mask JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
     <!-- Feather Icon JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"></script>
 
     <!-- Custom JS -->
-    @vite(['resources/assets/js/script.js', 'resources/assets/js/theme-script.js'])
+    @vite(['resources/assets/js/script.js', 'resources/assets/js/mask.js', 'resources/assets/js/theme-script.js'])
     @stack('scripts')
 </body>
 

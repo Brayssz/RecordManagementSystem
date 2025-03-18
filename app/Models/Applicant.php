@@ -14,6 +14,6 @@ class Applicant extends Authenticatable
     protected $fillable = [
         'first_name', 'middle_name', 'last_name', 'gender', 'email', 'password',
         'contact_number', 'date_of_birth', 'region', 'province', 'municipality',
-        'barangay', 'street', 'postal_code','citizenship', 'status', 'suffix', 'profile_photo_path'
+        'barangay', 'street', 'postal_code','citizenship', 'status', 'suffix', 'profile_photo_path', 'marital_status'
     ];
 }

@@ -27,6 +27,7 @@ class ApplicationForm extends Component
 
     public $applicant_id, $first_name, $middle_name, $last_name, $email, $contact_number, $date_of_birth, $gender, $status, $suffix;
     public $region, $province, $municipality, $barangay, $street, $postal_code, $citizenship, $password, $password_confirmation;
+    public $marital_status; // Added marital_status attribute
 
     public $photo;
     public $photoPreview;
@@ -84,6 +85,7 @@ class ApplicationForm extends Component
             $this->street = $this->applicant->street;
             $this->postal_code = $this->applicant->postal_code;
             $this->citizenship = $this->applicant->citizenship;
+            $this->marital_status = $this->applicant->marital_status; // Retrieve marital_status
             $this->photoPreview = $this->getProfilePhotoUrl($this->applicant);
 
             $this->password = null;
@@ -140,6 +142,7 @@ class ApplicationForm extends Component
             'suffix' => 'nullable|string|max:255',
             'branch_id' => 'required|exists:branches,branch_id',
             'schedule_id' => 'required|exists:branch_schedules,schedule_id', // Added validation rule for schedule_id
+            'marital_status' => 'required|string|max:255', // Added validation rule for marital_status
             'educational_attainments.*.document' => 'nullable|image|max:1024',
             'work_experiences.*.document' => 'nullable|image|max:1024',
         ];
@@ -211,7 +214,8 @@ class ApplicationForm extends Component
             'citizenship',
             'photoPreview',
             'branch_id', // Reset branch_id
-            'schedule_id' // Reset schedule_id
+            'schedule_id', // Reset schedule_id
+            'marital_status' // Reset marital_status
         ]);
     }
 
@@ -235,6 +239,7 @@ class ApplicationForm extends Component
         $this->applicant->street = $this->street;
         $this->applicant->postal_code = $this->postal_code;
         $this->applicant->citizenship = $this->citizenship;
+        $this->applicant->marital_status = $this->marital_status; // Save marital_status
 
         $this->applicant->save();
 

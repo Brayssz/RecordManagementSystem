@@ -62,6 +62,7 @@
         </div>
     </div>
     @livewire('content.application-approval')
+    @livewire('content.view-application')
 
 @endsection
 

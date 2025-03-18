@@ -21,7 +21,7 @@ class AppController extends Controller
             } else if(Auth::user()->position == 'Manager'){
                 return view('content.manager-dashboard');
             } else if(Auth::user()->position == 'Clerk'){
-                return view('content.staff-dashboard');
+                return view('content.clerk-dashboard');
             } 
         } else if (session('auth_user_type') == 'employer') {
             return view('content.employer-dashboard');

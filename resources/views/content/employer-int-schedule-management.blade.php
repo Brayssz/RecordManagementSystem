@@ -46,6 +46,17 @@
                                 </div>
                             </div>
 
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group ">
+                                    <select class="select employer_filter form-control">
+                                        <option value="">Employer</option>
+                                        @foreach ($employers as $employer)
+                                            <option value="{{ $employer->employer_id }}">{{ $employer->company_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
@@ -120,6 +131,7 @@
                         "data": function (d) {
                             d.status = $('.status_filter').val();
                             d.branch_id =  $('.branch_filter').val();
+                            d.employer_id =  $('.employer_filter').val();
                         },
                         "dataSrc": "data"
                     },
@@ -322,7 +334,7 @@
                         $('.dataTables_filter').appendTo('.search-input');
                         feather.replace();
 
-                        $('.branch_filter').on('change', function() {
+                        $('.branch_filter, .employer_filter').on('change', function() {
                             table.draw();
                         });
 

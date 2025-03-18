@@ -23,8 +23,13 @@ Route::middleware(['employee'])->group(function () {
 
     Route::get('/approve-applications', [ApplicationController::class, 'showToApproveApplications'])->name('approve-applications');
 
+    Route::get('/hire-applicants', [ApplicationController::class, 'showToHireApplications'])->name('hire-applicants');
+
+    Route::get('/deploy-applicants', [ApplicationController::class, 'showToDeployApplications'])->name('deploy-applicants');
      
     Route::get('/jobs', [JobOfferController::class, 'showJobOffers'])->name('jobs');
+
+    Route::get('/application-records', [ApplicationController::class, 'showApplicantRecords'])->name('application-records');
 
     Route::get('/employer-pending-applications', [ApplicationController::class, 'showPendingEmployerApplications'])->name('employer-pending-applications');
 
@@ -82,4 +87,4 @@ Route::get('/scheduled-branch-interviews', [ApplicationController::class, 'showS
 
 Route::get('/capture ', [AppController::class, 'showCapture'])->name('capture');
 
-Route::get('/branch-schedules ', [BranchScheduleController::class, 'showBranchSchedule'])->name('branch-schedules');
+Route::get('/branch-schedules', [BranchScheduleController::class, 'showBranchSchedule'])->name('branch-schedules');

@@ -47,4 +47,14 @@ class ApplicationForm extends Model
     {
         return $this->belongsTo(BranchSchedule::class, 'schedule_id');
     }
+
+    public function hiring()
+    {
+        return $this->hasOne(Hiring::class, 'application_id');
+    }
+
+    public function deployment()
+    {
+        return $this->hasOne(Deployment::class, 'application_id');
+    }
 }

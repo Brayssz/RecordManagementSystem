@@ -302,14 +302,16 @@
                                     return `<span class="badge badge-lineinfo">Submitting Documents</span>`;
                                 } else if (row.status === "Reviewing") {
                                     return `<span class="badge badge-linesecondary">Reviewing Application</span>`;
-                                } else if (row.status === "ScheduledManager") {
-                                    return `<span class="badge badge-linesecondary">Scheduled for Manager Interview</span>`;
                                 } else if (row.status === "ScheduledBranchInterview") {
-                                    return `<span class="badge badge-linesuccess">Scheduled for Employer Interview</span>`;
+                                    return `<span class="badge badge-linesecondary">Scheduled for Branch Interview</span>`;
+                                } else if (row.status === "ScheduledEmployerInterview") {
+                                    return `<span class="badge badge-lineinfo">Scheduled for Employer Interview</span>`;
                                 } else if (row.status === "Waiting") {
                                     return `<span class="badge badge-lineyellow">Waiting to be Hired</span>`;
                                 } else if (row.status === "Hired") {
-                                    return `<span class="badge badge-linesuccess">Hired</span>`;
+                                    return `<span class="badge badge-lineyellow">Waiting to be Deployed</span>`;
+                                } else if (row.status === "Deployed") {
+                                    return `<span class="badge badge-linesuccess">Deployed With Departure Schedule</span>`;
                                 } else if (row.status === "Canceled") {
                                     return `<span class="badge badge-linedanger">Canceled Application</span>`;
                                 } else if (row.status === "Rejected") {

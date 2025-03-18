@@ -85,7 +85,7 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="contact_number">Contact Number</label>
-                                            <input type="text" class="form-control" placeholder="e.g., +63 999 999 9999" id="contact_number" name="contact_number" value="{{ old('contact_number') }}" autofocus autocomplete="contact_number">
+                                            <input type="text" class="form-control phMobile not_pass" placeholder="e.g., +63 999 999 9999" id="contact_number" name="contact_number" value="{{ old('contact_number') }}" autofocus autocomplete="contact_number">
                                             @error('contact_number')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -174,9 +174,9 @@
 
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label" for="status">Status</label>
-                                            <input type="text" class="form-control" id="status" name="status" value="{{ old('status') }}" autofocus autocomplete="status" placeholder="Enter your status">
-                                            @error('status')
+                                            <label class="form-label" for="marital_status">Marital Status</label>
+                                            <input type="text" class="form-control" id="marital_status" name="marital_status" value="{{ old('marital_status') }}" autofocus autocomplete="marital_status" placeholder="Enter your marital status">
+                                            @error('marital_status')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>

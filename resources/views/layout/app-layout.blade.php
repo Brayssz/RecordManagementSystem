@@ -46,7 +46,7 @@
         $user = Auth::guard($position)->user();
     @endphp
 
-    
+
 
 </head>
 
@@ -215,28 +215,13 @@
                                                     data-feather="user-check"></i><span>Employers</span></a>
                                         </li>
 
-                                        <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
-                                            <a href="/approve-applications"><i
-                                                    data-feather="check-circle"></i><span>Applicant Hiring</span></a>
-                                        </li>
-    
-                                        <li class="{{ Request::is('employer-pending-applications') ? 'active' : '' }}">
-                                            <a href="/employer-pending-applications">
-                                                <i data-feather="calendar"></i>
-                                                <span>Interview Schedules</span>
-                                            </a>
-                                        </li>
-    
-                                        <li class="{{ Request::is('scheduled-employer-interviews') ? 'active' : '' }}">
-                                            <a href="/scheduled-employer-interviews">
-                                                <i data-feather="briefcase"></i>
-                                                <span>Scheduled Interviews</span>
-                                                <span class="badge-notif">1</span>
-                                            </a>
-                                        </li>
                                         <li class="{{ Request::is('applicants') ? 'active' : '' }}">
                                             <a href="applicants"><i
                                                     data-feather="users"></i><span>Applicants</span></a>
+                                        </li>
+                                        <li class="{{ Request::is('application-records') ? 'active' : '' }}">
+                                            <a href="/application-records"><i
+                                                    data-feather="archive"></i><span>Application Records</span></a>
                                         </li>
                                     @endif
 
@@ -245,30 +230,66 @@
                                             <a href="/employees"><i data-feather="user"></i><span>Employees</span></a>
                                         </li>
 
-                                        <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
-                                            <a href="/approve-applications"><i
-                                                    data-feather="check-circle"></i><span>Application
-                                                    Approval</span></a>
+                                        <li class="{{ Request::is('application-records') ? 'active' : '' }}">
+                                            <a href="/application-records"><i
+                                                    data-feather="archive"></i><span>Application Records</span></a>
                                         </li>
-
-                                        <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
-                                            <a href="/applicant-documents"><i data-feather="file"></i><span>Documents
-                                                    Management</span></a>
-                                        </li>
-
-                                        <li class="{{ Request::is('archive-applications') ? 'active' : '' }}">
-                                            <a href="/archive-applications"><i
-                                                    data-feather="archive"></i><span>Archive
-                                                    Application</span></a>
-                                        </li>
-
+                                        
                                         <li class="{{ Request::is('branch-schedules') ? 'active' : '' }}">
                                             <a href="/branch-schedules">
                                                 <i data-feather="calendar"></i>
                                                 <span>Interview Schedules</span>
                                             </a>
                                         </li>
+                                    @endif
 
+                                    @if ($user->position == 'Clerk')
+                                        <li class="{{ Request::is('application-records') ? 'active' : '' }}">
+                                            <a href="/application-records"><i
+                                                    data-feather="archive"></i><span>Application
+                                                    Records</span></a>
+                                        </li>
+                                    @endif
+                                @endif
+
+
+
+                            </ul>
+                        </li>
+
+                        <li class="submenu-open">
+                            <h6 class="submenu-hdr">Transactions</h6>
+                            <ul>
+                                @if ($position == 'employee')
+                                    @if ($user->position == 'Admin')
+                                        <li
+                                            class="{{ Request::is('employer-pending-applications') ? 'active' : '' }}">
+                                            <a href="/employer-pending-applications">
+                                                <i data-feather="calendar"></i>
+                                                <span>Interview Schedules</span>
+                                            </a>
+                                        </li>
+
+                                        <li
+                                            class="{{ Request::is('scheduled-employer-interviews') ? 'active' : '' }}">
+                                            <a href="/scheduled-employer-interviews">
+                                                <i data-feather="briefcase"></i>
+                                                <span>Scheduled Interviews</span>
+                                                <span class="badge-notif">1</span>
+                                            </a>
+                                        </li>
+                                        <li class="{{ Request::is('hire-applicants') ? 'active' : '' }}">
+                                            <a href="/hire-applicants"><i
+                                                    data-feather="check-circle"></i><span>Applicant Hiring</span></a>
+                                        </li>
+
+                                        <li class="{{ Request::is('deploy-applicants') ? 'active' : '' }}">
+                                            <a href="/deploy-applicants"><i data-feather="send"></i><span>Applicant
+                                                    Deployment</span></a>
+                                        </li>
+                                    @endif
+
+                                    @if ($user->position == 'Manager')
                                         <li class="{{ Request::is('scheduled-branch-interviews') ? 'active' : '' }}">
                                             <a href="/scheduled-branch-interviews">
                                                 <i data-feather="briefcase"></i>
@@ -276,23 +297,25 @@
                                                 <span class="badge-notif">1</span>
                                             </a>
                                         </li>
+                                        <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
+                                            <a href="/approve-applications"><i
+                                                    data-feather="check-circle"></i><span>Application
+                                                    Approval</span></a>
+                                        </li>
+
+                                        <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
+                                            <a href="/applicant-documents"><i
+                                                    data-feather="file"></i><span>Application Documents</span></a>
+                                        </li>
+
+                                      
                                     @endif
                                 @endif
 
                                 @if ($user->position == 'Clerk')
-                                    <li>
-                                        <a href="category-list.html"><i
-                                                data-feather="file-text"></i><span>Applications</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('application-documents') ? 'active' : '' }}">
-                                        <a href="/application-documents"><i data-feather="file"></i><span>Documents
-                                                Management</span></a>
-                                    </li>
-
-                                    <li class="{{ Request::is('archive-applications') ? 'active' : '' }}">
-                                        <a href="/archive-applications"><i data-feather="archive"></i><span>Archive
-                                                Application</span></a>
+                                    <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
+                                        <a href="/applicant-documents"><i data-feather="file"></i><span>Application
+                                                Documents</span></a>
                                     </li>
                                 @endif
 
@@ -302,12 +325,12 @@
                             <h6 class="submenu-hdr">Reports</h6>
                             <ul>
                                 <li>
-                                    <a href="manage-stocks.html"><i data-feather="package"></i><span>Report
-                                            1</span></a>
+                                    <a href="manage-stocks.html"><i data-feather="package"></i><span>Branch
+                                            Performance Report</span></a>
                                 </li>
                                 <li>
-                                    <a href="stock-adjustment.html"><i data-feather="clipboard"></i><span>Report
-                                            2</span></a>
+                                    <a href="stock-adjustment.html"><i data-feather="clipboard"></i><span>Deployment
+                                            Report</span></a>
                                 </li>
                                 <li>
                                     <a href="stock-transfer.html"><i data-feather="truck"></i><span>Report

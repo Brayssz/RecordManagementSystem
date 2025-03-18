@@ -1,4 +1,4 @@
-@extends('layout.app-layout')
+@extends('layout.applicant-layout')
 
 @section('title', 'Application Form')
 

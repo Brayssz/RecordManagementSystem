@@ -117,7 +117,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="contact_number">Contact
                                                         Number</label>
-                                                    <input type="text" id="contact_number" class="form-control"
+                                                    <input type="text" id="contact_number" class="form-control phMobile not_pass"
                                                         placeholder="e.g., +63 999 999 9999"
                                                         wire:model.lazy="contact_number">
                                                     @error('contact_number')

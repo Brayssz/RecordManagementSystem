@@ -44,7 +44,7 @@
                     <div class="modal-footer-btn mb-4 mt-0">
                         <button type="button" class="btn btn-cancel me-2"
                             data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-submit">Set Schedule</button>
+                        <button type="button" class="btn btn-submit btn-interview">Set Schedule</button>
                     </div>
                 </form>
             </div>
@@ -62,6 +62,16 @@
                         $('#set-interview-schedule-modal').modal('show'); // Open the modal
                     });
                 });
+
+                $(document).on('click', '.btn-interview', function() {
+                    confirmAlert("Set Interview Schedule?", "Are you sure you want to save this interview schedule?", function() {
+                        setInterview();
+                    }, 'Set');
+                });
+
+                const setInterview = () => {
+                    @this.setInterviewSchedule();
+                }
             });
         </script>
     @endpush

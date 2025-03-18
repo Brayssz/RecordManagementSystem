@@ -24,7 +24,7 @@ class ApplicantRegisterController extends Controller
             'gender' => 'required|string|max:10',
             'email' => 'required|string|email|max:255|unique:applicants|unique:employees|unique:employers',
             'password' => 'required|string|min:8|confirmed',
-            'contact_number' => 'required|string|max:15',
+            'contact_number' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
             'region' => 'required|string|max:255',
             'province' => 'required|string|max:255',

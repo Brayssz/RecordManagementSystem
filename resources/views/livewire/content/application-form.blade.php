@@ -146,6 +146,17 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="marital_status">Marital Status</label>
+                                <input type="text" class="form-control"
+                                    placeholder="Enter marital status" id="marital_status"
+                                    wire:model.lazy="marital_status">
+                                @error('marital_status')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
 
                     </div>
 

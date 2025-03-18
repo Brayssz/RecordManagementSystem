@@ -1,6 +1,6 @@
 @extends('layout.app-layout')
 
-@section('title', 'Scheduled Interviews')
+@section('title', 'Approve Applications')
 
 @section('content')
 
@@ -9,8 +9,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Scheduled Interviews</h4>
-                    <h6>View scheduled interviews and record interview details for the applicant.</h6>
+                    <h4>Applicant Deployment</h4>
+                    <h6>Review and Hire Applicants</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -39,6 +39,17 @@
 
                             <div class="col-lg-3 col-sm-12">
                                 <div class="form-group ">
+                                    <select class="select branch_filter form-control">
+                                        <option value="">Branch</option>
+                                        @foreach ($branches as $branch)
+                                            <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group ">
                                     <select class="select employer_filter form-control">
                                         <option value="">Employer</option>
                                         @foreach ($employers as $employer)
@@ -48,20 +59,36 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-lg-3 col-sm-12">
+                                <div class="form-group ">
+                                    <select class="select deployed_filter form-control">
+                                        <option value="">Pending</option>
+                                        <option value=true>Deployed</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
                         </div>
+
+
                     </div>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table interview-application-table pb-3">
+                    <table class="table application-table pb-3">
                         <thead>
                             <tr>
                                 <th></th>
+                                <th>Code</th>
                                 <th>Employer</th>
                                 <th>Applicant</th>
                                 <th>Job</th>
                                 <th>Country</th>
-                                <th class="no-sort">Action</th>
+                                <th>Branch</th>
+                                <th>Date Hired</th>
+                                <th class="no-sort">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +101,7 @@
             </div>
         </div>
     </div>
-    @livewire('content.record-branch-interview')
+    @livewire('content.deploy-applicant')
     @livewire('content.view-application')
 
 @endsection
@@ -83,6 +110,8 @@
     <script>
         $(document).ready(function() {
 
+            initSelect();
+
             @if (session('message'))
                 toastr.success("{{ session('message') }}", "Success", {
                     closeButton: true,
@@ -90,8 +119,8 @@
                 });
             @endif
 
-            if ($('.interview-application-table').length > 0) {
-                var table = $('.interview-application-table').DataTable({
+            if ($('.application-table').length > 0) {
+                var table = $('.application-table').DataTable({
                     "processing": true,
                     "serverSide": true,
                     "bFilter": true,
@@ -108,14 +137,15 @@
                         info: "_START_ - _END_ of _TOTAL_ items",
                     },
                     "ajax": {
-                        "url": "/scheduled-branch-interviews",
+                        "url": "/deploy-applicants",
                         "type": "GET",
                         "headers": {
                             "Accept": "application/json"
                         },
                         "data": function(d) {
-                            d.status = $('.status_filter').val();
+                            d.branch_id = $('.branch_filter').val();
                             d.employer_id = $('.employer_filter').val();
+                            d.only_deployed = $('.deployed_filter').val();
                         },
                         "dataSrc": "data"
                     },
@@ -125,22 +155,25 @@
                             "searchable": false
                         },
                         {
+                            "data": "hiring.confirmation_code"
+                        },
+                        {
                             "data": null,
                             "render": function(data, type, row) {
                                 let avatarSrc = 'assets/img/no-profile.png';
                                 if (row.job.employer.profile_photo_path) {
                                     avatarSrc = `/storage/${row.job.employer.profile_photo_path}`;
                                     return `
-                                        <div class="userimgname">
-                                            <a href="javascript:void(0);" class="product-img">
-                                                <img src="${avatarSrc}" alt="product" loading="lazy">
-                                            </a>
-                                            <div>
-                                                <a href="javascript:void(0);">${row.job.employer.company_name}</a>
-                                                <span class="emp-team">${row.job.employer.first_name || "Unknown"} ${row.job.employer.middle_name ? `${row.job.employer.middle_name} ` : ""}${row.job.employer.last_name || "User"}</span>
+                                            <div class="userimgname">
+                                                <a href="javascript:void(0);" class="product-img">
+                                                    <img src="${avatarSrc}" alt="product" loading="lazy">
+                                                </a>
+                                                <div>
+                                                    <a href="javascript:void(0);">${row.job.employer.company_name}</a>
+                                                    <span class="emp-team">${row.job.employer.first_name || "Unknown"} ${row.job.employer.middle_name ? `${row.job.employer.middle_name} ` : ""}${row.job.employer.last_name || "User"}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                                 } else {
                                     const colors = {
                                         A: 'bg-primary',
@@ -176,18 +209,18 @@
                                     const bgColor = colors[firstLetter] || 'bg-secondary';
 
                                     return `
-                                        <div class="userimgname">
-                                            <a href="javascript:void(0);" class="product-img">
-                                                <span class="avatar ${bgColor} avatar-rounded">
-                                                    <span class="avatar-title">${row.job.employer.first_name ? row.job.employer.first_name.charAt(0).toUpperCase() : 'U'}${row.job.employer.last_name ? row.job.employer.last_name.charAt(0).toUpperCase() : 'U'}</span>
-                                                </span>
-                                            </a>
-                                            <div>
-                                                 <a href="javascript:void(0);">${row.job.employer.company_name}</a>
-                                                <span class="emp-team">${row.job.employer.first_name || "Unknown"} ${row.job.employer.middle_name ? `${row.job.employer.middle_name} ` : ""}${row.job.employer.last_name || "User"}</span>
+                                            <div class="userimgname">
+                                                <a href="javascript:void(0);" class="product-img">
+                                                    <span class="avatar ${bgColor} avatar-rounded">
+                                                        <span class="avatar-title">${row.job.employer.first_name ? row.job.employer.first_name.charAt(0).toUpperCase() : 'U'}${row.job.employer.last_name ? row.job.employer.last_name.charAt(0).toUpperCase() : 'U'}</span>
+                                                    </span>
+                                                </a>
+                                                <div>
+                                                     <a href="javascript:void(0);">${row.job.employer.company_name}</a>
+                                                    <span class="emp-team">${row.job.employer.first_name || "Unknown"} ${row.job.employer.middle_name ? `${row.job.employer.middle_name} ` : ""}${row.job.employer.last_name || "User"}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                                 }
                             }
                         },
@@ -267,30 +300,53 @@
                             "data": "job.country"
                         },
                         {
+                            "data": "branch.municipality"
+                        },
+                        {
+                            "data": "hiring.confirmation_date",
+                            "render": function(data, type, row) {
+                                return moment(data).format('MMMM D, YYYY');
+                            }
+                        },
+                        {
                             "data": null,
                             "render": function(data, type, row) {
-                                return `
+                                let actionButtons = `
                                 <div class="edit-delete-action">
                                     <a class="me-2 p-2 view-application" data-applicationid="${row.application_id}">
                                         <i data-feather="eye" class="feather-eye"></i>
                                     </a>
-                                    <a class="me-2 p-2 record_interview" data-interviewid="${row.branch_interview ? row.branch_interview.b_interview_id : null}" data-applicationid="${row.application_id}">
-                                        <i data-feather="file-text" class="feather-file-text"></i>
+                                `;
+
+                                if (row.deployment === null) {
+                                    actionButtons += `
+                                    <a class="me-2 p-2 deploy" data-applicationid="${row.application_id}">
+                                        <i data-feather="check" class="feather-check"></i>
                                     </a>
-                                </div>
-                            `;
+                                    `;
+                                } else {
+                                    actionButtons += `
+                                    <a class="me-2 p-2 reschedule" data-applicationid="${row.application_id}" data-deploymentid="${row.deployment.deployment_id}">
+                                        <i data-feather="edit" class="feather-edit"></i>
+                                    </a>
+                                    `;
+                                }
+
+                                actionButtons += `</div>`;
+
+                                return actionButtons;
                             }
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(4).addClass('action-table-data');
+                        $(row).find('td').eq(7).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                         feather.replace();
 
-                        $('.status_filter, .employer_filter').on('change', function() {
+                        $('.branch_filter, .employer_filter, .deployed_filter').on('change', function() {
                             table.draw();
                         });
 
@@ -305,5 +361,20 @@
                 })
             }
         });
+
+
+
+        function initSelect() {
+            $('.select').select2({
+                minimumResultsForSearch: -1,
+                width: '100%'
+            });
+
+            $('#job_countries').select2({
+                placeholder: "Select countries",
+                allowClear: true,
+                closeOnSelect: false
+            });
+        }
     </script>
 @endpush

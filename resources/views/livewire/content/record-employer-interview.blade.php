@@ -58,7 +58,7 @@
                             <div class="modal-footer-btn mb-4 mt-0">
                                 <button type="button" class="btn btn-cancel me-2"
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-submit">Submit</button>
+                                <button type="button" class="btn btn-submit btn-interview">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -104,6 +104,17 @@
                     $('#interview-modal').modal('show');
                 });
 
+            }
+
+            $('.btn-interview').click(function() {
+                confirmAlert("Record Interview Details?", "Are you sure you want to save this interview details?",
+                    function() {
+                        recordInterview();
+                    }, 'Record');
+            });
+
+            const recordInterview = () => {
+                @this.submitEmployerInterview();
             }
 
             $(document).on('hidden.bs.modal', '#interview-modal', function () {

@@ -26,7 +26,7 @@ class ApplicantManagement extends Component
 
     public $applicant_id, $first_name, $middle_name, $last_name, $suffix, $email, $contact_number, $date_of_birth, $gender, $status;
     public $region, $province, $municipality, $barangay, $street, $postal_code, $password, $password_confirmation;
-    public $citizenship;
+    public $citizenship, $marital_status;
 
     public $photo;
     public $photoPreview;
@@ -53,6 +53,7 @@ class ApplicantManagement extends Component
             $this->street = $this->applicant->street;
             $this->postal_code = $this->applicant->postal_code;
             $this->citizenship = $this->applicant->citizenship;
+            $this->marital_status = $this->applicant->marital_status;
             $this->photoPreview = $this->getProfilePhotoUrl($this->applicant);
 
             $this->password = null;
@@ -105,6 +106,7 @@ class ApplicantManagement extends Component
             'street' => 'required|string|max:255',
             'postal_code' => 'required|string|max:10',
             'citizenship' => 'required|string|max:255',
+            'marital_status' => 'required|string|max:255',
             'password' => $passwordRules,
             'photo' => 'nullable|image|max:1024',
             'status' => 'nullable|string|max:255',
@@ -160,7 +162,7 @@ class ApplicantManagement extends Component
             'contact_number', 'date_of_birth', 'gender',
             'region', 'province', 'municipality', 'barangay', 
             'street', 'postal_code', 'password', 'photo', 
-            'status', 'photoPreview', 'applicant_id', 'citizenship'
+            'status', 'photoPreview', 'applicant_id', 'citizenship', 'marital_status'
         ]);
     }
 
@@ -186,6 +188,7 @@ class ApplicantManagement extends Component
                 'street' => $this->street,
                 'postal_code' => $this->postal_code,
                 'citizenship' => $this->citizenship,
+                'marital_status' => $this->marital_status,
                 'password' => bcrypt($this->password), 
                 'profile_photo_path' => $photoPath ?? null,
             ]);
@@ -214,6 +217,7 @@ class ApplicantManagement extends Component
             $this->applicant->street = $this->street;
             $this->applicant->postal_code = $this->postal_code;
             $this->applicant->citizenship = $this->citizenship;
+            $this->applicant->marital_status = $this->marital_status;
 
             if (isset($this->password)) {
                 $this->applicant->password = bcrypt($this->password);
