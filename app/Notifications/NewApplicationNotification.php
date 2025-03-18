@@ -6,17 +6,19 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\ApplicationForm;
 
 class NewApplicationNotification extends Notification
 {
     use Queueable;
 
+    public $application_id; 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($application_id)
     {
-        //
+        $this->application_id = $application_id;
     }
 
     /**
@@ -26,7 +28,24 @@ class NewApplicationNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['database'];
+    }
+
+     /**
+     * Get the database representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toDatabase(object $notifiable): array
+    {
+        $application = ApplicationForm::find($this->application_id)->with('job')->first();
+
+        $message = 'New application from ' . $application->first_name . ' ' . $application->last_name . ' has been submitted for job ' . $application->job->job_title . '.' ; 
+
+        return [
+            'message' => $message,
+            'type' => 'NewApplication'
+        ];
     }
 
     /**

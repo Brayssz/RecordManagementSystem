@@ -13,6 +13,8 @@ use App\Models\Branch;
 use App\Models\ApplicationForm as Application;
 use App\Models\Content;
 use App\Models\Document;
+use App\Models\Employee;
+use App\Notifications\NewApplicationNotification;
 
 class ApplicationForm extends Component
 {
@@ -304,11 +306,21 @@ class ApplicationForm extends Component
         $this->addEducationalAttainment($application->application_id);
         $this->addWorkExperienceDocument($application->application_id);
 
+        // $this->notifyEmployees($application);
+
         session()->flash('message', 'Application successfully created.');
 
         return redirect()->route('job-offers');
     }
 
+    public function notifyEmployees($application) {
+        $employees = Employee::where('branch_id', $application->branch_id)->get();
+
+        foreach ($employees as $employee) {
+            $employee->notify(new NewApplicationNotification($application->application_id));
+        }
+    }
+    
     public function mount($job_id)
     {
         $this->job_id = $job_id;

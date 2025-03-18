@@ -121,6 +121,16 @@ return new class extends Migration
             $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
         });
 
+        Schema::create('branch_schedules', function (Blueprint $table) {
+            $table->id('schedule_id');
+            $table->dateTime('interview_date');
+            $table->integer('available_slots')->default(0);
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
+        });
+
         Schema::create('branch_interviews', function (Blueprint $table) {
             $table->id('b_interview_id');
             $table->unsignedBigInteger('branch_id')->nullable();
@@ -137,7 +147,6 @@ return new class extends Migration
             $table->foreign('application_id')->references('application_id')->on('application_forms')->onDelete('set null');
         });
 
-        // Employer Interviews Table
         Schema::create('employer_interviews', function (Blueprint $table) {
             $table->id('e_interview_id');
             $table->unsignedBigInteger('employer_id')->nullable();
@@ -154,7 +163,6 @@ return new class extends Migration
             $table->foreign('application_id')->references('application_id')->on('application_forms')->onDelete('set null');
         });
 
-        // Hiring Table
         Schema::create('hirings', function (Blueprint $table) {
             $table->id('hiring_id');
             $table->unsignedBigInteger('e_interview_id')->nullable();
@@ -170,7 +178,6 @@ return new class extends Migration
             $table->foreign('application_id')->references('application_id')->on('application_forms')->onDelete('set null');
         });
 
-        // Deployment Table
         Schema::create('deployments', function (Blueprint $table) {
             $table->id('deployment_id');
             $table->unsignedBigInteger('application_id')->nullable();
@@ -183,7 +190,7 @@ return new class extends Migration
             $table->foreign('application_id')->references('application_id')->on('application_forms')->onDelete('set null');
             $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('set null');
         });
-         // Documents Table
+
          Schema::create('documents', function (Blueprint $table) {
             $table->id('document_id');
             $table->unsignedBigInteger('application_id')->nullable();
@@ -238,6 +245,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+
     public function down(): void
     {
         Schema::dropIfExists('deployments');
@@ -248,12 +256,14 @@ return new class extends Migration
         Schema::dropIfExists('job_offers');
         Schema::dropIfExists('employers');
         Schema::dropIfExists('employees');
+        Schema::dropIfExists('branch_schedules');
         Schema::dropIfExists('documents');
         Schema::dropIfExists('branches');
         Schema::dropIfExists('applicants');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('notifications');
+        
         foreach (['applicants', 'employees', 'employers'] as $table) {
             Schema::table($table, function (Blueprint $table) {
                 $table->dropColumn(['two_factor_code', 'two_factor_expires_at']);
