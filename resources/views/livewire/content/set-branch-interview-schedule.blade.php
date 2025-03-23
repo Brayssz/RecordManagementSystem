@@ -10,16 +10,41 @@
             <div class="modal-body">
                 <form wire:submit.prevent="setInterviewSchedule">
                     @csrf
-                    <div class="mb-3">
-                        <label for="interview_date" class="form-label">Interview Date</label>
-                        <input type="date" id="interview_date" class="form-control" wire:model.lazy="interview_date">
-                        @error('interview_date')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="interview_date" class="form-label">Interview Date</label>
+                            <input type="date" id="interview_date" class="form-control"
+                                wire:model.lazy="interview_date">
+                            @error('interview_date')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
+
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="available_start_time" class="form-label">Available Start Time</label>
+                            <input type="time" id="available_start_time" class="form-control"
+                                wire:model.lazy="available_start_time">
+                            @error('available_start_time')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="available_end_time" class="form-label">Available End Time</label>
+                            <input type="time" id="available_end_time" class="form-control"
+                                wire:model.lazy="available_end_time">
+                            @error('available_end_time')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="modal-footer-btn mb-4 mt-0">
-                        <button type="button" class="btn btn-cancel me-2"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-submit">Set Schedule</button>
                     </div>
                 </form>

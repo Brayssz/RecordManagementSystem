@@ -36,11 +36,14 @@ class NewApplicationNotification extends Notification
      *
      * @return array<string, mixed>
      */
+
     public function toDatabase(object $notifiable): array
     {
-        $application = ApplicationForm::find($this->application_id)->with('job')->first();
+        $application = ApplicationForm::find($this->application_id)->with('applicant', 'job')->first();
 
-        $message = 'New application from ' . $application->first_name . ' ' . $application->last_name . ' has been submitted for job ' . $application->job->job_title . '.' ; 
+        $middle_name_initial = $application->applicant->middle_name ? ' ' . substr($application->applicant->middle_name, 0, 1) . '.' : '';
+
+        $message = 'New application from ' . $application->applicant->first_name . $middle_name_initial . ' ' . $application->applicant->last_name . ' has been submitted for job as ' . $application->job->job_title . '.' ; 
 
         return [
             'message' => $message,
@@ -54,8 +57,7 @@ class NewApplicationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
+            ->line('MML Recruitment Agency.')
             ->line('Thank you for using our application!');
     }
 

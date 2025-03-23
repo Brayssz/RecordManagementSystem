@@ -350,10 +350,7 @@ class ApplicationController extends Controller
         if ($request->ajax()) {
             $query = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview', 'schedule', 'job.employer')
                 ->where('branch_id', Auth::guard("employee")->user()->branch_id)
-                ->where('status', 'Pending')
-                ->whereHas('schedule', function ($q) {
-                    $q->whereDate('interview_date', now()->toDateString());
-                });
+                ->where('status', 'Pending');
 
             if ($request->filled('employer_id')) {
                 $query->whereHas('job', function ($q) use ($request) {
@@ -412,10 +409,7 @@ class ApplicationController extends Controller
     {
         if ($request->ajax()) {
             $query = ApplicationForm::with('applicant', 'job.employer', 'branch', 'employerInterview')
-                ->where('status', 'ScheduledEmployerInterview')
-                ->whereHas('employerInterview', function ($q) {
-                    $q->whereDate('interview_date', now()->toDateString());
-                });
+                ->where('status', 'ScheduledEmployerInterview');
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
@@ -477,7 +471,7 @@ class ApplicationController extends Controller
         if ($request->ajax()) {
             $query = ApplicationForm::with('applicant', 'job', 'branch', 'employerInterview', 'job.employer', 'hiring', 'deployment')
                 ->whereHas('hiring')
-                ->whereIn('status', ['Hired', 'Deployed']);
+                ->whereIn('status', ['Hired']);
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);

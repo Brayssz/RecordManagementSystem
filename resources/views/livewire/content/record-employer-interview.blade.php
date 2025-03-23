@@ -42,7 +42,7 @@
                                                         <span class="quantity-btn">+<i data-feather="plus-circle"
                                                                 class="plus-circle"></i></span>
                                                         <input type="number" class="quntity-input not_pass" id="rating"
-                                                            wire:model.lazy="rating">
+                                                            wire:model.lazy="rating" max="10">
                                                         <span class="quantity-btn"><i data-feather="minus-circle"
                                                                 class="feather-search"></i></span>
                                                     </div>

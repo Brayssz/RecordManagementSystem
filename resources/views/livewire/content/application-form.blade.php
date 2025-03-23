@@ -25,7 +25,8 @@
                         </div>
                         <div class="input-blocks mb-0">
                             <div class="image-upload mb-0">
-                                <input type="file" wire:model.live="photo" x-ref="photo" x-on:change="
+                                <input type="file" wire:model.live="photo" x-ref="photo"
+                                    x-on:change="
                                         photoName = $refs.photo.files[0].name;
                                         const reader = new FileReader();
                                         reader.onload = (e) => {
@@ -92,8 +93,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="email">Email</label>
-                                <input type="email" class="form-control" placeholder="e.g., name@mail.com" id="email"
-                                    wire:model.lazy="email">
+                                <input type="email" class="form-control" placeholder="e.g., name@mail.com"
+                                    id="email" wire:model.lazy="email">
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -139,8 +140,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="citizenship">Citizenship</label>
-                                <input type="text" class="form-control" placeholder="Enter citizenship" id="citizenship"
-                                    wire:model.lazy="citizenship">
+                                <input type="text" class="form-control" placeholder="Enter citizenship"
+                                    id="citizenship" wire:model.lazy="citizenship">
                                 @error('citizenship')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -149,9 +150,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="marital_status">Marital Status</label>
-                                <input type="text" class="form-control"
-                                    placeholder="Enter marital status" id="marital_status"
-                                    wire:model.lazy="marital_status">
+                                <input type="text" class="form-control" placeholder="Enter marital status"
+                                    id="marital_status" wire:model.lazy="marital_status">
                                 @error('marital_status')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -172,7 +172,8 @@
                                         <label class="form-label"
                                             for="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</label>
                                         <input type="text" class="form-control" id="{{ $field }}"
-                                            wire:model.lazy="{{ $field }}" placeholder="Enter your {{ $field }}">
+                                            wire:model.lazy="{{ $field }}"
+                                            placeholder="Enter your {{ $field }}">
                                         @error($field)
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -184,38 +185,43 @@
 
                     <div class="pass-info">
                         <div class="card-title-head" wire:ignore>
-                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Branch</h6>
+                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Branch Information</h6>
                         </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="mb-3">
-                                <div wire:ignore>
-                                    <select class="select branch" id="branch_id" name="branch_id" wire:model="branch_id">
-                                        <option value="">Choose</option>
-                                        @foreach ($branches as $branch)
-                                            <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="branch_id">Branch</label>
+                                    <div wire:ignore>
+                                        <select class="select branch" id="branch_id" name="branch_id"
+                                            wire:model="branch_id">
+                                            <option value="">Choose</option>
+                                            @foreach ($branches as $branch)
+                                                <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('branch_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                @error('branch_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label" for="branch_id">Interview Schedule</label>
+                                    <div wire:ignore>
+                                        <select class="select schedule" id="schedule_id" name="schedule_id"
+                                            wire:model="schedule_id">
+                                            <option value="" selected>Please Select a branch first</option>
+                                        </select>
+                                    </div>
+                                    @error('schedule_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-12 col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="branch_id">Interview Schedule</label>
-                                <div wire:ignore>
-                                    <select class="select schedule" id="schedule_id" name="schedule_id"
-                                        wire:model="schedule_id">
-                                        <option value="" selected>Please Select a branch first</option>
-                                    </select>
-                                </div>
-                                @error('schedule_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
+
                     </div>
 
 
@@ -235,9 +241,11 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <div>
-                                                <label class="form-label" for="document_{{ $index }}">Document</label>
-                                                <input class="form-control" type="file" id="file-input" accept="image/*"
-                                                    x-ref="document_{{ $index }}" x-on:change="
+                                                <label class="form-label"
+                                                    for="document_{{ $index }}">Document</label>
+                                                <input class="form-control" type="file" id="file-input"
+                                                    accept="image/*" x-ref="document_{{ $index }}"
+                                                    x-on:change="
                                                                                             photoName = $refs.document_{{ $index }}.files[0].name;
                                                                                             const reader = new FileReader();
                                                                                             reader.onload = (e) => {
@@ -289,8 +297,10 @@
                                                             <div>
                                                                 <label class="form-label"
                                                                     for="document_{{ $index }}">Document</label>
-                                                                <input class="form-control" type="file" id="file-input"
-                                                                    accept="image/*" x-ref="document_{{ $index }}" x-on:change="
+                                                                <input class="form-control" type="file"
+                                                                    id="file-input" accept="image/*"
+                                                                    x-ref="document_{{ $index }}"
+                                                                    x-on:change="
                                                                     photoName = $refs.document_{{ $index }}.files[0].name;
                                                                     const reader = new FileReader();
                                                                     reader.onload = (e) => {
@@ -313,7 +323,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
+
                                             </div>
                                             <div class="col-12 mb-5">
                                                 <div class="product-list">
@@ -322,7 +332,8 @@
                                                         <template x-if="docPhotoPreview !== ''">
                                                             <li class="ps-0 w-100">
                                                                 <div class="product-view-set">
-                                                                    <div class="product-views-img" style="max-width: 100%;">
+                                                                    <div class="product-views-img"
+                                                                        style="max-width: 100%;">
                                                                         <img :src="docPhotoPreview" alt="img">
                                                                     </div>
                                                                 </div>
@@ -336,7 +347,7 @@
 
                                 </div>
 
-                               
+
 
                             </div>
                         @endforeach
@@ -356,7 +367,7 @@
     </div>
     @push('scripts')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $(document).on('change', '[id]', handleInputChange);
             });
 
@@ -368,7 +379,7 @@
                     @this.set(property, value);
 
                     console.log(`${property}: ${value}`);
-                    
+
                 }
                 getBranchSchedules(e);
             }
@@ -376,32 +387,44 @@
             const getBranchSchedules = (e) => {
                 console.log("hello" + e.target);
                 if ($(e.target).is('.branch')) {
-                        @this.call('getSchedules').then(schedules => {
-                            console.log(schedules);
+                    @this.call('getSchedules').then(schedules => {
+                        console.log(schedules);
 
-                            let scheduleSelect = $('.schedule');
-                            scheduleSelect.empty();
+                        let scheduleSelect = $('.schedule');
+                        scheduleSelect.empty();
 
-                            scheduleSelect.append('<option value="" selected>Choose an interview schedule</option>');
+                        scheduleSelect.append('<option value="" selected>Choose an interview schedule</option>');
 
-                            schedules.forEach(schedule => {
-                                let formattedDate = new Date(schedule.interview_date).toLocaleDateString(
-                                    'en-US', {
-                                        month: 'long',
-                                        day: '2-digit',
-                                        year: 'numeric',
-                                        weekday: 'long'
-                                    });
+                        schedules.forEach(schedule => {
+                            let formattedDate = new Date(schedule.interview_date).toLocaleDateString(
+                                'en-US', {
+                                    month: 'long',
+                                    day: '2-digit',
+                                    year: 'numeric',
+                                    weekday: 'long'
+                                });
+                            let formattedTime = `${new Date('1970-01-01T' + schedule.available_start_time).toLocaleTimeString(
+                                        'en-US', {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        })} - ${new Date('1970-01-01T' + schedule.available_end_time).toLocaleTimeString(
+                                        'en-US', {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        })}`;
 
-                                scheduleSelect.append(
-                                    `<option value="${schedule.schedule_id}">${formattedDate}</option>`);
-                            });
-
-                            // Reinitialize Select2 if needed
-                            scheduleSelect.trigger(
-                                'change'); // If using Select2, replace with scheduleSelect.select2();
+                            scheduleSelect.append(
+                                `<option value="${schedule.schedule_id}">${formattedDate} (${formattedTime})</option>`
+                            );
                         });
-                    }
+
+                        // Reinitialize Select2 if needed
+                        scheduleSelect.trigger(
+                            'change'); // If using Select2, replace with scheduleSelect.select2();
+                    });
+                }
             }
         </script>
     @endpush

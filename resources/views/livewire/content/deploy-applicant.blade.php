@@ -156,9 +156,7 @@
             }
 
             function openDeployModal() {
-                const application_id = $(this).data('applicationid');
 
-                @this.set('application_id', application_id);
 
                 $('#deploy-modal').modal('show');
             }
@@ -170,6 +168,8 @@
             });
 
             $('.btn-reschedule').click(function() {
+
+
                 confirmAlert("Reschedule Departure?", "Are you sure you want to reschedule this applicant's departure?",
                     function() {
                         submitReschedule();
@@ -185,6 +185,10 @@
             }
 
             function openRescheduleModal() {
+                const application_id = $(this).data('applicationid');
+
+                @this.set('application_id', application_id);
+                
                 const deployment_id = $(this).data('deploymentid');
 
                 @this.set('deployment_id', deployment_id);
@@ -193,7 +197,6 @@
                     $('#reschedule-modal').modal('show');
                 });
 
-                $('#reschedule-modal').modal('show');
             }
         </script>
     @endpush

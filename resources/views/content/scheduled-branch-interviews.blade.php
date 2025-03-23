@@ -61,6 +61,8 @@
                                 <th>Applicant</th>
                                 <th>Job</th>
                                 <th>Country</th>
+                                <th>Interview Date</th>
+                                <th>Status</th>
                                 <th class="no-sort">Action</th>
                             </tr>
                         </thead>
@@ -241,7 +243,7 @@
                                     const firstLetter = (row.applicant.first_name ? row.applicant
                                         .first_name.charAt(0)
                                         .toUpperCase() : 'U'
-                                    ); // Default to 'U' if first_name is missing
+                                    ); 
                                     const bgColor = colors[firstLetter] || 'bg-secondary';
 
                                     return `
@@ -267,6 +269,20 @@
                             "data": "job.country"
                         },
                         {
+                            "data": "schedule.interview_date",
+                            "render": function(data, type, row) {
+                                return moment(data).format('dddd, MMMM D, YYYY');
+                            }
+                        },
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                return row.branch_interview ?
+                                    `<span class="badge badge-linesuccess">Interviewed</span>` :
+                                    `<span class="badge badge-linewarning">Pending</span>`;
+                            }
+                        },
+                        {
                             "data": null,
                             "render": function(data, type, row) {
                                 return `
@@ -283,7 +299,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(4).addClass('action-table-data');
+                        $(row).find('td').eq(6).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');

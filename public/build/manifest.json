@@ -75,6 +75,12 @@
     "src": "resources/assets/js/canada.js",
     "isEntry": true
   },
+  "resources/assets/js/chart-data.js": {
+    "file": "assets/chart-data-BC7uZbqy.js",
+    "name": "chart-data",
+    "src": "resources/assets/js/chart-data.js",
+    "isEntry": true
+  },
   "resources/assets/js/custom-select2.js": {
     "file": "assets/custom-select2-CP0N5BcD.js",
     "name": "custom-select2",
@@ -220,7 +226,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-CApJom_O.css",
+    "file": "assets/app-D2GEqsLz.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },

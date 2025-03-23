@@ -17,6 +17,8 @@ class BranchSchedule extends Model
         'interview_date',
         'available_slots',
         'branch_id',
+        'available_start_time', 
+        'available_end_time',   
     ];
 
     public function branch()

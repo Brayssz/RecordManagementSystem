@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Deployment;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ApplicationForm;
 
 class DeployApplicant extends Component
 {
@@ -34,6 +35,7 @@ class DeployApplicant extends Component
         $application->status = 'Deployed';
         $application->save();
     }
+    
     public function deployApplicant()
     {
         $this->validate();
@@ -46,8 +48,6 @@ class DeployApplicant extends Component
         ]);
 
         session()->flash('message', 'Applicant deployed successfully.');
-
-        $this->updateApplicationStatus();
 
         $this->resetInputFields();
 
@@ -68,6 +68,9 @@ class DeployApplicant extends Component
             ]);
 
             session()->flash('message', 'Departure rescheduled successfully.');
+
+            $this->updateApplicationStatus();
+
             $this->resetInputFields();
 
             return redirect()->route('deploy-applicants');

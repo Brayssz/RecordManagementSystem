@@ -84,6 +84,8 @@ return new class extends Migration
         Schema::create('branch_schedules', function (Blueprint $table) {
             $table->id('schedule_id');
             $table->dateTime('interview_date');
+            $table->time('available_start_time');
+            $table->time('available_end_time');
             $table->integer('available_slots')->default(0);
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->timestamps();
@@ -133,8 +135,6 @@ return new class extends Migration
 
             $table->foreign('branch_id')->references('branch_id')->on('branches')->onDelete('set null');
         });
-
-       
 
         Schema::create('branch_interviews', function (Blueprint $table) {
             $table->id('b_interview_id');

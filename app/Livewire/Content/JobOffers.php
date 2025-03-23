@@ -18,21 +18,21 @@ class JobOffers extends Component
 
     protected $queryString = ['search', 'filter'];
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
+    // public function updatingSearch()
+    // {
+    //     $this->resetPage();
+    // }
 
-    public function updatingFilter()
-    {
-        $this->resetPage();
-    }
+    // public function updatingFilter()
+    // {
+    //     $this->resetPage();
+    // }
 
-    public function getJobOffers($page = 1, $searchQuery = '', $country_id = '')
+    public function getJobOffers($page = 1, $searchQuery = '')
     {
         $search = $searchQuery; 
     
-        $jobOffers = JobOffer::with('employer')->where(function ($query) use ($search) {
+        $jobOffers = JobOffer::with('employer')->where('available_slots', '>', 0)->where(function ($query) use ($search) {
                 $query->where('job_title', 'like', '%' . $search . '%')
                     ->orWhere('job_qualifications', 'like', '%' . $search . '%')
                     ->orWhere('job_description', 'like', '%' . $search . '%');

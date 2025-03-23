@@ -62,6 +62,28 @@
                                                     @enderror
                                                 </div>
                                             </div>
+
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label for="available_start_time" class="form-label">Available Start Time</label>
+                                                    <input type="time" id="available_start_time" class="form-control"
+                                                        wire:model.lazy="available_start_time">
+                                                    @error('available_start_time')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                        
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label for="available_end_time" class="form-label">Available End Time</label>
+                                                    <input type="time" id="available_end_time" class="form-control"
+                                                        wire:model.lazy="available_end_time">
+                                                    @error('available_end_time')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

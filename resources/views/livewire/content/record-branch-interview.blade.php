@@ -42,7 +42,7 @@
                                                         <span class="quantity-btn">+<i data-feather="plus-circle"
                                                                 class="plus-circle"></i></span>
                                                         <input type="number" class="quntity-input not_pass" id="rating"
-                                                            wire:model.lazy="rating">
+                                                            wire:model.lazy="rating" max="10">
                                                         <span class="quantity-btn"><i data-feather="minus-circle"
                                                                 class="feather-search"></i></span>
                                                     </div>
@@ -90,7 +90,6 @@
             }
 
 
-
             function handleInterviewActions() {
                 $(document).on('change', '[id]', handleInputChange);
                 $(document).on('click', '.record_interview', openInterviewModal);
@@ -115,13 +114,13 @@
                 if (interview_id === null) {
                     $('#interview-modal').modal('show');
                 } 
-                // else {
-                //     @this.set('b_interview_id', interview_id);
+                else {
+                    @this.set('b_interview_id', interview_id);
 
-                //     @this.call('getBranchInterview', interview_id).then(() => {
-                //         $('#interview-modal').modal('show');
-                //     });
-                // }
+                    @this.call('getBranchInterview', interview_id).then(() => {
+                        $('#interview-modal').modal('show');
+                    });
+                }
             }
             $(document).on('hidden.bs.modal', '#interview-modal', function () {
                 @this.call('resetFields');

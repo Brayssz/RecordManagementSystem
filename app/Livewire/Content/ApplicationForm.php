@@ -322,7 +322,7 @@ class ApplicationForm extends Component
         $this->addEducationalAttainment($application->application_id);
         $this->addWorkExperienceDocument($application->application_id);
 
-        // $this->notifyEmployees($application);
+        $this->notifyEmployees($application);
 
         $this->decreaseScheduleSlot();
 

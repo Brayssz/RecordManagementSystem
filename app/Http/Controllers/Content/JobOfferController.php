@@ -49,6 +49,8 @@ class JobOfferController extends Controller
                 "data" => $jobOffers
             ]);
         }
+
+        
         $jobOffers = JobOffer::where('status', 'Active')->with('employer')->get();
         // return($jobOffers);
         return view('content.job-offer-management', compact('jobOffers'));

@@ -88,3 +88,6 @@ Route::get('/scheduled-branch-interviews', [ApplicationController::class, 'showS
 Route::get('/capture ', [AppController::class, 'showCapture'])->name('capture');
 
 Route::get('/branch-schedules', [BranchScheduleController::class, 'showBranchSchedule'])->name('branch-schedules');
+
+Route::get('/get-application-chart-data', [AppController::class, 'getApplicationChartData']);
+
