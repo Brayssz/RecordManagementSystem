@@ -13,6 +13,7 @@ use App\Http\Controllers\Content\DocumentController;
 use App\Http\Controllers\Content\EmployeeController;
 use App\Http\Controllers\Content\EmployerController;
 use App\Http\Controllers\Content\JobOfferController;
+use App\Http\Controllers\Content\ReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -91,3 +92,8 @@ Route::get('/branch-schedules', [BranchScheduleController::class, 'showBranchSch
 
 Route::get('/get-application-chart-data', [AppController::class, 'getApplicationChartData']);
 
+Route::get('/branch-performance-report', [ReportController::class, 'showBranchPerformanceReport']);
+
+Route::get('/hired-applicant-report', [ReportController::class, 'showHiredApplicantReport']);
+
+Route::get('/applicant-deployment-report', [ReportController::class, 'showApplicantDeploymentReport']);

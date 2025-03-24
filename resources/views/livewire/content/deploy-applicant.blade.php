@@ -156,22 +156,24 @@
             }
 
             function openDeployModal() {
+                const application_id = $(this).data('applicationid');
 
+                @this.set('application_id', application_id);
 
                 $('#deploy-modal').modal('show');
             }
 
-            $('.btn-deploy').click(function() {
-                confirmAlert("Deploy Applicant?", "Are you sure you want to deploy this applicant?", function() {
+            $('.btn-deploy').click(function () {
+                confirmAlert("Deploy Applicant?", "Are you sure you want to deploy this applicant?", function () {
                     submitDeploy();
                 }, 'Deploy');
             });
 
-            $('.btn-reschedule').click(function() {
+            $('.btn-reschedule').click(function () {
 
 
                 confirmAlert("Reschedule Departure?", "Are you sure you want to reschedule this applicant's departure?",
-                    function() {
+                    function () {
                         submitReschedule();
                     }, 'Reschedule');
             });
@@ -188,7 +190,7 @@
                 const application_id = $(this).data('applicationid');
 
                 @this.set('application_id', application_id);
-                
+
                 const deployment_id = $(this).data('deploymentid');
 
                 @this.set('deployment_id', deployment_id);

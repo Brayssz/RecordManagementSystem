@@ -27595,7 +27595,7 @@ div.dataTables_wrapper div.dataTables_length select {
 }
 
 .daterangepicker .ranges li.active {
-  background-color: #FF9900 !important;
+  background-color:  #643bc6;
 }
 
 .todo-inbox-check .checkboxs .checkmarks:after {

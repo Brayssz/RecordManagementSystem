@@ -37,8 +37,7 @@
                                     class="employee_total">21</span></h6>
                         </div>
                         <div class="search-input text-left">
-                            <a href="" class="btn btn-searchset"><i data-feather="search"
-                                    class="feather-search"></i></a>
+                            <a href="" class="btn btn-searchset"><i data-feather="search" class="feather-search"></i></a>
                         </div>
 
                         <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
@@ -110,7 +109,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
 
             @if (session('message'))
@@ -121,7 +120,7 @@
             @endif
 
 
-            if ($('.employee-table').length > 0) {
+                if ($('.employee-table').length > 0) {
                 var table = $('.employee-table').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -144,7 +143,7 @@
                         "headers": {
                             "Accept": "application/json"
                         },
-                        "data": function(d) {
+                        "data": function (d) {
                             d.status = $('.status_filter').val();
                             d.position = $('.position_filter').val();
                             d.branch_id = $('.branch_filter').val();
@@ -152,138 +151,138 @@
                         "dataSrc": "data"
                     },
                     "columns": [{
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let avatarSrc = 'img/no-profile.png';
-                                if (row.profile_photo_path) {
-                                    avatarSrc = `/storage/${row.profile_photo_path}`;
-                                    return `
-                            <div class="userimgname">
-                                <a href="javascript:void(0);" class="product-img">
-                                    <img src="${avatarSrc}" alt="profile" loading="lazy">
-                                </a>
-                                <div>
-                                    <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
-                                    <span class="emp-team">${row.position}</span>
-                                </div>
-                            </div>
-                        `;
-                                } else {
-                                    const colors = {
-                                        A: 'bg-primary',
-                                        B: 'bg-success',
-                                        C: 'bg-info',
-                                        D: 'bg-warning',
-                                        E: 'bg-danger',
-                                        F: 'bg-secondary',
-                                        G: 'bg-dark',
-                                        H: 'bg-light',
-                                        I: 'bg-primary',
-                                        J: 'bg-success',
-                                        K: 'bg-info',
-                                        L: 'bg-warning',
-                                        M: 'bg-danger',
-                                        N: 'bg-secondary',
-                                        O: 'bg-dark',
-                                        P: 'bg-light',
-                                        Q: 'bg-primary',
-                                        R: 'bg-success',
-                                        S: 'bg-info',
-                                        T: 'bg-warning',
-                                        U: 'bg-danger',
-                                        V: 'bg-secondary',
-                                        W: 'bg-dark',
-                                        X: 'bg-light',
-                                        Y: 'bg-primary',
-                                        Z: 'bg-success'
-                                    };
-
-                                    const firstLetter = row.first_name ? row.first_name.charAt(0)
-                                        .toUpperCase() : 'A';
-                                    const lastLetter = row.last_name ? row.last_name.charAt(0)
-                                        .toUpperCase() : 'Z';
-                                    const bgColor = colors[firstLetter] || 'bg-secondary';
-
-                                    return `
-                            <div class="userimgname">
-                                <a href="javascript:void(0);" class="product-img">
-                                    <span class="avatar ${bgColor} avatar-rounded">
-                                        <span class="avatar-title">${firstLetter}${lastLetter}</span>
-                                    </span>
-                                </a>
-                                <div>
-                                    <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
-                                    <span class="emp-team">${row.position}</span>
-                                </div>
-                            </div>
-                        `;
-                                }
-                            }
-                        },
-                        {
-                            "data": "email",
-                            "render": function(data, type, row) {
-                                return `<a href="mailto:${data}">${data}</a>`;
-                            }
-                        },
-                        {
-                            "data": "contact_number"
-                        },
-                        {
-                            "data": "date_of_birth"
-                        },
-                        {
-                            "data": "gender"
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                return row.branch && row.branch.municipality ? row.branch
-                                    .municipality : "N/A";
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                return row.status === "Active" ?
-                                    `<span class="badge badge-linesuccess">Active</span>` :
-                                    `<span class="badge badge-linedanger">Inactive</span>`;
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            let avatarSrc = 'img/no-profile.png';
+                            if (row.profile_photo_path) {
+                                avatarSrc = `/storage/${row.profile_photo_path}`;
                                 return `
-                        <div class="edit-delete-action">
-                            <a class="me-2 p-2 edit-employee" data-employeeid="${row.employee_id}">
-                                <i data-feather="edit" class="feather-edit"></i>
-                            </a>
-                        </div>
-                    `;
+                                <div class="userimgname">
+                                    <a href="javascript:void(0);" class="product-img">
+                                        <img src="${avatarSrc}" alt="profile" loading="lazy">
+                                    </a>
+                                    <div>
+                                        <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
+                                        <span class="emp-team">${row.position}</span>
+                                    </div>
+                                </div>
+                            `;
+                            } else {
+                                const colors = {
+                                    A: 'bg-primary',
+                                    B: 'bg-success',
+                                    C: 'bg-info',
+                                    D: 'bg-warning',
+                                    E: 'bg-danger',
+                                    F: 'bg-secondary',
+                                    G: 'bg-dark',
+                                    H: 'bg-light',
+                                    I: 'bg-primary',
+                                    J: 'bg-success',
+                                    K: 'bg-info',
+                                    L: 'bg-warning',
+                                    M: 'bg-danger',
+                                    N: 'bg-secondary',
+                                    O: 'bg-dark',
+                                    P: 'bg-light',
+                                    Q: 'bg-primary',
+                                    R: 'bg-success',
+                                    S: 'bg-info',
+                                    T: 'bg-warning',
+                                    U: 'bg-danger',
+                                    V: 'bg-secondary',
+                                    W: 'bg-dark',
+                                    X: 'bg-light',
+                                    Y: 'bg-primary',
+                                    Z: 'bg-success'
+                                };
+
+                                const firstLetter = row.first_name ? row.first_name.charAt(0)
+                                    .toUpperCase() : 'A';
+                                const lastLetter = row.last_name ? row.last_name.charAt(0)
+                                    .toUpperCase() : 'Z';
+                                const bgColor = colors[firstLetter] || 'bg-secondary';
+
+                                return `
+                                <div class="userimgname">
+                                    <a href="javascript:void(0);" class="product-img">
+                                        <span class="avatar ${bgColor} avatar-rounded">
+                                            <span class="avatar-title">${firstLetter}${lastLetter}</span>
+                                        </span>
+                                    </a>
+                                    <div>
+                                        <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
+                                        <span class="emp-team">${row.position}</span>
+                                    </div>
+                                </div>
+                            `;
                             }
                         }
+                    },
+                    {
+                        "data": "email",
+                        "render": function (data, type, row) {
+                            return `<a href="mailto:${data}">${data}</a>`;
+                        }
+                    },
+                    {
+                        "data": "contact_number"
+                    },
+                    {
+                        "data": "date_of_birth"
+                    },
+                    {
+                        "data": "gender"
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return row.branch && row.branch.municipality ? row.branch
+                                .municipality : "N/A";
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return row.status === "Active" ?
+                                `<span class="badge badge-linesuccess">Active</span>` :
+                                `<span class="badge badge-linedanger">Inactive</span>`;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `
+                            <div class="edit-delete-action">
+                                <a class="me-2 p-2 edit-employee" data-employeeid="${row.employee_id}">
+                                    <i data-feather="edit" class="feather-edit"></i>
+                                </a>
+                            </div>
+                        `;
+                        }
+                    }
                     ],
-                    "createdRow": function(row, data, dataIndex) {
+                    "createdRow": function (row, data, dataIndex) {
                         $(row).find('td').eq(7).addClass('action-table-data');
                     },
-                    "initComplete": function(settings, json) {
+                    "initComplete": function (settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                         feather.replace();
 
-                        $('.status_filter').on('change', function() {
+                        $('.status_filter').on('change', function () {
                             table.draw();
                         });
 
-                        $('.position_filter').on('change', function() {
+                        $('.position_filter').on('change', function () {
                             table.draw();
                         });
 
-                        $('.branch_filter').on('change', function() {
+                        $('.branch_filter').on('change', function () {
                             table.draw();
                         });
                     },
-                    "drawCallback": function(settings) {
+                    "drawCallback": function (settings) {
                         feather.replace();
                     },
                 });
