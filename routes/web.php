@@ -97,3 +97,5 @@ Route::get('/branch-performance-report', [ReportController::class, 'showBranchPe
 Route::get('/hired-applicant-report', [ReportController::class, 'showHiredApplicantReport']);
 
 Route::get('/applicant-deployment-report', [ReportController::class, 'showApplicantDeploymentReport']);
+
+Route::get('/branch-interview-report', [ReportController::class, 'showBranchInterviewReport']);

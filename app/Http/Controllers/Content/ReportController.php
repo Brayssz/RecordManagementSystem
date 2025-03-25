@@ -192,11 +192,10 @@ class ReportController extends Controller
         return view('content.applicant-deployment-report', compact('branches'));
     }
 
-
-     public function showApplicantDeploymentReport(Request $request)
+    public function showBranchInterviewReport(Request $request)
     {
-        if ($request->ajax()) {
-            $query = ApplicationForm::query()->where('status', 'Deployed')->with('applicant', 'branch', 'job', 'hiring', 'deployment');
+        if ($request) {
+            $query = ApplicationForm::query()->where('status', 'Deployed')->with('applicant', 'branch', 'job', 'hiring', 'deployment', 'branchInterview', 'branchInterview.employee');
 
             if(Auth::guard('employee')->user()->position == 'Manager') {
                 $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
@@ -210,8 +209,8 @@ class ReportController extends Controller
                 $dates = explode(' - ', $request->date_range);
                 $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
                 $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
-                $query->whereHas('deployment', function ($q) use ($startDate, $endDate) {
-                    $q->whereBetween('actual_departure_date', [$startDate, $endDate]);
+                $query->whereHas('branchInterview', function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween('interview_date', [$startDate, $endDate]);
                 });
             }
 
@@ -221,12 +220,17 @@ class ReportController extends Controller
             $totalRecords = 0;
 
             foreach ($applications as $application) {
+                $interviewer = $application->branchInterview->employee;
+                $interviewerName = $interviewer->first_name . ' ' . ($interviewer->middle_name ? substr($interviewer->middle_name, 0, 1) . '. ' : '') . $interviewer->last_name;
+
                 $report[] = [
                     'applicant_name' => $application->applicant->first_name . ' ' . ($application->applicant->middle_name ? substr($application->applicant->middle_name, 0, 1) . '. ' : '') . $application->applicant->last_name,
                     'branch' => $application->branch->municipality,
                     'job_title' => $application->job->job_title,
-                    'schedule_departure_date' => $application->deployment->schedule_departure_date,
-                    'actual_departure_date' => $application->deployment->actual_departure_date,
+                    'rating' => $application->branchInterview->rating,
+                    'interview_date' => $application->branchInterview->interview_date,
+                    'interviewer' => $interviewerName,
+                    'remarks' => $application->branchInterview->remarks,
                     'referral_code' => $application->hiring->confirmation_code,
                 ];
 

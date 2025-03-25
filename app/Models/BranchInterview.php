@@ -13,4 +13,9 @@ class BranchInterview extends Model
         'branch_id', 'employee_id', 'application_id',
         'interview_date', 'remarks', 'rating', 'status'
     ];
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
 }

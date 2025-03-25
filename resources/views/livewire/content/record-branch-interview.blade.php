@@ -108,6 +108,7 @@
                 const application_id = $(this).data('applicationid');
 
                 @this.set('application_id', application_id);
+                
                 console.log(application_id);
                 console.log(interview_id);
 
