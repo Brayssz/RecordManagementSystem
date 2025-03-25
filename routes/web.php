@@ -13,6 +13,7 @@ use App\Http\Controllers\Content\DocumentController;
 use App\Http\Controllers\Content\EmployeeController;
 use App\Http\Controllers\Content\EmployerController;
 use App\Http\Controllers\Content\JobOfferController;
+use App\Http\Controllers\Content\PDFController;
 use App\Http\Controllers\Content\ReportController;
 
 Route::get('/', function () {
@@ -92,6 +93,8 @@ Route::get('/branch-schedules', [BranchScheduleController::class, 'showBranchSch
 
 Route::get('/get-application-chart-data', [AppController::class, 'getApplicationChartData']);
 
+
+
 Route::get('/branch-performance-report', [ReportController::class, 'showBranchPerformanceReport']);
 
 Route::get('/hired-applicant-report', [ReportController::class, 'showHiredApplicantReport']);
@@ -99,3 +102,21 @@ Route::get('/hired-applicant-report', [ReportController::class, 'showHiredApplic
 Route::get('/applicant-deployment-report', [ReportController::class, 'showApplicantDeploymentReport']);
 
 Route::get('/branch-interview-report', [ReportController::class, 'showBranchInterviewReport']);
+
+Route::get('/employer-interview-report', [ReportController::class, 'showEmployerInterviewReport']);
+
+Route::get('/registered-applicants-report', [ReportController::class, 'showRegisteredApplicantsReport']);
+
+
+
+Route::get('/generate-branch-performance-report', [PDFController::class, 'showBranchPerformanceReport']);
+
+Route::get('/generate-hired-applicant-report', [PDFController::class, 'showHiredApplicantReport']);
+
+Route::get('/generate-applicant-deployment-report', [PDFController::class, 'showApplicantDeploymentReport']);
+
+Route::get('/generate-branch-interview-report', [PDFController::class, 'showBranchInterviewReport']);
+
+Route::get('/generate-employer-interview-report', [PDFController::class, 'showEmployerInterviewReport']);
+
+Route::get('/generate-registered-applicants-report', [PDFController::class, 'showRegisteredApplicantsReport']);

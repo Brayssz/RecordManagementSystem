@@ -17,5 +17,9 @@ class EmployerInterview extends Model
     {
         return $this->belongsTo(ApplicationForm::class, 'application_id');
     }
-}
 
+    public function employer()
+    {
+        return $this->belongsTo(Employer::class, 'employer_id');
+    }
+}

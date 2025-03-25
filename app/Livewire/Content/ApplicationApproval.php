@@ -4,6 +4,7 @@ namespace App\Livewire\Content;
 
 use Livewire\Component;
 use App\Models\ApplicationForm;
+use App\Notifications\ApproveApplication;
 
 class ApplicationApproval extends Component
 {
@@ -16,8 +17,16 @@ class ApplicationApproval extends Component
         $application->save();
 
         session()->flash('message', 'Application approved.');
+        $this->sendApprovalEmail();
 
         return redirect()->route('approve-applications');
+    }
+
+    public function sendApprovalEmail()
+    {
+        $application = ApplicationForm::with('applicant')->find($this->application_id);
+
+        $application->applicant->notify(new ApproveApplication($this->application_id));
     }
 
     public function rejectApplication()

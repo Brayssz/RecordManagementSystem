@@ -98,6 +98,54 @@
                         <i data-feather="maximize"></i>
                     </a>
                 </li>
+                @if (Auth::guard('employee')->user()->position == 'Manager')
+                    <!-- Notifications -->
+                    <li class="nav-item dropdown nav-item-box">
+                        <a href="javascript:void(0);" class="dropdown-toggle nav-link notification">
+                            <i data-feather="bell"></i><span class="badge rounded-pill notif-count">2</span>
+                        </a>
+                        <div class="dropdown-menu notifications">
+                            <div class="topnav-dropdown-header">
+                                <span class="notification-title">Notifications</span>
+                                <a href="javascript:void(0)" class="clear-noti"> Read All </a>
+                            </div>
+                            <div class="noti-content">
+                                <ul class="notification-list">
+                                    <li class="notification-message">
+                                        <a>
+                                            <div class="media d-flex">
+                                                <span class="avatar avatar-md bg-success">
+                                                    <span class="avatar-title">i</span>
+                                                </span>
+                                                <div class="media-body flex-grow-1">
+                                                    <p class="noti-details">
+                                                        {{-- <span class="noti-title">John Doe</span> added new
+                                            task --}}
+                                                        <span class="noti-title">Patient appointment booking sadasdsada
+                                                            dasdadasd sadsadasdsadasdadada</span>
+                                                    </p>
+                                                    <div class="row">
+                                                        <p class="noti-time col-lg-6">
+                                                            <span class="notification-time">4 mins ago</span>
+                                                        </p>
+                                                        <p class="noti-time col-lg-6 text-end">
+                                                            <span class="notification-time">Read</span>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="topnav-dropdown-footer">
+                                <a href="activities.html">View all Notifications</a>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- /Notifications -->
+                @endif
 
 
                 <li class="nav-item dropdown has-arrow main-drop">
@@ -235,7 +283,7 @@
                                             <a href="/application-records"><i
                                                     data-feather="archive"></i><span>Application Records</span></a>
                                         </li>
-                                        
+
                                         <li class="{{ Request::is('branch-schedules') ? 'active' : '' }}">
                                             <a href="/branch-schedules">
                                                 <i data-feather="calendar"></i>
@@ -308,8 +356,6 @@
                                             <a href="/applicant-documents"><i
                                                     data-feather="file"></i><span>Application Documents</span></a>
                                         </li>
-
-                                      
                                     @endif
                                 @endif
 
@@ -325,22 +371,24 @@
                         <li class="submenu-open">
                             <h6 class="submenu-hdr">Reports</h6>
                             <ul>
-                                <li>
-                                    <a href="manage-stocks.html"><i data-feather="package"></i><span>Branch
-                                            Performance Report</span></a>
+                                <li class="{{ Request::is('branch-performance-report') ? 'active' : '' }}">
+                                    <a href="branch-performance-report"><i data-feather="bar-chart-2"></i><span>Branch
+                                            Performance</span></a>
                                 </li>
-                                <li>
-                                    <a href="stock-adjustment.html"><i data-feather="clipboard"></i><span>Deployment
-                                            Report</span></a>
+                                <li class="{{ Request::is('applicant-deployment-report') ? 'active' : '' }}">
+                                    <a href="applicant-deployment-report"><i data-feather="send"></i><span>Applicant
+                                            Deployment</span></a>
                                 </li>
-                                <li>
-                                    <a href="stock-transfer.html"><i data-feather="truck"></i><span>Report
-                                            3</span></a>
+                                <li class="{{ Request::is('hired-applicant-report') ? 'active' : '' }}">
+                                    <a href="hired-applicant-report"><i data-feather="user-check"></i><span>Hired
+                                            Applicant</span></a>
+                                </li>
+                                <li class="{{ Request::is('employer-interview-report') ? 'active' : '' }}">
+                                    <a href="employer-interview-report"><i data-feather="file-text"></i><span>Employer
+                                            Interview</span></a>
                                 </li>
                             </ul>
                         </li>
-
-
                     </ul>
                 </div>
             </div>
@@ -351,6 +399,7 @@
         </div>
 
         @livewire('content.layout')
+        @livewire('notification.app-notifications')
 
     </div>
     <!-- jQuery -->

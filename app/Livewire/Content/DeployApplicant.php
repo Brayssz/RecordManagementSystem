@@ -7,6 +7,8 @@ use App\Models\Deployment;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ApplicationForm;
+use App\Notifications\DepartureDate;
+use Carbon\Carbon;
 
 class DeployApplicant extends Component
 {
@@ -49,10 +51,31 @@ class DeployApplicant extends Component
 
         session()->flash('message', 'Applicant deployed successfully.');
 
+        $this->emailDepartureDate();
+
         $this->resetInputFields();
 
         return redirect()->route('deploy-applicants');
     }
+
+    public function emailDepartureDate() {
+
+        $application = ApplicationForm::with('applicant')->find($this->application_id);
+
+        $formattedDate = '**Departure Date:** '. " " . Carbon::parse($this->schedule_departure_date)->format('F j, Y');
+
+        $application->applicant->notify(new DepartureDate($this->application_id, $formattedDate));
+    }
+
+    public function emailActualDepartureDate() {
+
+        $application = ApplicationForm::with('applicant')->find($this->application_id);
+
+        $formattedDate = '**Actual Departure Date:** '. " " . Carbon::parse($this->actual_departure_date)->format('F j, Y');
+
+        $application->applicant->notify(new DepartureDate($this->application_id, $formattedDate));
+    }
+
 
     public function rescheduleDeparture()
     {
@@ -70,6 +93,8 @@ class DeployApplicant extends Component
             session()->flash('message', 'Departure rescheduled successfully.');
 
             $this->updateApplicationStatus();
+
+            $this->emailActualDepartureDate();
 
             $this->resetInputFields();
 

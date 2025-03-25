@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\ApplicationForm;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\EmployerInterview;
+use App\Models\Applicant;
 
 class ReportController extends Controller
 {
@@ -194,8 +195,8 @@ class ReportController extends Controller
 
     public function showBranchInterviewReport(Request $request)
     {
-        if ($request) {
-            $query = ApplicationForm::query()->where('status', 'Deployed')->with('applicant', 'branch', 'job', 'hiring', 'deployment', 'branchInterview', 'branchInterview.employee');
+        if ($request->ajax()) {
+            $query = ApplicationForm::query()->where('status', '!=', 'Pending')->with('applicant', 'branch', 'job', 'hiring', 'deployment', 'branchInterview', 'branchInterview.employee');
 
             if(Auth::guard('employee')->user()->position == 'Manager') {
                 $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
@@ -210,7 +211,7 @@ class ReportController extends Controller
                 $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
                 $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
                 $query->whereHas('branchInterview', function ($q) use ($startDate, $endDate) {
-                    $q->whereBetween('interview_date', [$startDate, $endDate]);
+                    $q->whereBetween('created_at', [$startDate, $endDate]);
                 });
             }
 
@@ -228,7 +229,7 @@ class ReportController extends Controller
                     'branch' => $application->branch->municipality,
                     'job_title' => $application->job->job_title,
                     'rating' => $application->branchInterview->rating,
-                    'interview_date' => $application->branchInterview->interview_date,
+                    'interview_date' => $application->branchInterview->created_at,
                     'interviewer' => $interviewerName,
                     'remarks' => $application->branchInterview->remarks,
                     'referral_code' => $application->hiring->confirmation_code,
@@ -246,7 +247,113 @@ class ReportController extends Controller
         }
 
         $branches = Branch::where('status', 'Active')->get();
-        return view('content.applicant-deployment-report', compact('branches'));
+        return view('content.branch-interview-report', compact('branches'));
+    }
+
+    public function showEmployerInterviewReport(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer');
+
+            if (Auth::guard('employee')->user()->position == 'Manager') {
+                $query = $query->whereHas('application', function ($q) {
+                    $q->where('branch_id', Auth::guard('employee')->user()->branch_id);
+                });
+            }
+
+            if ($request->filled('branch_id')) {
+                $query->whereHas('application', function ($q) use ($request) {
+                    $q->where('branch_id', $request->branch_id);
+                });
+            }
+
+            if ($request->filled('date_range')) {
+                $dates = explode(' - ', $request->date_range);
+                $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
+                $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
+                $query->whereBetween('interview_date', [$startDate, $endDate]);
+            }
+
+            $interviews = $query->get();
+
+            $report = [];
+            $totalRecords = 0;
+
+            foreach ($interviews as $interview) {
+                $application = $interview->application;
+                $applicant = $application->applicant;
+                $employer = $interview->employer;
+                $report[] = [
+                    'applicant_name' => $applicant->first_name . ' ' . ($applicant->middle_name ? substr($applicant->middle_name, 0, 1) . '. ' : '') . $applicant->last_name,
+                    'branch' => $application->branch->municipality,
+                    'job_title' => $application->job->job_title,
+                    'rating' => $interview->rating,
+                    'interview_date' => $interview->interview_date,
+                    'interviewer' => $employer->first_name . ' ' . ($employer->middle_name ? substr($employer->middle_name, 0, 1) . '. ' : '') . $employer->last_name,
+                    'remarks' => $interview->remarks,
+                    'referral_code' => $application->hiring->confirmation_code,
+                ];
+
+                $totalRecords++;
+            }
+
+            return response()->json([
+                "draw" => intval($request->input('draw', 1)),
+                "recordsTotal" => $totalRecords,
+                "recordsFiltered" => $totalRecords,
+                "data" => $report
+            ]);
+        }
+
+        $branches = Branch::where('status', 'Active')->get();
+        return view('content.employer-interview-report', compact('branches'));
+    }
+
+    public function showRegisteredApplicantsReport(Request $request) 
+    {
+        if ($request->ajax()) {
+            $query = Applicant::query();
+
+            if ($request->filled('branch_id')) {
+                $query->where('branch_id', $request->branch_id);
+            }
+
+            if ($request->filled('date_range')) {
+                $dates = explode(' - ', $request->date_range);
+                $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
+                $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            }
+
+            $applicants = $query->get();
+
+            $report = [];
+            $totalRecords = 0;
+
+            foreach ($applicants as $applicant) {
+                $address = $applicant->street . ', ' . $applicant->barangay . ', ' . $applicant->municipality . ', ' . $applicant->province . ', ' . $applicant->region . ', ' . $applicant->postal_code;
+                $report[] = [
+                    'applicant_name' => $applicant->first_name . ' ' . ($applicant->middle_name ? substr($applicant->middle_name, 0, 1) . '. ' : '') . $applicant->last_name,
+                    'contact_number' => $applicant->contact_number,
+                    'email' => $applicant->email,
+                    'date_registered' => $applicant->created_at,
+                    'address' => $address,
+                    'status' => $applicant->status,
+                ];
+
+                $totalRecords++;
+            }
+
+            return response()->json([
+                "draw" => intval($request->input('draw', 1)),
+                "recordsTotal" => $totalRecords,
+                "recordsFiltered" => $totalRecords,
+                "data" => $report
+            ]);
+        }
+
+        $branches = Branch::where('status', 'Active')->get();
+        return view('content.registered-applicants-report', compact('branches'));
     }
 }
  

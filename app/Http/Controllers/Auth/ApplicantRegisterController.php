@@ -34,6 +34,7 @@ class ApplicantRegisterController extends Controller
             'postal_code' => 'required|string|max:10',
             'citizenship' => 'required|string|max:255',
             'marital_status' => 'required|string|max:255',
+            'terms' => 'accepted',
         ]);
 
         if ($validator->fails()) {

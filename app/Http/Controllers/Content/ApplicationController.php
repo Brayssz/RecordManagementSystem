@@ -234,7 +234,7 @@ class ApplicationController extends Controller
     public function showToApproveApplications(Request $request)
     {
         if ($request->ajax()) {
-            $query = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview')->where('branch_id', Auth::guard("employee")->user()->branch_id)->whereIn('status', ['Pending', 'Interviewed']);
+            $query = ApplicationForm::with('applicant', 'job', 'branch', 'branchInterview')->where('branch_id', Auth::guard("employee")->user()->branch_id)->whereIn('status', ['Interviewed']);
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);

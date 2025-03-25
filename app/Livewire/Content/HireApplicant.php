@@ -7,6 +7,7 @@ use App\Models\ApplicationForm;
 use App\Models\Hiring;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\HireApplicant as HireApplicantNotification;
 
 class HireApplicant extends Component
 {
@@ -21,8 +22,16 @@ class HireApplicant extends Component
         session()->flash('message', 'Application approved.');
 
         $this->hiring();
+        $this->sendHiredEmail();
 
         return redirect()->route('hire-applicants');
+    }
+
+    public function sendHiredEmail()
+    {
+        $application = ApplicationForm::with('applicant')->find($this->application_id);
+
+        $application->applicant->notify(new HireApplicantNotification($this->application_id));
     }
 
     public function hiring() {

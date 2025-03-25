@@ -8,8 +8,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Hired Applicant Report</h4>
-                    <h6>Monitor the number of hired applicants per branch</h6>
+                    <h4>Branch Interview Report</h4>
+                    <h6>Track and analyze interview performance across branches</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -34,19 +34,7 @@
                     <div class="search-set mb-0 d-flex w-100 justify-content-start">
 
                         <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
-                            @if (Auth::guard('employee')->user()->position != 'Manager')
-                                <div class="col-lg-4 col-sm-12">
-                                    <div class="form-group ">
-                                        <select class="select branch_filter form-control">
-                                            <option value="">Select Branch</option>
-                                            @foreach($branches as $branch)
-                                                <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            @endif
-
+                            
                             <div class="col-lg-4 col-sm-12">
                                 <div class=" position-relative">
                                     <input type="text" id="reportrange" class="form-control pe-5 daterange_filter"
@@ -65,8 +53,10 @@
                                 <th>Applicant</th>
                                 <th>Branch</th>
                                 <th>Job Title</th>
-                                <th>Date Hired</th>
-                                <th>Refferal Code</th>
+                                <th>Rating</th>
+                                <th>Interview Date</th>
+                                <th>Interviewer</th>
+                                <th>Result/Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,8 +84,9 @@
                 });
             @endif
 
+
             $('.btn-generate').on('click', function () {
-                window.open('/generate-hired-applicant-report?date_range=' + $('.daterange_filter').val() + '&branch_id=' + $('.branch_filter').val(), '_blank');
+                window.open('/generate-branch-interview-report?date_range=' + $('.daterange_filter').val(), '_blank');
             });
 
             var start = moment().subtract(29, 'days');
@@ -138,7 +129,7 @@
                         info: "_START_ - _END_ of _TOTAL_ items",
                     },
                     "ajax": {
-                        "url": "/hired-applicant-report",
+                        "url": "/branch-interview-report",
                         "type": "GET",
                         "headers": {
                             "Accept": "application/json"
@@ -160,16 +151,25 @@
                             "data": "job_title"
                         },
                         {
-                            "data": "application_date",
+                            "data": "rating"
+                        },
+                        {
+                            "data": "interview_date",
                             "render": function (data, type, row) {
-                                var date = new Date(data);
-                                var options = { year: 'numeric', month: 'long', day: '2-digit' };
-                                return date.toLocaleDateString('en-US', options);
+                                if (data) {
+                                    var date = new Date(data);
+                                    var options = { year: 'numeric', month: 'long', day: '2-digit' };
+                                    return date.toLocaleDateString('en-US', options);
+                                }
+                                return '';
                             }
                         },
                         {
-                            "data": "referral_code"
+                            "data": "interviewer"
                         },
+                        {
+                            "data": "remarks"
+                        }
                     ],
                     "initComplete": function (settings, json) {
                         $('.dataTables_filter').remove();

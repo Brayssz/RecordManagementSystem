@@ -3,10 +3,13 @@
 namespace App\Livewire\Content;
 
 use App\Models\BranchSchedule;
+use App\Notifications\Reschedule;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\ApplicationForm;
 
 class BranchScheduleManagement extends Component
 {
@@ -60,8 +63,8 @@ class BranchScheduleManagement extends Component
         $this->interview_date = $this->schedule->interview_date;
         $this->available_slots = $this->schedule->available_slots;
         $this->schedule_id = $this->schedule->schedule_id;
-        $this->available_start_time = $this->schedule->available_start_time;
-        $this->available_end_time = $this->schedule->available_end_time;
+        $this->available_start_time = Carbon::parse($this->schedule->available_start_time)->format('H:i');
+        $this->available_end_time = Carbon::parse($this->schedule->available_end_time)->format('H:i');
     }
 
     public function submitSchedule()
@@ -86,10 +89,26 @@ class BranchScheduleManagement extends Component
                 'available_end_time' => $this->available_end_time,
             ]);
 
+            $date = Carbon::parse($this->interview_date)->format('F j, Y') . "( " . Carbon::parse($this->available_start_time)->format('h:i A') . " - " . Carbon::parse($this->available_end_time)->format('h:i A') ." )";
+            $this->sendRescheduleEmail($date);
+
             session()->flash('message', 'Schedule successfully updated!');
         }
 
         return redirect()->route('branch-schedules');
+    }
+
+    public function sendRescheduleEmail($date)
+    {
+
+        $applications = ApplicationForm::with('applicant')->where('schedule_id' ,$this->schedule_id)->get();
+
+        foreach ($applications as $application) {
+
+            $application->applicant->notify(new Reschedule($application->application_id, $date));
+            
+        }
+
     }
 
     public function render()

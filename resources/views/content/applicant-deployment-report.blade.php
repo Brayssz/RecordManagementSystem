@@ -23,7 +23,7 @@
                 </li>
             </ul>
             <div class="page-btn">
-                <a class="btn btn-added generate-report"><i data-feather="plus-circle" class="me-2"></i>Generate Report</a>
+                <a class="btn btn-added btn-generate"><i data-feather="plus-circle" class="me-2"></i>Generate Report</a>
             </div>
         </div>
 
@@ -94,8 +94,11 @@
                 });
             @endif
 
+            $('.btn-generate').on('click', function () {
+                window.open('/generate-applicant-deployment-report?date_range=' + $('.daterange_filter').val() + '&branch_id=' + $('.branch_filter').val(), '_blank');
+            });
 
-                var start = moment().subtract(29, 'days');
+            var start = moment().subtract(29, 'days');
             var end = moment();
 
             function cb(start, end) {

@@ -23,7 +23,7 @@
                 </li>
             </ul>
             <div class="page-btn">
-                <a class="btn btn-added add-branch"><i data-feather="plus-circle" class="me-2"></i>Generate Report</a>
+                <a class="btn btn-added btn-generate"><i data-feather="plus-circle" class="me-2"></i>Generate Report</a>
             </div>
         </div>
         <!-- /product list -->
@@ -81,6 +81,10 @@
                     progressBar: true,
                 });
             @endif
+
+            $('.btn-generate').on('click', function () {
+                window.open('/generate-branch-performance-report?date_range=' + $('.daterange_filter').val(), '_blank');
+            });
 
             const date_range_init = function () {
                 var start = moment().subtract(29, 'days');
