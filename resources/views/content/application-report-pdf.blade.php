@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hired Applicants Report</title>
+    <title>Applications Report</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,13 +58,14 @@
     <p style="text-align: center; margin-bottom: 20px;">Region XII</p>
 
     <div style="border-top: 1px solid #000; margin: 20px 0;"></div>
-    
-    
 
-    <h3 style="text-align: center; margin-top: 20px;">Hired Applicants Report</h3>
-    <p style="text-align: center; margin-top: 0;">{{ \Carbon\Carbon::parse($startDate)->format('F j, Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('F j, Y') }}</p>
+
+
+    <h3 style="text-align: center; margin-top: 20px;">Applications Report</h3>
+    <p style="text-align: center; margin-top: 0;">{{ \Carbon\Carbon::parse($startDate)->format('F j, Y') }} -
+        {{ \Carbon\Carbon::parse($endDate)->format('F j, Y') }}</p>
     @if (isset($branch))
-        <p style="text-align: center;">{{$branch}} Branch</p>
+        <p style="text-align: center;">{{ $branch }} Branch</p>
     @endif
     <p style="text-align: center;">
 
@@ -77,24 +78,24 @@
                 <th>Applicant</th>
                 <th>Branch</th>
                 <th>Job Title</th>
-                <th>Date Hired</th>
-                <th>Refferal Code</th>
+                <th>Application Date</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($report as $record)
-            <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
-            <td>{{ $record['applicant_name'] }}</td>
-            <td>{{ $record['branch'] }}</td>
-            <td>{{ $record['job_title'] }}</td>
-            <td>{{ \Carbon\Carbon::parse($record['application_date'])->format('F j, Y') }}</td>
-            <td>{{ $record['referral_code'] }}</td>
-            </tr>
+                <tr>
+                    <th scope="row">{{ $loop->iteration }}</th>
+                    <td>{{ $record['applicant_name'] }}</td>
+                    <td>{{ $record['branch'] }}</td>
+                    <td>{{ $record['job_title'] }}</td>
+                    <td>{{ \Carbon\Carbon::parse($record['application_date'])->format('F j, Y') }}</td>
+                    <td>{{ $record['status'] }}</td>
+                </tr>
             @empty
-            <tr>
-            <td colspan="6" class="text-center">No record found</td>
-            </tr>
+                <tr>
+                    <td colspan="6" class="text-center">No record found</td>
+                </tr>
             @endforelse
         </tbody>
     </table>
@@ -102,9 +103,9 @@
     <div>
         <h4 style=" margin-bottom: 10px;">Prepared by:</h4>
         <h3 style=" margin-bottom: 1px;">
-            {{ Auth::guard('employee')->user()->first_name }} 
+            {{ Auth::guard('employee')->user()->first_name }}
             @if (Auth::guard('employee')->user()->middle_name)
-            {{ Auth::guard('employee')->user()->middle_name[0] }}. 
+                {{ Auth::guard('employee')->user()->middle_name[0] }}.
             @endif
             {{ Auth::guard('employee')->user()->last_name }}
         </h3>

@@ -95,7 +95,8 @@
             @endif
 
             $('.btn-generate').on('click', function () {
-                window.open('/generate-hired-applicant-report?date_range=' + $('.daterange_filter').val() + '&branch_id=' + $('.branch_filter').val(), '_blank');
+                var branchId = $('.branch_filter').is(':visible') ? $('.branch_filter').val() : '';
+                window.open('/generate-applicant-deployment-report?date_range=' + $('.daterange_filter').val() + '&branch_id=' + branchId, '_blank');
             });
 
             var start = moment().subtract(29, 'days');

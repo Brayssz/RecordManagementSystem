@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EmployerInterview;
 use App\Models\Applicant;
+use Carbon\Carbon;
 
 class PDFController extends Controller
 {
@@ -87,6 +88,11 @@ class PDFController extends Controller
 
         $query = ApplicationForm::query()->where('status', 'Hired')->with('applicant', 'branch', 'job', 'hiring');
 
+        if (Auth::guard('employee')->user()->position == 'Manager') {
+            $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
+            $branch = Branch::where('branch_id', Auth::guard('employee')->user()->branch_id)->first()->municipality;
+        }
+
         $branch = null;
         if ($request->filled('branch_id')) {
             $query->where('branch_id', $request->branch_id);
@@ -129,6 +135,13 @@ class PDFController extends Controller
         $query = ApplicationForm::query()->where('status', 'Deployed')->with('applicant', 'branch', 'job', 'hiring', 'deployment');
 
         $branch = null;
+
+        if (Auth::guard('employee')->user()->position == 'Manager') {
+            $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
+            $branch = Branch::where('branch_id', Auth::guard('employee')->user()->branch_id)->first()->municipality;
+        }
+
+
         if ($request->filled('branch_id')) {
             $query->where('branch_id', $request->branch_id);
             $branch = Branch::find($request->branch_id)->municipality;
@@ -294,5 +307,68 @@ class PDFController extends Controller
         $pdf = Pdf::loadView('content.registered-applicants-report-pdf', compact('report', 'startDate', 'endDate'));
 
         return $pdf->stream('registered_applicant_report.pdf');
+    }
+
+    public function getFullStatusText($status)
+    {
+        $statuses = [
+            "Pending" => "Pending for Manager Interview",
+            "Interviewed" => "Interviewed",
+            "Submitting" => "Submitting Documents",
+            "Reviewing" => "Reviewing Application",
+            "ScheduledBranchInterview" => "Scheduled for Branch Interview",
+            "ScheduledEmployerInterview" => "Scheduled for Employer Interview",
+            "Waiting" => "Waiting to be Hired",
+            "Hired" => "Waiting to be Deployed",
+            "Deployed" => "Deployed With Departure Schedule",
+            "Canceled" => "Canceled Application",
+            "Rejected" => "Rejected Application",
+        ];
+
+        return $statuses[$status] ?? "Unknown";
+    }
+
+    public function showApplicationsReport(Request $request)
+    {
+        $query = ApplicationForm::query()->with('applicant', 'branch', 'job', 'hiring', 'deployment', 'branchInterview', 'branchInterview.employee');
+
+        $branch = null;
+
+        if (Auth::guard('employee')->user()->position == 'Manager') {
+            $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
+            $branch = Branch::where('branch_id', Auth::guard('employee')->user()->branch_id)->first()->municipality;
+        }
+
+        if ($request->filled('branch_id')) {
+            $query->where('branch_id', $request->branch_id);
+            $branch = Branch::find($request->branch_id)->municipality;
+        }
+        $startDate = null;
+        $endDate = null;
+        if ($request->filled('date_range')) {
+            $dates = explode(' - ', $request->date_range);
+            $startDate = Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
+            $endDate = Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
+            $query->whereBetween('application_date', [$startDate, $endDate]);
+        }
+
+        $applications = $query->get();
+
+        $report = [];
+
+        foreach ($applications as $application) {
+
+            $report[] = [
+                'applicant_name' => $application->applicant->first_name . ' ' . ($application->applicant->middle_name ? substr($application->applicant->middle_name, 0, 1) . '. ' : '') . $application->applicant->last_name,
+                'branch' => $application->branch->municipality,
+                'job_title' => $application->job->job_title,
+                'application_date' => $application->created_at,
+                'status' => $this->getFullStatusText($application->status),
+            ];
+        }
+
+        $pdf = Pdf::loadView('content.application-report-pdf', compact('report', 'startDate', 'endDate', 'branch'));
+
+        return $pdf->stream('applications_report.pdf');
     }
 }

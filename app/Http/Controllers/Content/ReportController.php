@@ -9,6 +9,7 @@ use App\Models\ApplicationForm;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EmployerInterview;
 use App\Models\Applicant;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
@@ -93,10 +94,10 @@ class ReportController extends Controller
     public function showHiredApplicantReport(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $query = ApplicationForm::query()->where('status', 'Hired')->with('applicant', 'branch', 'job', 'hiring');
 
-            if(Auth::guard('employee')->user()->position == 'Manager') {
+            if (Auth::guard('employee')->user()->position == 'Manager') {
                 $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
             }
             if ($request->filled('branch_id')) {
@@ -146,7 +147,7 @@ class ReportController extends Controller
         if ($request->ajax()) {
             $query = ApplicationForm::query()->where('status', 'Deployed')->with('applicant', 'branch', 'job', 'hiring', 'deployment');
 
-            if(Auth::guard('employee')->user()->position == 'Manager') {
+            if (Auth::guard('employee')->user()->position == 'Manager') {
                 $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
             }
 
@@ -198,10 +199,10 @@ class ReportController extends Controller
         if ($request->ajax()) {
             $query = ApplicationForm::query()->where('status', '!=', 'Pending')->with('applicant', 'branch', 'job', 'hiring', 'deployment', 'branchInterview', 'branchInterview.employee');
 
-            if(Auth::guard('employee')->user()->position == 'Manager') {
+            if (Auth::guard('employee')->user()->position == 'Manager') {
                 $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
             }
-            
+
             if ($request->filled('branch_id')) {
                 $query->where('branch_id', $request->branch_id);
             }
@@ -309,7 +310,7 @@ class ReportController extends Controller
         return view('content.employer-interview-report', compact('branches'));
     }
 
-    public function showRegisteredApplicantsReport(Request $request) 
+    public function showRegisteredApplicantsReport(Request $request)
     {
         if ($request->ajax()) {
             $query = Applicant::query();
@@ -355,5 +356,75 @@ class ReportController extends Controller
         $branches = Branch::where('status', 'Active')->get();
         return view('content.registered-applicants-report', compact('branches'));
     }
+
+    public function getFullStatusText($status)
+    {
+        $statuses = [
+            "Pending" => "Pending for Manager Interview",
+            "Interviewed" => "Interviewed",
+            "Submitting" => "Submitting Documents",
+            "Reviewing" => "Reviewing Application",
+            "ScheduledBranchInterview" => "Scheduled for Branch Interview",
+            "ScheduledEmployerInterview" => "Scheduled for Employer Interview",
+            "Waiting" => "Waiting to be Hired",
+            "Hired" => "Waiting to be Deployed",
+            "Deployed" => "Deployed With Departure Schedule",
+            "Canceled" => "Canceled Application",
+            "Rejected" => "Rejected Application",
+        ];
+
+        return $statuses[$status] ?? "Unknown";
+    }
+
+    public function showApplicationsReport(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = ApplicationForm::query()->with('applicant', 'branch', 'job', 'hiring', 'deployment', 'branchInterview', 'branchInterview.employee');
+
+            if (Auth::guard('employee')->user()->position == 'Manager') {
+                $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
+            }
+
+            if ($request->filled('branch_id')) {
+                $query->where('branch_id', $request->branch_id);
+            }
+
+            if ($request->filled('date_range')) {
+                $dates = explode(' - ', $request->date_range);
+                $startDate = Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
+                $endDate = Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
+                $query->whereBetween('application_date', [$startDate, $endDate]);
+            }
+
+            $applications = $query->get();
+
+            $report = [];
+            $totalRecords = 0;
+
+            foreach ($applications as $application) {
+
+                $report[] = [
+                    'applicant_name' => $application->applicant->first_name . ' ' . ($application->applicant->middle_name ? substr($application->applicant->middle_name, 0, 1) . '. ' : '') . $application->applicant->last_name,
+                    'branch' => $application->branch->municipality,
+                    'job_title' => $application->job->job_title,
+                    'application_date' => $application->created_at,
+                    'status' => $this->getFullStatusText($application->status),
+                ];
+
+                $totalRecords++;
+            }
+
+            return response()->json([
+                "draw" => intval($request->input('draw', 1)),
+                "recordsTotal" => $totalRecords,
+                "recordsFiltered" => $totalRecords,
+                "data" => $report
+            ]);
+        }
+
+        $branches = Branch::where('status', 'Active')->get();
+        return view('content.application-report', compact('branches'));
+    }
+
+
 }
- 

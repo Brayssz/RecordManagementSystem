@@ -107,6 +107,8 @@ Route::get('/employer-interview-report', [ReportController::class, 'showEmployer
 
 Route::get('/registered-applicants-report', [ReportController::class, 'showRegisteredApplicantsReport']);
 
+Route::get('/applications-report', [ReportController::class, 'showApplicationsReport']);
+
 
 
 Route::get('/generate-branch-performance-report', [PDFController::class, 'showBranchPerformanceReport']);
@@ -120,3 +122,5 @@ Route::get('/generate-branch-interview-report', [PDFController::class, 'showBran
 Route::get('/generate-employer-interview-report', [PDFController::class, 'showEmployerInterviewReport']);
 
 Route::get('/generate-registered-applicants-report', [PDFController::class, 'showRegisteredApplicantsReport']);
+
+Route::get('/generate-applications-report', [PDFController::class, 'showApplicationsReport']);

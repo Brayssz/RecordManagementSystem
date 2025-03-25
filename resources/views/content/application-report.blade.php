@@ -1,6 +1,6 @@
 @extends('layout.app-layout')
 
-@section('title', 'Branch Performance Report')
+@section('title', 'Applications Report')
 
 @section('content')
 
@@ -8,8 +8,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Applicant Deployment Report</h4>
-                    <h6>Monitor the number of deployed applicants per branch</h6>
+                    <h4>Application Report</h4>
+                    <h6>Monitor application per branch</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -64,9 +64,8 @@
                                 <th>Applicant</th>
                                 <th>Branch</th>
                                 <th>Job Title</th>
-                                <th>Scheduled Deployment Date</th>
-                                <th>Actual Deployment Date</th>
-                                <th>Referral Code</th>
+                                <th>Application Date</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,7 +95,7 @@
 
             $('.btn-generate').on('click', function () {
                 var branchId = $('.branch_filter').is(':visible') ? $('.branch_filter').val() : '';
-                window.open('/generate-applicant-deployment-report?date_range=' + $('.daterange_filter').val() + '&branch_id=' + branchId, '_blank');
+                window.open('/generate-applications-report?date_range=' + $('.daterange_filter').val() + '&branch_id=' + branchId, '_blank');
             });
 
             var start = moment().subtract(29, 'days');
@@ -139,7 +138,7 @@
                         info: "_START_ - _END_ of _TOTAL_ items",
                     },
                     "ajax": {
-                        "url": "/applicant-deployment-report",
+                        "url": "/applications-report",
                         "type": "GET",
                         "headers": {
                             "Accept": "application/json"
@@ -161,7 +160,7 @@
                             "data": "job_title"
                         },
                         {
-                            "data": "schedule_departure_date",
+                            "data": "application_date",
                             "render": function (data, type, row) {
                                 var date = new Date(data);
                                 var options = { year: 'numeric', month: 'long', day: '2-digit' };
@@ -169,15 +168,7 @@
                             }
                         },
                         {
-                            "data": "actual_departure_date",
-                            "render": function (data, type, row) {
-                                var date = new Date(data);
-                                var options = { year: 'numeric', month: 'long', day: '2-digit' };
-                                return date.toLocaleDateString('en-US', options);
-                            }
-                        },
-                        {
-                            "data": "referral_code"
+                            "data": "status"
                         },
                     ],
                     "initComplete": function (settings, json) {
