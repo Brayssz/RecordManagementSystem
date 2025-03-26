@@ -1667,6 +1667,23 @@ function toggleFullscreen(elem) {
 		input.val(newVal).trigger("input").trigger("change");
 	});
 
+	$(".quantity-btn-rating").on("click", function () {
+
+		var $button = $(this);
+		var oldValue = $button.closest('.product-quantity').find("input.quntity-input").val();
+		if ($button.text() == "+") {
+			var newVal = Math.min(parseFloat(oldValue) + 1, 10);
+		} else {
+			if (oldValue > 0) {
+				var newVal = parseFloat(oldValue) - 1;
+			} else {
+				newVal = 0;
+			}
+		}
+		var input = $button.closest('.product-quantity').find("input.quntity-input");
+		input.val(newVal).trigger("input").trigger("change");
+	});
+
 		// Custom Country Code Selector
 
 		if ($('#phone').length > 0) {

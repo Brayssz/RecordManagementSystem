@@ -9,6 +9,12 @@
   transition: all 0.5s;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 /******* Base *******/
 body {
   font-family: "Nunito", sans-serif;
@@ -10723,6 +10729,12 @@ table.dataTable thead > tr > th.no-sort.sorting::after {
   width: 16px;
   height: 16px;
 }
+.quantity-btn-rating svg {
+  stroke: 1px;
+  width: 16px;
+  height: 16px;
+}
+
 
 ::-webkit-scrollbar {
   width: 5px;
