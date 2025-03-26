@@ -35,31 +35,6 @@
                             <a href="" class="btn btn-searchset"><i data-feather="search"
                                     class="feather-search"></i></a>
                         </div>
-
-                        <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select status_filter form-control">
-                                        <option value="">Status</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Canceled">Canceled</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12">
-                                <div class="form-group ">
-                                    <select class="select branch_filter form-control">
-                                        <option value="">Branch</option>
-
-                                        @foreach($branches as $branch)
-                                            <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -71,7 +46,6 @@
                                 <th>Applicant</th>
                                 <th>Job</th>
                                 <th>Country</th>
-                                <th>Branch</th>
                                 <th>Valid ID</th>
                                 <th>Birth Certificate</th>
                                 <th>NBI Clearance</th>
@@ -230,9 +204,6 @@
                             "data": "job.country"
                         },
                         {
-                            "data": "branch.municipality"
-                        },
-                        {
                             "data": null,
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
@@ -302,7 +273,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(9).addClass('action-table-data');
+                        $(row).find('td').eq(8).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');

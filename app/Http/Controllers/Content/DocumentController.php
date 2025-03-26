@@ -13,7 +13,9 @@ class DocumentController extends Controller
     public function showApplicantDocuments(Request $request)
     {
         if ($request->ajax()) {
-            $query = ApplicationForm::with('applicant', 'documents', 'job', 'branch')->where('branch_id', Auth::guard("employee")->user()->branch_id)->where('status', 'Submitting');
+            $query = ApplicationForm::with('applicant', 'documents', 'job', 'branch')
+                ->where('branch_id', Auth::guard("employee")->user()->branch_id)
+                ->where('status', 'Submitting');
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
@@ -24,7 +26,19 @@ class DocumentController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('applicant_id', 'like', '%' . $search . '%')
                         ->orWhere('branch_id', 'like', '%' . $search . '%')
-                        ->orWhere('job_id', 'like', '%' . $search . '%');
+                        ->orWhere('job_id', 'like', '%' . $search . '%')
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('job', function ($q) use ($search) {
+                            $q->where('job_title', 'like', '%' . $search . '%')
+                                ->orWhere('country', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('branch', function ($q) use ($search) {
+                            $q->where('municipality', 'like', '%' . $search . '%');
+                        });
                 });
             }
 
