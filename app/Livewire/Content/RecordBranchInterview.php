@@ -6,6 +6,8 @@ use App\Models\ApplicationForm;
 use App\Models\BranchInterview;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\ApproveApplication;
+
 
 class RecordBranchInterview extends Component
 {
@@ -68,13 +70,48 @@ class RecordBranchInterview extends Component
                 'status' => "Completed",
             ]);
 
+            if($this->rating >= 5){
+                $this->approveApplication();
+            } else {
+                $this->rejectApplication();
+            }
+
             session()->flash('message', 'Branch interview successfully created.');
         }
 
         $this->resetFields();
-        $this->setApplicationStatus();
 
         return redirect()->route('scheduled-branch-interviews');
+    }
+
+    public function approveApplication()
+    {
+        $application = ApplicationForm::find($this->application_id);
+        $application->status = 'Submitting';
+        $application->save();
+
+        session()->flash('message', 'Application approved.');
+        $this->sendApprovalEmail();
+
+        return redirect()->route('approve-applications');
+    }
+
+    public function sendApprovalEmail()
+    {
+        $application = ApplicationForm::with('applicant')->find($this->application_id);
+
+        $application->applicant->notify(new ApproveApplication($this->application_id));
+    }
+
+    public function rejectApplication()
+    {
+        $application = ApplicationForm::find($this->application_id);
+        $application->status = 'Rejected';
+        $application->save();
+
+        session()->flash('message', 'Application rejected.');
+
+        return redirect()->route('approve-applications');
     }
 
     public function setApplicationStatus()

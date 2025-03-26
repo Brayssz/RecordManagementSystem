@@ -346,11 +346,11 @@
                                                 <span class="badge-notif">1</span>
                                             </a>
                                         </li>
-                                        <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
+                                        {{-- <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
                                             <a href="/approve-applications"><i
                                                     data-feather="check-circle"></i><span>Application
                                                     Approval</span></a>
-                                        </li>
+                                        </li> --}}
 
                                         <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
                                             <a href="/applicant-documents"><i
