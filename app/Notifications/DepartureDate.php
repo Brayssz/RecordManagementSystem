@@ -41,7 +41,6 @@ class DepartureDate extends Notification
     {
         $application = ApplicationForm::where('application_id', $this->application_id)->with('applicant', 'job')->first();
 
-        dd($application);
         $middleInitial = $application->applicant->middle_name ? ' ' . strtoupper(substr($application->applicant->middle_name, 0, 1)) . '.' : '';
         $applicantName = $application->applicant->first_name . $middleInitial . ' ' . $application->applicant->last_name;
         $jobTitle = $application->job->job_title;
