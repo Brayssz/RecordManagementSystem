@@ -14,12 +14,14 @@ class DeployApplicant extends Component
 {
     public $schedule_departure_date;
     public $actual_departure_date;
+    public $end_contract_date;
     public $application_id;
     public $deployment_id;
 
     protected $rules = [
         'schedule_departure_date' => 'required|date|after:today',
         'actual_departure_date' => 'nullable|date|after:today',
+        'end_contract_date' => 'nullable|date|after:actual_departure_date',
     ];
 
     public function getDeployment()
@@ -79,7 +81,11 @@ class DeployApplicant extends Component
 
     public function rescheduleDeparture()
     {
-        $this->validate();
+        $this->validate([
+            'schedule_departure_date' => 'required|date|after:today',
+            'actual_departure_date' => 'required|date|after:today',
+            'end_contract_date' => 'required|date|after:actual_departure_date',
+        ]);
 
         $deployment = Deployment::find($this->deployment_id);
 
@@ -87,6 +93,7 @@ class DeployApplicant extends Component
             $deployment->update([
                 'actual_departure_date' => $this->actual_departure_date,
                 'schedule_departure_date' => $this->schedule_departure_date,
+                'end_contract_date' => $this->end_contract_date,
                 'status' => 'rescheduled',
             ]);
 
@@ -108,6 +115,7 @@ class DeployApplicant extends Component
     {
         $this->schedule_departure_date = null;
         $this->actual_departure_date = null;
+        $this->end_contract_date = null;
         $this->application_id = null;
         $this->deployment_id = null;
     }

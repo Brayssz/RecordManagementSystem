@@ -188,6 +188,7 @@ return new class extends Migration
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->date('schedule_departure_date');
             $table->date('actual_departure_date')->nullable();
+            $table->date('end_contract_date')->nullable();
             $table->string('status');
             $table->timestamps();
 

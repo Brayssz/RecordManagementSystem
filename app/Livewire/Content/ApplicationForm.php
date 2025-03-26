@@ -308,6 +308,10 @@ class ApplicationForm extends Component
         );
     }
 
+    public function checkExistingApplication() {
+        
+    }
+
     public function createApplication($applicant_id)
     {
         $application = new Application();

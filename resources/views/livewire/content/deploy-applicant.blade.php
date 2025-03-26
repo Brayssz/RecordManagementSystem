@@ -109,6 +109,20 @@
 
                                                     </div>
                                                 </div>
+                                                
+                                                <div class="col-lg-12 col-md-12">
+                                                    <div class="mb-3">
+                                                        <label for="end_contract_date"
+                                                            class="form-label">End Contract Date</label>
+                                                        <input type="date" class="form-control"
+                                                            wire:model="end_contract_date">
+
+                                                        @error('end_contract_date')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
