@@ -39,7 +39,7 @@ class DepartureDate extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $application = ApplicationForm::find($this->application_id)->with('applicant', 'job')->first();
+        $application = ApplicationForm::where('application_id', $this->application_id)->with('applicant', 'job')->first();
 
         dd($application);
         $middleInitial = $application->applicant->middle_name ? ' ' . strtoupper(substr($application->applicant->middle_name, 0, 1)) . '.' : '';
