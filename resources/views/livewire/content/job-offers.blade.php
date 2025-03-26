@@ -178,8 +178,16 @@
 
             $(document).on('click', '.apply-job', function() {
                 const jobId = $(this).data('jobid');
-                const url = `{{ url('/apply') }}?job_id=${jobId}`;
-                window.location.href = url;
+
+                @this.call('checkExistingApplication').then(response => {
+                    if (response.status) {
+                        messageAlert('Warning', response.message);
+                        getJobOffers();
+                    } else {
+                        const url = `{{ url('/apply') }}?job_id=${jobId}`;
+                        window.location.href = url;
+                    }
+                });
             });
         </script>
     @endpush

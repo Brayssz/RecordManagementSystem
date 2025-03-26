@@ -309,7 +309,10 @@ class ApplicationForm extends Component
     }
 
     public function checkExistingApplication() {
-        
+        return Application::where('applicant_id', $this->applicant_id)
+            ->where('job_id', $this->job_id)
+            ->where('status', 'Pending')
+            ->exists();
     }
 
     public function createApplication($applicant_id)
