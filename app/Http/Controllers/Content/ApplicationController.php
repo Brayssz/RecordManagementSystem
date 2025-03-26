@@ -88,7 +88,12 @@ class ApplicationController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('applicant_id', 'like', '%' . $search . '%')
                         ->orWhere('branch_id', 'like', '%' . $search . '%')
-                        ->orWhere('job_id', 'like', '%' . $search . '%');
+                        ->orWhere('job_id', 'like', '%' . $search . '%')
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        });
                 });
             }
 
