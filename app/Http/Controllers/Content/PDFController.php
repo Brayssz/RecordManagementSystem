@@ -321,7 +321,7 @@ class PDFController extends Controller
             "Waiting" => "Waiting to be Hired",
             "Hired" => "Waiting to be Deployed",
             "Deployed" => "Deployed With Departure Schedule",
-            "Canceled" => "Canceled Application",
+            "Cancelled" => "Canceled Application",
             "Rejected" => "Rejected Application",
         ];
 
