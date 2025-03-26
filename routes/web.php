@@ -82,9 +82,6 @@ Route::get('/branches', [BranchController::class, 'showBranches'])->name('branch
 Route::get('/employers', [EmployerController::class, 'showEmployers'])->name('employers');
 
 
-
-Route::get('/branch-pending-applications', [ApplicationController::class, 'showPendingBranchApplications'])->name('branch-pending-applications');
-
 Route::get('/scheduled-branch-interviews', [ApplicationController::class, 'showScheduledBranchInterviews'])->name('scheduled-branch-interviews');
 
 Route::get('/capture ', [AppController::class, 'showCapture'])->name('capture');
