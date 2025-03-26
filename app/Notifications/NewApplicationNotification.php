@@ -39,7 +39,7 @@ class NewApplicationNotification extends Notification
 
     public function toDatabase(object $notifiable): array
     {
-        $application = ApplicationForm::find($this->application_id)->with('applicant', 'job')->first();
+        $application = ApplicationForm::where('application_id', $this->application_id)->with('applicant', 'job')->first();
 
         $middle_name_initial = $application->applicant->middle_name ? ' ' . substr($application->applicant->middle_name, 0, 1) . '.' : '';
 
