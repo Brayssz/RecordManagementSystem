@@ -45,6 +45,8 @@ class JobOffers extends Component
                 } else {
                     return ['status' => true, 'message' => 'You have currently ongoing contract that ends on ' . \Carbon\Carbon::parse($endContractDate)->format('F j, Y')];
                 }
+            } else if ($application->status == 'Rejected' || $application->status == 'Cancelled')  {
+                return ['status' => false, 'message' => ''];
             } else {
                 return ['status' => true, 'message' => 'Application in progress.'];
             }
