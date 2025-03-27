@@ -85,7 +85,7 @@ class AppController extends Controller
             DB::raw("MONTH(application_date) as month"),
             DB::raw("COUNT(*) as total")
         )
-            ->where('status', 'Hired')
+            ->whereIn('status', ['Hired', 'Deployed'])
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month')
