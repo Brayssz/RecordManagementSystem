@@ -76,11 +76,11 @@ class PDFController extends Controller
                 'hired_applications' => $hiredApplications,
                 'deployed_applications' => $deployedApplications,
             ];
-
-            $pdf = Pdf::loadView('content.branch-performance-report-pdf', compact('report', 'startDate', 'endDate'));
-
-            return $pdf->stream('branch_performance_report.pdf');
         }
+
+        $pdf = Pdf::loadView('content.branch-performance-report-pdf', compact('report', 'startDate', 'endDate'));
+
+        return $pdf->stream('branch_performance_report.pdf');
     }
 
     public function showHiredApplicantReport(Request $request)

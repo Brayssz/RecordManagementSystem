@@ -42,7 +42,7 @@ class Reschedule extends Notification
         $middleInitial = $application->applicant->middle_name ? ' ' . strtoupper(substr($application->applicant->middle_name, 0, 1)) . '.' : '';
         $applicantName = $application->applicant->first_name . $middleInitial . ' ' . $application->applicant->last_name;
         $jobTitle = $application->job->job_title;
-        $newSchedule = $this->new_schedule; // Assuming you have a new_schedule property
+        $newSchedule = $this->new_schedule; 
 
         return (new MailMessage)
             ->subject('Important: Your Job Interview Schedule Has Been Rescheduled')
