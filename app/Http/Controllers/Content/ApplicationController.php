@@ -435,7 +435,7 @@ class ApplicationController extends Controller
         if ($request->ajax()) {
             $query = ApplicationForm::with('applicant', 'job', 'branch', 'employerInterview', 'job.employer', 'hiring', 'deployment')
                 ->whereHas('hiring')
-                ->whereIn('status', ['Hired']);
+                ->whereIn('status', ['Hired', 'Deployed']);
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
