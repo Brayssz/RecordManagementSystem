@@ -120,9 +120,13 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="region">Region</label>
-                                            <input type="text" class="form-control" id="region" name="region"
-                                                value="{{ old('region') }}" autofocus autocomplete="region"
-                                                placeholder="Enter your region">
+                                            <select class="form-select" id="region" name="region" autofocus>
+                                                <option value="">Select Region</option>
+                                                @foreach ($locationData as $region => $data)
+                                                    <option value="{{ $region }}">{{ $data['region_name'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                             @error('region')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -132,9 +136,9 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="province">Province</label>
-                                            <input type="text" class="form-control" id="province" name="province"
-                                                value="{{ old('province') }}" autofocus autocomplete="province"
-                                                placeholder="Enter your province">
+                                            <select class="form-select" id="province" name="province" disabled>
+                                                <option value="">Select Province</option>
+                                            </select>
                                             @error('province')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -144,9 +148,9 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="municipality">Municipality</label>
-                                            <input type="text" class="form-control" id="municipality"
-                                                name="municipality" value="{{ old('municipality') }}" autofocus
-                                                autocomplete="municipality" placeholder="Enter your municipality">
+                                            <select class="form-select" id="municipality" name="municipality" disabled>
+                                                <option value="">Select Municipality</option>
+                                            </select>
                                             @error('municipality')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -156,14 +160,16 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label" for="barangay">Barangay</label>
-                                            <input type="text" class="form-control" id="barangay" name="barangay"
-                                                value="{{ old('barangay') }}" autofocus autocomplete="barangay"
-                                                placeholder="Enter your barangay">
+                                            <select class="form-select" id="barangay" name="barangay" disabled>
+                                                <option value="">Select Barangay</option>
+                                            </select>
                                             @error('barangay')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
+
+
 
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
@@ -253,7 +259,8 @@
                                 <input class="form-check-input" type="checkbox" id="terms" name="terms"
                                     {{ old('terms') ? 'checked' : '' }}>
                                 <label class="form-check-label" for="terms">
-                                    I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#terms-modal">Terms and Conditions</a>
+                                    I agree to the <a href="#" data-bs-toggle="modal"
+                                        data-bs-target="#terms-modal">Terms and Conditions</a>
                                 </label>
                                 @error('terms')
                                     <span class="text-danger">{{ $message }}</span>
@@ -291,49 +298,53 @@
                         </div>
                         <div class="modal-body">
                             <div class="terms-content px-5">
-                                
-                                <p>By creating an account with <strong>MMML Recruitment Agency</strong>, you agree to the following terms:</p>
-                        
+
+                                <p>By creating an account with <strong>MMML Recruitment Agency</strong>, you agree to the
+                                    following terms:</p>
+
                                 <h6>1. Acceptance of Terms</h6>
                                 <p>You must read and agree to these Terms before proceeding with registration.</p>
-                        
+
                                 <h6>2. Eligibility</h6>
                                 <p>- You must be at least 18 years old or meet the minimum employment age.<br>
-                                   - All information provided must be accurate and truthful.<br>
-                                   - This platform must be used only for job application purposes.</p>
-                        
+                                    - All information provided must be accurate and truthful.<br>
+                                    - This platform must be used only for job application purposes.</p>
+
                                 <h6>3. Use of Personal Information</h6>
-                                <p>- Your personal data will be stored and processed as outlined in our <strong>Privacy Policy</strong>.<br>
-                                   - Your profile may be shared with potential employers.<br>
-                                   - We may contact you regarding job opportunities and updates.</p>
-                        
+                                <p>- Your personal data will be stored and processed as outlined in our <strong>Privacy
+                                        Policy</strong>.<br>
+                                    - Your profile may be shared with potential employers.<br>
+                                    - We may contact you regarding job opportunities and updates.</p>
+
                                 <h6>4. Application and Approval</h6>
                                 <p>- Submission of an application does not guarantee job placement.<br>
-                                   - Additional documents may be required upon approval.</p>
-                        
+                                    - Additional documents may be required upon approval.</p>
+
                                 <h6>5. User Responsibilities</h6>
                                 <p>- Keep your login credentials confidential.<br>
-                                   - Provide truthful and up-to-date information.<br>
-                                   - Do not misuse the platform.</p>
-                        
+                                    - Provide truthful and up-to-date information.<br>
+                                    - Do not misuse the platform.</p>
+
                                 <h6>6. Termination of Account</h6>
                                 <p>We reserve the right to suspend or terminate accounts that violate these terms.</p>
-                        
+
                                 <h6>7. Changes to Terms</h6>
                                 <p>We may update these Terms at any time. Continued use implies acceptance.</p>
-                        
+
                                 <h6>8. Contact Us</h6>
                                 <p>📧 support@mmmlrecruitment.com<br>
-                                   📞 +63 999 999 9999</p>
+                                    📞 +63 999 999 9999</p>
                             </div>
-                        
+
                             <div class="modal-footer-btn mb-4 mt-0">
-                                <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn bg-primary btn-agree-terms" data-bs-dismiss="modal">Agree</button>
+                                <button type="button" class="btn btn-cancel me-2"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn bg-primary btn-agree-terms"
+                                    data-bs-dismiss="modal">Agree</button>
                             </div>
                         </div>
-                        
-                       
+
+
                     </div>
                 </div>
             </div>
@@ -347,6 +358,69 @@
 
             $('.btn-agree-terms').on('click', function() {
                 $('#terms').prop('checked', true);
+            });
+
+            $('#region').on('change', function() {
+                const selectedRegion = $(this).val();
+                $('#province').prop('disabled', !selectedRegion);
+                $('#municipality').prop('disabled', true).html(
+                    '<option value="">Select Municipality</option>');
+                $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
+
+                if (selectedRegion) {
+                    const provinces = @json($locationData);
+                    const provinceOptions = provinces[selectedRegion]?.province_list || {};
+
+                    let options = '<option value="">Select Province</option>';
+                    for (const province in provinceOptions) {
+                        options += `<option value="${province}">${province}</option>`;
+                    }
+                    $('#province').html(options);
+                } else {
+                    $('#province').html('<option value="">Select Province</option>');
+                }
+            });
+
+            $('#province').on('change', function() {
+                const selectedProvince = $(this).val();
+                $('#municipality').prop('disabled', !selectedProvince);
+                $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
+
+                if (selectedProvince) {
+                    const provinces = @json($locationData);
+                    const selectedRegion = $('#region').val();
+                    const municipalities = provinces[selectedRegion]?.province_list[selectedProvince]
+                        ?.municipality_list || {};
+
+                    let options = '<option value="">Select Municipality</option>';
+                    for (const municipality in municipalities) {
+                        options += `<option value="${municipality}">${municipality}</option>`;
+                    }
+                    $('#municipality').html(options);
+                } else {
+                    $('#municipality').html('<option value="">Select Municipality</option>');
+                }
+            });
+
+            $('#municipality').on('change', function() {
+                const selectedMunicipality = $(this).val();
+                $('#barangay').prop('disabled', !selectedMunicipality);
+
+                if (selectedMunicipality) {
+                    const provinces = @json($locationData);
+                    const selectedRegion = $('#region').val();
+                    const selectedProvince = $('#province').val();
+                    const barangays = provinces[selectedRegion]?.province_list[selectedProvince]
+                        ?.municipality_list[selectedMunicipality]?.barangay_list || [];
+
+                    let options = '<option value="">Select Barangay</option>';
+                    barangays.forEach(barangay => {
+                        options += `<option value="${barangay}">${barangay}</option>`;
+                    });
+                    $('#barangay').html(options);
+                } else {
+                    $('#barangay').html('<option value="">Select Barangay</option>');
+                }
             });
         });
     </script>

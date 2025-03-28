@@ -7,12 +7,18 @@ use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Utils\JsonUtil;
 
 class ApplicantRegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.applicant-registration');
+        $jsonResponse = JsonUtil::getJsonFromPublic('location.json');
+        $locationData = $jsonResponse->getData(true); 
+
+        // return($locationData);
+    
+        return view('auth.applicant-registration', compact('locationData'));
     }
 
     public function register(Request $request)

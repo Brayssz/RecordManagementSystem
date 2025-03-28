@@ -17,6 +17,7 @@ use App\Models\Document;
 use App\Models\Employee;
 use App\Notifications\NewApplicationNotification;
 use Carbon\Carbon;
+use App\Models\JobOffer;
 
 class ApplicationForm extends Component
 {
@@ -27,7 +28,7 @@ class ApplicationForm extends Component
 
     public $applicant_id, $first_name, $middle_name, $last_name, $email, $contact_number, $date_of_birth, $gender, $status, $suffix;
     public $region, $province, $municipality, $barangay, $street, $postal_code, $citizenship, $password, $password_confirmation;
-    public $marital_status; // Added marital_status attribute
+    public $marital_status;
 
     public $photo;
     public $photoPreview;
@@ -35,28 +36,13 @@ class ApplicationForm extends Component
     public $branches;
 
     public $job_id;
-    public $branch_id; // Added branch_id attribute
-    public $schedule_id; // Added schedule_id attribute
+    public $branch_id;
+    public $schedule_id;
 
-    public $educational_attainments = [
-        ['level' => 'Elementary', 'document' => ''],
-        ['level' => 'Junior High School', 'document' => ''],
-        ['level' => 'High School', 'document' => ''],
-        ['level' => 'Higher', 'document' => '']
-    ];
+    public $valid_id;
+    public $valid_id_type;
 
-    public function addWorkExperience()
-    {
-        $this->work_experiences[] = ['document' => ''];
-    }
-
-    public function removeWorkExperience($index)
-    {
-        unset($this->work_experiences[$index]);
-        $this->work_experiences = array_values($this->work_experiences);
-    }
-
-    public $work_experiences = [];
+    public $birth_certificate;
 
     public function getBranches()
     {
@@ -85,7 +71,7 @@ class ApplicationForm extends Component
             $this->street = $this->applicant->street;
             $this->postal_code = $this->applicant->postal_code;
             $this->citizenship = $this->applicant->citizenship;
-            $this->marital_status = $this->applicant->marital_status; // Retrieve marital_status
+            $this->marital_status = $this->applicant->marital_status;
             $this->photoPreview = $this->getProfilePhotoUrl($this->applicant);
 
             $this->password = null;
@@ -93,11 +79,6 @@ class ApplicationForm extends Component
         } else {
             session()->flash('error', 'Applicant not found.');
         }
-    }
-
-    public function getTotalApplicant()
-    {
-        $this->total_applicant = Applicant::count();
     }
 
     protected function rules()
@@ -141,11 +122,103 @@ class ApplicationForm extends Component
             'status' => 'nullable|string|max:255',
             'suffix' => 'nullable|string|max:255',
             'branch_id' => 'required|exists:branches,branch_id',
-            'schedule_id' => 'required|exists:branch_schedules,schedule_id', // Added validation rule for schedule_id
-            'marital_status' => 'required|string|max:255', // Added validation rule for marital_status
-            'educational_attainments.*.document' => 'nullable|image|max:1024',
-            'work_experiences.*.document' => 'nullable|image|max:1024',
+            'schedule_id' => 'required|exists:branch_schedules,schedule_id',
+            'marital_status' => 'required|string|max:255',
+            'valid_id' => 'required|image|max:1024', // Validation for valid ID
+            'valid_id_type' => 'required|string|max:255', // Validation for valid ID type
+            'birth_certificate' => 'required|image|max:1024', // Validation for birth certificate
         ];
+    }
+
+    public function updateBirthCertificate(UploadedFile $photo, $application_id, $storagePath = 'birth-certificates')
+    {
+        $documentDisk = env('VAPOR_ARTIFACT_NAME') ? 's3' : 'public';
+
+        $fileName = 'birth_certificate_' . $application_id . '.' . $photo->getClientOriginalExtension();
+
+        $document = Document::where('application_id', $application_id)
+            ->where('document_type', 'Birth Certificate')
+            ->first();
+
+        if ($document) {
+            Storage::disk($documentDisk)->delete($document->file_name);
+        }
+
+        Document::updateOrCreate(
+            [
+                'application_id' => $application_id,
+                'document_type' => 'Birth Certificate',
+            ],
+            [
+                'file_name' => $photo->storeAs($storagePath, $fileName, ['disk' => $documentDisk]),
+                'upload_date' => now(),
+                'status' => 'Active',
+            ]
+        );
+    }
+
+    public function updateValidId(UploadedFile $photo, $application_id, $valid_id_type, $storagePath = 'valid-ids')
+    {
+        $documentDisk = env('VAPOR_ARTIFACT_NAME') ? 's3' : 'public';
+
+        $fileName = 'valid_id_' . $application_id . '_' . strtolower(str_replace(' ', '_', $valid_id_type)) . '.' . $photo->getClientOriginalExtension();
+
+        $document = Document::where('application_id', $application_id)
+            ->where('document_type', 'Valid ID')
+            ->first();
+
+        if ($document) {
+            Storage::disk($documentDisk)->delete($document->file_name);
+        }
+
+        Document::updateOrCreate(
+            [
+                'application_id' => $application_id,
+                'document_type' => 'Valid ID',
+            ],
+            [
+                'file_name' => $photo->storeAs($storagePath, $fileName, ['disk' => $documentDisk]),
+                'upload_date' => now(),
+                'status' => 'Active',
+            ]
+        );
+    }
+
+    public function createApplication($applicant_id)
+    {
+        $application = new Application();
+        $application->applicant_id = $applicant_id;
+        $application->branch_id = $this->branch_id;
+        $application->schedule_id = $this->schedule_id;
+        $application->job_id = $this->job_id;
+        $application->application_date = now();
+        $application->status = 'Pending';
+        $application->save();
+
+        if ($this->valid_id) {
+            $this->updateValidId($this->valid_id, $application->application_id, $this->valid_id_type);
+        }
+
+        if ($this->birth_certificate) {
+            $this->updateBirthCertificate($this->birth_certificate, $application->application_id);
+        }
+
+        $this->notifyEmployees($application);
+
+        $this->decreaseScheduleSlot();
+        $this->decreaseJobOfferSlot();
+
+        session()->flash('message', 'Application successfully created.');
+
+        return redirect()->route('job-offers');
+    }
+
+
+    public function decreaseJobOfferSlot()
+    {
+        $jobOffer = JobOffer::find($this->job_id);
+        $jobOffer->available_slots -= 1;
+        $jobOffer->save();
     }
 
     public function getProfilePhotoUrl(Applicant $applicant): string
@@ -178,19 +251,6 @@ class ApplicationForm extends Component
         });
     }
 
-    public function deleteProfilePhoto($applicant)
-    {
-        if (is_null($applicant->profile_photo_path)) {
-            return;
-        }
-
-        Storage::disk(config('filesystems.default', 'public'))->delete($applicant->profile_photo_path);
-
-        $applicant->forceFill([
-            'profile_photo_path' => null,
-        ])->save();
-    }
-
     public function resetFields()
     {
         $this->reset([
@@ -213,9 +273,12 @@ class ApplicationForm extends Component
             'suffix',
             'citizenship',
             'photoPreview',
-            'branch_id', // Reset branch_id
-            'schedule_id', // Reset schedule_id
-            'marital_status' // Reset marital_status
+            'branch_id',
+            'schedule_id',
+            'marital_status',
+            'valid_id',
+            'valid_id_type',
+            'birth_certificate',
         ]);
     }
 
@@ -250,94 +313,6 @@ class ApplicationForm extends Component
         $this->createApplication($this->applicant->applicant_id);
     }
 
-    public function addEducationalAttainment($application_id)
-    {
-        foreach ($this->educational_attainments as $attainment) {
-            if ($attainment['document']) {
-                $this->updateDocumentPhoto($attainment['document'], $application_id, $attainment['level']);
-            }
-        }
-    }
-
-    public function getSchedules()
-    {
-        return BranchSchedule::where('available_slots', '>', 0)
-            ->whereDate('interview_date', '>=', Carbon::now('Asia/Manila'))
-            ->where('branch_id', $this->branch_id)
-            ->get();
-    }
-
-    public function addWorkExperienceDocument($application_id)
-    {
-        $index = 0; // Initialize the index variable
-
-        foreach ($this->work_experiences as $experience) {
-            if ($experience['document']) {
-                $this->updateDocumentPhoto($experience['document'], $application_id, 'Work Experience ' . $index);
-            }
-            $index++; // Increment the index variable
-        }
-    }
-
-    public function updateDocumentPhoto(UploadedFile $photo, $application_id, $document_type, $storagePath = 'document-photos')
-    {
-        $documentDisk = env('VAPOR_ARTIFACT_NAME') ? 's3' : 'public';
-
-        $fileName = 'document_' . $application_id . '_' . strtolower(str_replace(' ', '_', $document_type)) . '.' . $photo->getClientOriginalExtension();
-
-        $document = Document::where('application_id', $application_id)
-            ->where('document_type', $document_type)
-            ->first();
-
-        if ($document) {
-            // Delete the old file from storage
-            Storage::disk($documentDisk)->delete($document->file_name);
-        }
-
-        // Update or create the document record
-        Document::updateOrCreate(
-            [
-                'application_id' => $application_id,
-                'document_type' => $document_type,
-            ],
-            [
-                'file_name' => $photo->storeAs($storagePath, $fileName, ['disk' => $documentDisk]),
-                'upload_date' => now(),
-                'status' => 'Active',
-            ]
-        );
-    }
-
-    public function checkExistingApplication() {
-        return Application::where('applicant_id', $this->applicant_id)
-            ->where('job_id', $this->job_id)
-            ->where('status', 'Pending')
-            ->exists();
-    }
-
-    public function createApplication($applicant_id)
-    {
-        $application = new Application();
-        $application->applicant_id = $applicant_id;
-        $application->branch_id = $this->branch_id; // Set branch_id
-        $application->schedule_id = $this->schedule_id; // Set schedule_id
-        $application->job_id = $this->job_id;
-        $application->application_date = now();
-        $application->status = 'Pending';
-        $application->save();
-
-        $this->addEducationalAttainment($application->application_id);
-        $this->addWorkExperienceDocument($application->application_id);
-
-        $this->notifyEmployees($application);
-
-        $this->decreaseScheduleSlot();
-
-        session()->flash('message', 'Application successfully created.');
-
-        return redirect()->route('job-offers');
-    }
-
     public function decreaseScheduleSlot()
     {
         $branch_schedule = BranchSchedule::find($this->schedule_id);
@@ -345,14 +320,21 @@ class ApplicationForm extends Component
         $branch_schedule->save();
     }
 
-    public function notifyEmployees($application) {
+    public function notifyEmployees($application)
+    {
         $employees = Employee::where('branch_id', $application->branch_id)->get();
 
         foreach ($employees as $employee) {
             $employee->notify(new NewApplicationNotification($application->application_id));
         }
     }
-    
+    public function getSchedules()
+    {
+        return BranchSchedule::where('available_slots', '>', 0)
+            ->whereDate('interview_date', '>=', Carbon::now('Asia/Manila'))
+            ->where('branch_id', $this->branch_id)
+            ->get();
+    }
     public function mount($job_id)
     {
         $this->job_id = $job_id;

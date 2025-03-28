@@ -75,8 +75,8 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="last_name">Last Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter last name" id="last_name"
-                                        wire:model.lazy="last_name">
+                                    <input type="text" class="form-control" placeholder="Enter last name"
+                                        id="last_name" wire:model.lazy="last_name">
                                     @error('last_name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -162,20 +162,86 @@
                         <h6><span><i data-feather="info" class="feather-edit"></i></span>Other Information</h6>
                     </div>
                     <div class="row">
-                        @foreach (['region', 'province', 'municipality', 'barangay', 'street', 'postal_code'] as $field)
-                            <div class="col-lg-4 col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label"
-                                        for="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</label>
-                                    <input type="text" class="form-control" id="{{ $field }}"
-                                        wire:model.lazy="{{ $field }}"
-                                        placeholder="Enter your {{ $field }}">
-                                    @error($field)
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3" wire:ignore>
+                                <label class="form-label" for="region">Region</label>
+                                <select class="form-select" id="region" name="region" wire:model.lazy="region"
+                                    autofocus>
+                                    <option value="">Select Region</option>
+                                    @foreach ($locationData as $region => $data)
+                                        <option value="{{ $region }}">
+                                            {{ $data['region_name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('region')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
-                        @endforeach
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3" wire:ignore>
+                                <label class="form-label" for="province">Province</label>
+                                <select class="form-select" id="province" name="province"
+                                    wire:model.lazy="province" disabled>
+                                    <option value="">Select Province</option>
+                                </select>
+                                @error('province')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3" wire:ignore>
+                                <label class="form-label" for="municipality">Municipality</label>
+                                <select class="form-select" id="municipality" name="municipality"
+                                    wire:model.lazy="municipality" disabled>
+                                    <option value="">Select Municipality</option>
+                                </select>
+                                @error('municipality')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3" wire:ignore>
+                                <label class="form-label" for="barangay">Barangay</label>
+                                <select class="form-select" id="barangay" name="barangay"
+                                    wire:model.lazy="barangay" disabled>
+                                    <option value="">Select Barangay</option>
+                                </select>
+                                @error('barangay')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="street">Street</label>
+                                <input type="text" class="form-control" id="street" name="street"
+                                    wire:model.lazy="street" autofocus autocomplete="street"
+                                    placeholder="Enter your street">
+                                @error('street')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="postal_code">Postal
+                                    Code</label>
+                                <input type="text" class="form-control" id="postal_code" name="postal_code"
+                                    wire:model.lazy="postal_code" autofocus autocomplete="postal_code"
+                                    placeholder="Enter your postal code">
+                                @error('postal_code')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -216,5 +282,129 @@
             </form>
         </div>
     </div>
-    <!-- /product list -->
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                populateEditForm();
+                handleLocationDropdowns();
+                $(document).on('change', handleInputChange);
+            });
+
+            function handleInputChange(e) {
+                if ($(e.target).is('select') || $(e.target).is('.not_pass')) {
+                    const property = e.target.id;
+                    const value = e.target.value;
+                    @this.set(property, value);
+
+                    console.log(`${property}: ${value}`);
+                }
+            }
+
+            function populateEditForm() {
+                const region = @this.get('region');
+                const province = @this.get('province');
+                const municipality = @this.get('municipality');
+                const barangay = @this.get('barangay');
+
+                if (region) {
+                    $('#region').val(region).change();
+                    const provinces = @json($locationData);
+                    const provinceOptions = provinces[region]?.province_list || {};
+
+                    let provinceHtml = '<option value="">Select Province</option>';
+                    for (const prov in provinceOptions) {
+                        provinceHtml += `<option value="${prov}" ${prov === province ? 'selected' : ''}>${prov}</option>`;
+                    }
+                    $('#province').html(provinceHtml).prop('disabled', false);
+
+                    if (province) {
+                        const municipalities = provinceOptions[province]?.municipality_list || {};
+
+                        let municipalityHtml = '<option value="">Select Municipality</option>';
+                        for (const mun in municipalities) {
+                            municipalityHtml +=
+                                `<option value="${mun}" ${mun === municipality ? 'selected' : ''}>${mun}</option>`;
+                        }
+                        $('#municipality').html(municipalityHtml).prop('disabled', false);
+
+                        if (municipality) {
+                            const barangays = municipalities[municipality]?.barangay_list || [];
+
+                            let barangayHtml = '<option value="">Select Barangay</option>';
+                            barangays.forEach(bgy => {
+                                barangayHtml +=
+                                    `<option value="${bgy}" ${bgy === barangay ? 'selected' : ''}>${bgy}</option>`;
+                            });
+                            $('#barangay').html(barangayHtml).prop('disabled', false);
+                        }
+                    }
+                }
+            }
+
+            function handleLocationDropdowns() {
+                $('#region').on('change', function() {
+                    const selectedRegion = $(this).val();
+                    $('#province').prop('disabled', !selectedRegion);
+                    $('#municipality').prop('disabled', true).html(
+                        '<option value="">Select Municipality</option>');
+                    $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
+
+                    if (selectedRegion) {
+                        const provinces = @json($locationData);
+                        const provinceOptions = provinces[selectedRegion]?.province_list || {};
+
+                        let options = '<option value="">Select Province</option>';
+                        for (const province in provinceOptions) {
+                            options += `<option value="${province}">${province}</option>`;
+                        }
+                        $('#province').html(options);
+                    } else {
+                        $('#province').html('<option value="">Select Province</option>');
+                    }
+                });
+
+                $('#province').on('change', function() {
+                    const selectedProvince = $(this).val();
+                    $('#municipality').prop('disabled', !selectedProvince);
+                    $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
+
+                    if (selectedProvince) {
+                        const provinces = @json($locationData);
+                        const selectedRegion = $('#region').val();
+                        const municipalities = provinces[selectedRegion]?.province_list[selectedProvince]
+                            ?.municipality_list || {};
+
+                        let options = '<option value="">Select Municipality</option>';
+                        for (const municipality in municipalities) {
+                            options += `<option value="${municipality}">${municipality}</option>`;
+                        }
+                        $('#municipality').html(options);
+                    } else {
+                        $('#municipality').html('<option value="">Select Municipality</option>');
+                    }
+                });
+
+                $('#municipality').on('change', function() {
+                    const selectedMunicipality = $(this).val();
+                    $('#barangay').prop('disabled', !selectedMunicipality);
+
+                    if (selectedMunicipality) {
+                        const provinces = @json($locationData);
+                        const selectedRegion = $('#region').val();
+                        const selectedProvince = $('#province').val();
+                        const barangays = provinces[selectedRegion]?.province_list[selectedProvince]
+                            ?.municipality_list[selectedMunicipality]?.barangay_list || [];
+
+                        let options = '<option value="">Select Barangay</option>';
+                        barangays.forEach(barangay => {
+                            options += `<option value="${barangay}">${barangay}</option>`;
+                        });
+                        $('#barangay').html(options);
+                    } else {
+                        $('#barangay').html('<option value="">Select Barangay</option>');
+                    }
+                });
+            }
+        </script>
+    @endpush
 </div>
