@@ -13,6 +13,8 @@ use App\Models\Applicant;
 use App\Models\ApplicationForm;
 use App\Models\EmployerInterview;
 use Illuminate\Support\Facades\DB;
+use App\Models\Hiring;
+use App\Models\Deployment;
 
 class AppController extends Controller
 {
@@ -81,27 +83,24 @@ class AppController extends Controller
 
     public function getApplicationChartData()
     {
-        $hired = ApplicationForm::select(
-            DB::raw("MONTH(application_date) as month"),
+        $hired = Hiring::select(
+            DB::raw("MONTH(confirmation_date) as month"),
             DB::raw("COUNT(*) as total")
         )
-            ->whereIn('status', ['Hired', 'Deployed'])
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month')
             ->toArray();
 
-        $deployed = ApplicationForm::select(
-            DB::raw("MONTH(application_date) as month"),
+        $deployed = Deployment::select(
+            DB::raw("MONTH(actual_departure_date) as month"),
             DB::raw("COUNT(*) as total")
         )
-            ->where('status', 'Deployed')
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month')
             ->toArray();
 
-        // Fill missing months with zero values
         $months = range(1, 12);
         $hiredData = [];
         $deployedData = [];
