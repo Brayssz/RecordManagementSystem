@@ -31,6 +31,7 @@ class DeployApplicant extends Component
         if ($deployment) {
             $this->schedule_departure_date = $deployment->schedule_departure_date;
             $this->actual_departure_date = $deployment->actual_departure_date;
+            $this->end_contract_date = $deployment->end_contract_date;
         }
     }
 
