@@ -76,17 +76,17 @@ class PDFController extends Controller
                 'hired_applications' => $hiredApplications,
                 'deployed_applications' => $deployedApplications,
             ];
-
-            $pdf = Pdf::loadView('content.branch-performance-report-pdf', compact('report', 'startDate', 'endDate'));
-
-            return $pdf->stream('branch_performance_report.pdf');
         }
+
+        $pdf = Pdf::loadView('content.branch-performance-report-pdf', compact('report', 'startDate', 'endDate'));
+
+        return $pdf->stream('branch_performance_report.pdf');
     }
 
     public function showHiredApplicantReport(Request $request)
     {
 
-        $query = ApplicationForm::query()->where('status', 'Hired')->with('applicant', 'branch', 'job', 'hiring');
+        $query = ApplicationForm::query()->whereIn('status', ['Hired', 'Deployed'])->with('applicant', 'branch', 'job', 'hiring');
 
         if (Auth::guard('employee')->user()->position == 'Manager') {
             $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
@@ -219,7 +219,6 @@ class PDFController extends Controller
                 'interview_date' => $application->branchInterview->created_at,
                 'interviewer' => $interviewerName,
                 'remarks' => $application->branchInterview->remarks,
-                'referral_code' => $application->hiring->confirmation_code,
             ];
         }
 

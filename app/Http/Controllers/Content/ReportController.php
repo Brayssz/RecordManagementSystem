@@ -95,7 +95,7 @@ class ReportController extends Controller
     {
         if ($request->ajax()) {
 
-            $query = ApplicationForm::query()->where('status', 'Hired')->with('applicant', 'branch', 'job', 'hiring');
+            $query = ApplicationForm::query()->whereIn('status', ['Hired', 'Deployed'])->with('applicant', 'branch', 'job', 'hiring');
 
             if (Auth::guard('employee')->user()->position == 'Manager') {
                 $query = $query->where('branch_id', Auth::guard('employee')->user()->branch_id);
@@ -233,7 +233,6 @@ class ReportController extends Controller
                     'interview_date' => $application->branchInterview->created_at,
                     'interviewer' => $interviewerName,
                     'remarks' => $application->branchInterview->remarks,
-                    'referral_code' => $application->hiring->confirmation_code,
                 ];
 
                 $totalRecords++;
