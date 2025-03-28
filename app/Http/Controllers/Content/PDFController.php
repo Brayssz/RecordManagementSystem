@@ -343,6 +343,7 @@ class PDFController extends Controller
             $query->where('branch_id', $request->branch_id);
             $branch = Branch::find($request->branch_id)->municipality;
         }
+        
         $startDate = null;
         $endDate = null;
         if ($request->filled('date_range')) {

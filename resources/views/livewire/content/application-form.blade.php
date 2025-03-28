@@ -420,9 +420,8 @@
                             );
                         });
 
-                        // Reinitialize Select2 if needed
                         scheduleSelect.trigger(
-                            'change'); // If using Select2, replace with scheduleSelect.select2();
+                            'change'); 
                     });
                 }
             }
