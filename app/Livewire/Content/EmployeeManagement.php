@@ -154,7 +154,7 @@ class EmployeeManagement extends Component
 
         $fileName = 'profile_' . $employee->employee_id . '_' . strtolower(str_replace(' ', '_', $employee->first_name)) . '.' . $photo->getClientOriginalExtension();
 
-        tap($employee->profile_photo, function ($previous) use ($photo, $employee, $fileName, $profilePhotoDisk, $storagePath) {
+        tap($employee->profile_photo_path, function ($previous) use ($photo, $employee, $fileName, $profilePhotoDisk, $storagePath) {
             $employee->forceFill([
                 'profile_photo_path' => $photo->storeAs(
                     $storagePath,

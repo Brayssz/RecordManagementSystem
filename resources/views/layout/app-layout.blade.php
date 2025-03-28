@@ -34,6 +34,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.min.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    
+
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
     {{-- @livewireStyles<!-- Styles - --}}
     @php
@@ -487,6 +489,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>  
 
     @vite(['resources/assets/js/script.js', 'resources/assets/js/custom-select2.js', 'resources/assets/js/mask.js', 'resources/assets/js/theme-script.js', 'resources/assets/js/chart-data.js'])
     @livewireScripts
