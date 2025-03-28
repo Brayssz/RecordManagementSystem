@@ -38,12 +38,22 @@
                                                 <div class="image-upload mb-0">
                                                     <input type="file" wire:model.live="photo" x-ref="photo"
                                                         x-on:change="
-                                                            photoName = $refs.photo.files[0].name;
-                                                            const reader = new FileReader();
-                                                            reader.onload = (e) => {
-                                                                photoPreview = e.target.result;
+                                                            const file = $refs.photo.files[0];
+                                                            const img = new Image();
+                                                            img.onload = () => {
+                                                                if (img.width !== img.height) {
+                                                                    messageAlert('Invalid Image', 'Please upload an image with equal dimesion.');
+                                                                    $refs.photo.value = '';
+                                                                } else {
+                                                                    photoName = file.name;
+                                                                    const reader = new FileReader();
+                                                                    reader.onload = (e) => {
+                                                                        photoPreview = e.target.result;
+                                                                    };
+                                                                    reader.readAsDataURL(file);
+                                                                }
                                                             };
-                                                            reader.readAsDataURL($refs.photo.files[0]);
+                                                            img.src = URL.createObjectURL(file);
                                                         ">
                                                     <div class="image-uploads">
                                                         <h4>Change Image</h4>
@@ -51,6 +61,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @error('photo')
+                                            <div class="col-12 alert alert-danger d-flex align-items-center" role="alert">
+                                                <i class="feather-alert-octagon flex-shrink-0 me-2"></i>
+                                                <div>
+                                                    {{ $message }}
+                                                </div>
+                                            </div>
+                                        @enderror
                                         <div class="row">
                                             <div class="col-lg-10 col-md-6">
                                                 <div class="row">
@@ -117,7 +135,8 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="contact_number">Contact
                                                         Number</label>
-                                                    <input type="text" id="contact_number" class="form-control phMobile"
+                                                    <input type="text" id="contact_number"
+                                                        class="form-control phMobile"
                                                         placeholder="e.g., +63 999 999 9999"
                                                         wire:model.lazy="contact_number">
                                                     @error('contact_number')
@@ -166,7 +185,8 @@
                                             </div>
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="marital_status">Marital Status</label>
+                                                    <label class="form-label" for="marital_status">Marital
+                                                        Status</label>
                                                     <input type="text" class="form-control"
                                                         placeholder="Enter marital status" id="marital_status"
                                                         wire:model.lazy="marital_status">
@@ -194,28 +214,96 @@
                                                 </div>
                                             @endif
                                         </div>
-                                       
+
                                         <div class="other-info">
                                             <div class="card-title-head" wire:ignore>
                                                 <h6><span><i data-feather="info" class="feather-edit"></i></span>Other
                                                     Information</h6>
                                             </div>
                                             <div class="row">
-                                                @foreach (['region', 'province', 'municipality', 'barangay', 'street', 'postal_code'] as $field)
-                                                    <div class="col-lg-4 col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label"
-                                                                for="{{ $field }}">{{ ucfirst(str_replace('_', ' ', $field)) }}</label>
-                                                            <input type="text" class="form-control"
-                                                                id="{{ $field }}"
-                                                                wire:model.lazy="{{ $field }}"
-                                                                placeholder="Enter your {{ $field }}">
-                                                            @error($field)
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3" wire:ignore>
+                                                        <label class="form-label" for="region">Region</label>
+                                                        <select class="form-select" id="region" name="region"
+                                                            wire:model.lazy="region" autofocus>
+                                                            <option value="">Select Region</option>
+                                                            @foreach ($locationData as $region => $data)
+                                                                <option value="{{ $region }}">
+                                                                    {{ $data['region_name'] }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('region')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
                                                     </div>
-                                                @endforeach
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3" wire:ignore>
+                                                        <label class="form-label" for="province">Province</label>
+                                                        <select class="form-select" id="province" name="province"
+                                                            wire:model.lazy="province" disabled>
+                                                            <option value="">Select Province</option>
+                                                        </select>
+                                                        @error('province')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3" wire:ignore>
+                                                        <label class="form-label"
+                                                            for="municipality">Municipality</label>
+                                                        <select class="form-select" id="municipality"
+                                                            name="municipality" wire:model.lazy="municipality"
+                                                            disabled>
+                                                            <option value="">Select Municipality</option>
+                                                        </select>
+                                                        @error('municipality')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3" wire:ignore>
+                                                        <label class="form-label" for="barangay">Barangay</label>
+                                                        <select class="form-select" id="barangay" name="barangay"
+                                                            wire:model.lazy="barangay" disabled>
+                                                            <option value="">Select Barangay</option>
+                                                        </select>
+                                                        @error('barangay')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="street">Street</label>
+                                                        <input type="text" class="form-control" id="street"
+                                                            name="street" wire:model.lazy="street" autofocus
+                                                            autocomplete="street" placeholder="Enter your street">
+                                                        @error('street')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="postal_code">Postal
+                                                            Code</label>
+                                                        <input type="text" class="form-control" id="postal_code"
+                                                            name="postal_code" wire:model.lazy="postal_code" autofocus
+                                                            autocomplete="postal_code"
+                                                            placeholder="Enter your postal code">
+                                                        @error('postal_code')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="pass-info">
@@ -270,6 +358,7 @@
             document.addEventListener('DOMContentLoaded', () => {
                 initializeComponents();
                 handleApplicantActions();
+                handleLocationDropdowns();
             });
 
             function initSelect() {
@@ -330,9 +419,112 @@
 
             function populateEditForm() {
                 const gender = @this.get('gender');
+                const region = @this.get('region');
+                const province = @this.get('province');
+                const municipality = @this.get('municipality');
+                const barangay = @this.get('barangay');
 
                 initSelect();
                 initSelectVal(gender);
+
+                if (region) {
+                    $('#region').val(region).change();
+                    const provinces = @json($locationData);
+                    const provinceOptions = provinces[region]?.province_list || {};
+
+                    let provinceHtml = '<option value="">Select Province</option>';
+                    for (const prov in provinceOptions) {
+                        provinceHtml += `<option value="${prov}" ${prov === province ? 'selected' : ''}>${prov}</option>`;
+                    }
+                    $('#province').html(provinceHtml).prop('disabled', false);
+
+                    if (province) {
+                        const municipalities = provinceOptions[province]?.municipality_list || {};
+
+                        let municipalityHtml = '<option value="">Select Municipality</option>';
+                        for (const mun in municipalities) {
+                            municipalityHtml +=
+                                `<option value="${mun}" ${mun === municipality ? 'selected' : ''}>${mun}</option>`;
+                        }
+                        $('#municipality').html(municipalityHtml).prop('disabled', false);
+
+                        if (municipality) {
+                            const barangays = municipalities[municipality]?.barangay_list || [];
+
+                            let barangayHtml = '<option value="">Select Barangay</option>';
+                            barangays.forEach(bgy => {
+                                barangayHtml +=
+                                    `<option value="${bgy}" ${bgy === barangay ? 'selected' : ''}>${bgy}</option>`;
+                            });
+                            $('#barangay').html(barangayHtml).prop('disabled', false);
+                        }
+                    }
+                }
+            }
+
+            function handleLocationDropdowns() {
+                $('#region').on('change', function() {
+                    const selectedRegion = $(this).val();
+                    $('#province').prop('disabled', !selectedRegion);
+                    $('#municipality').prop('disabled', true).html(
+                        '<option value="">Select Municipality</option>');
+                    $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
+
+                    if (selectedRegion) {
+                        const provinces = @json($locationData);
+                        const provinceOptions = provinces[selectedRegion]?.province_list || {};
+
+                        let options = '<option value="">Select Province</option>';
+                        for (const province in provinceOptions) {
+                            options += `<option value="${province}">${province}</option>`;
+                        }
+                        $('#province').html(options);
+                    } else {
+                        $('#province').html('<option value="">Select Province</option>');
+                    }
+                });
+
+                $('#province').on('change', function() {
+                    const selectedProvince = $(this).val();
+                    $('#municipality').prop('disabled', !selectedProvince);
+                    $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
+
+                    if (selectedProvince) {
+                        const provinces = @json($locationData);
+                        const selectedRegion = $('#region').val();
+                        const municipalities = provinces[selectedRegion]?.province_list[selectedProvince]
+                            ?.municipality_list || {};
+
+                        let options = '<option value="">Select Municipality</option>';
+                        for (const municipality in municipalities) {
+                            options += `<option value="${municipality}">${municipality}</option>`;
+                        }
+                        $('#municipality').html(options);
+                    } else {
+                        $('#municipality').html('<option value="">Select Municipality</option>');
+                    }
+                });
+
+                $('#municipality').on('change', function() {
+                    const selectedMunicipality = $(this).val();
+                    $('#barangay').prop('disabled', !selectedMunicipality);
+
+                    if (selectedMunicipality) {
+                        const provinces = @json($locationData);
+                        const selectedRegion = $('#region').val();
+                        const selectedProvince = $('#province').val();
+                        const barangays = provinces[selectedRegion]?.province_list[selectedProvince]
+                            ?.municipality_list[selectedMunicipality]?.barangay_list || [];
+
+                        let options = '<option value="">Select Barangay</option>';
+                        barangays.forEach(barangay => {
+                            options += `<option value="${barangay}">${barangay}</option>`;
+                        });
+                        $('#barangay').html(options);
+                    } else {
+                        $('#barangay').html('<option value="">Select Barangay</option>');
+                    }
+                });
             }
         </script>
     @endpush

@@ -99,6 +99,7 @@
                         `;
 
                         $container.append(jobCard);
+                        hideLoader();
                     });
 
                     const $paginationContainer = $('#paginationContainer');
@@ -168,6 +169,8 @@
 
                     feather.replace();
                 });
+
+                
             };
 
             $('#searchInput').on('input', function() {
@@ -178,7 +181,7 @@
 
             $(document).on('click', '.apply-job', function() {
                 const jobId = $(this).data('jobid');
-
+                showLoader();
                 @this.call('checkExistingApplication').then(response => {
                     if (response.status) {
                         messageAlert('Warning', response.message);

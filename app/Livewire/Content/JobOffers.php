@@ -34,19 +34,23 @@ class JobOffers extends Component
 
     public function checkExistingApplication()
     {
-        $application = ApplicationForm::where('applicant_id', Auth::guard('applicant')->user()->applicant_id)
-            ->first();
+        $applications = ApplicationForm::where('applicant_id', Auth::guard('applicant')->user()->applicant_id)
+            ->get();
 
-        if ($application) {
+        if ($applications->isEmpty()) {
+            return ['status' => false, 'message' => ''];
+        }
+
+        foreach ($applications as $application) {
             if ($application->status == 'Deployed') {
                 $endContractDate = $application->deployment->end_contract_date;
                 if ($endContractDate && \Carbon\Carbon::parse($endContractDate)->isBefore(now())) {
-                    return ['status' => false, 'message' => ''];
+                    continue; // Skip this application if the contract has ended
                 } else {
                     return ['status' => true, 'message' => 'You have currently ongoing contract that ends on ' . \Carbon\Carbon::parse($endContractDate)->format('F j, Y')];
                 }
             } else {
-                return ['status' => true, 'message' => 'Application in progress.'];
+                return ['status' => true, 'message' => 'You have an application in progress.'];
             }
         }
 
