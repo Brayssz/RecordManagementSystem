@@ -20,7 +20,7 @@
                                 <span><img :src="photoPreview" alt=""></span>
                             </template>
                             <template x-if="!photoPreview">
-                                <span>2 x 2 <br><span class="text-muted">Passport Size</span></span>
+                                {{-- <span>2 x 2 <br><span class="text-muted">Passport Size</span>< ,.span> --}}
                             </template>
                         </div>
                         <div class="input-blocks mb-0">
