@@ -253,7 +253,7 @@ class ReportController extends Controller
 
     public function showEmployerInterviewReport(Request $request)
     {
-        if ($request) {
+        if ($request->ajax()) {
             $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer');
 
             if (Auth::guard('employee')->user()->position == 'Manager') {
