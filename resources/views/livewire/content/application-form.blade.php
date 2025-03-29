@@ -597,10 +597,6 @@
                                 `Available: ${schedule.available_slots} slots  |  Time: ${formattedTime}`;
                         });
 
-<<<<<<< HEAD
-                        scheduleSelect.trigger(
-                            'change'); 
-=======
                         console.log(allowedDates, tooltips);
 
                         $('#datepicker').attr('placeholder', 'Select a valid date');
@@ -646,7 +642,6 @@
                         });
 
                         tooltipInit();
->>>>>>> 32d0f99f4bbfef965392f3d6d84b64552fb2aa37
                     });
                 }
 
