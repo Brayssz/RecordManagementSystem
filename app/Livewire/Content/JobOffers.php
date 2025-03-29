@@ -59,16 +59,25 @@ class JobOffers extends Component
 
     public function getJobOffers($page = 1, $searchQuery = '')
     {
-        $search = $searchQuery;
+        $search = trim($searchQuery);
 
-        $jobOffers = JobOffer::with('employer')->where('available_slots', '>', 0)->where(function ($query) use ($search) {
-            $query->where('job_title', 'like', '%' . $search . '%')
-                ->orWhere('job_qualifications', 'like', '%' . $search . '%')
-                ->orWhere('job_description', 'like', '%' . $search . '%');
-        });
+        $jobOffers = JobOffer::with('employer')
+            ->where('available_slots', '>', 0)
+            ->where(function ($query) use ($search) {
+                $query->where('job_title', 'like', '%' . $search . '%')
+                    ->orWhere('job_qualifications', 'like', '%' . $search . '%')
+                    ->orWhere('job_description', 'like', '%' . $search . '%')
+                    ->orWhereHas('employer', function ($query) use ($search) {
+                        $query->where('status', 'Active')
+                            ->where(function ($query) use ($search) {
+                                $query->where('first_name', 'like', '%' . $search . '%')
+                                    ->orWhere('last_name', 'like', '%' . $search . '%')
+                                    ->orWhere('company_name', 'like', '%' . $search . '%');
+                            });
+                    });
+            });
 
-
-        $jobOffers = $jobOffers->paginate(6, ['*'], 'page', $page); // Fetch 6 jobs per page
+        $jobOffers = $jobOffers->paginate(6, ['*'], 'page', $page);
 
         return response()->json($jobOffers);
     }

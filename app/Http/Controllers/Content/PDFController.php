@@ -218,7 +218,7 @@ class PDFController extends Controller
                 'interview_date' => $application->branchInterview->created_at,
                 'interviewer' => $interviewerName,
                 'remarks' => $application->branchInterview->remarks,
-                'referral_code' => $application->hiring->confirmation_code,
+                'referral_code' => $application->hiring->confirmation_code? $application->hiring->confirmation_code : 'N/A',
             ];
         }
 
@@ -265,6 +265,7 @@ class PDFController extends Controller
                 'interview_date' => $interview->interview_date,
                 'interviewer' => $employer->first_name . ' ' . ($employer->middle_name ? substr($employer->middle_name, 0, 1) . '. ' : '') . $employer->last_name,
                 'remarks' => $interview->remarks,
+                'referral_code' => $application->hiring->confirmation_code? $application->hiring->confirmation_code : 'N/A',
             ];
         }
 

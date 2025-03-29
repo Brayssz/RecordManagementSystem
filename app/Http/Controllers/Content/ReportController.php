@@ -233,7 +233,7 @@ class ReportController extends Controller
                     'interview_date' => $application->branchInterview->created_at,
                     'interviewer' => $interviewerName,
                     'remarks' => $application->branchInterview->remarks,
-                    'referral_code' => $application->hiring->confirmation_code,
+                    'referral_code' => $application->hiring->confirmation_code? $application->hiring->confirmation_code : 'N/A',
                 ];
 
                 $totalRecords++;
@@ -253,7 +253,7 @@ class ReportController extends Controller
 
     public function showEmployerInterviewReport(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request) {
             $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer');
 
             if (Auth::guard('employee')->user()->position == 'Manager') {
@@ -292,7 +292,7 @@ class ReportController extends Controller
                     'interview_date' => $interview->interview_date,
                     'interviewer' => $employer->first_name . ' ' . ($employer->middle_name ? substr($employer->middle_name, 0, 1) . '. ' : '') . $employer->last_name,
                     'remarks' => $interview->remarks,
-                    'referral_code' => $application->hiring->confirmation_code,
+                    'referral_code' => $application->hiring? $application->hiring->confirmation_code : 'N/A',
                 ];
 
                 $totalRecords++;

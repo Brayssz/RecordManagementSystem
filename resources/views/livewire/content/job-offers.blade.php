@@ -174,8 +174,7 @@
             };
 
             $('#searchInput').on('input', function() {
-                const searchQuery = $(this).val().trim()
-                const country_id = $('.country_filter').val().trim();
+                const searchQuery = $(this).val().trim();
                 getJobOffers(1, searchQuery); 
             });
 
