@@ -73,7 +73,7 @@
                             <div class="modal-footer-btn mb-4 mt-0">
                                 <button type="button" class="btn btn-cancel me-2 "
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-submit">Submit</button>
+                                <button type="button" class="btn btn-submit save-document">Submit</button>
                             </div>
 
                         </form>
@@ -109,6 +109,43 @@
                 }
             });
 
+            $('.save-document').on('click', function() {
+
+                confirmAlert("Submit Document",
+                    "Are you sure you want to submit this document?",
+                    function() {
+                        // showLoader();
+                        submitDocument();
+                    }, "Submit");
+            });
+
+            const submitDocument = function() {
+                @this.call('saveDocumentPhoto').then(() => {
+                    hideLoader();
+                    let error = @this.get('error');
+
+                    if (error && error.valid) {
+                        messageAlert('Invalid Document', error.message);
+                        @this.set('error', []);
+                    }
+
+                    if (error && error.type === 'medical') {
+                        okAlert("Rejected Application",
+                            error.message,
+                            function() {
+                                rejectApplication();
+                            }, "Confirm");
+                        @this.set('error', []);
+                    }
+
+                });
+            }
+
+            const rejectApplication = function() {
+                @this.call('rejectApplication');
+            };
+
+            
 
             $(document).on('click', '.submit-documents', function() {
                 const applicationId = $(this).data('applicationid');

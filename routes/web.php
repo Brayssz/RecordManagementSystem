@@ -15,6 +15,7 @@ use App\Http\Controllers\Content\EmployerController;
 use App\Http\Controllers\Content\JobOfferController;
 use App\Http\Controllers\Content\PDFController;
 use App\Http\Controllers\Content\ReportController;
+use App\Http\Controllers\Content\TextractController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -121,3 +122,11 @@ Route::get('/generate-employer-interview-report', [PDFController::class, 'showEm
 Route::get('/generate-registered-applicants-report', [PDFController::class, 'showRegisteredApplicantsReport']);
 
 Route::get('/generate-applications-report', [PDFController::class, 'showApplicationsReport']);
+
+
+
+Route::get('/ocr-upload', function () {
+    return view('content.ocr');
+});
+
+Route::post('/ocr', [TextractController::class, 'processImage']);

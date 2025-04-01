@@ -315,11 +315,11 @@
                                     <select class="form-select" id="valid_id_type" name="valid_id_type"
                                         wire:model.lazy="valid_id_type">
                                         <option value="">Select ID Type</option>
-                                        <option value="Passport">Passport</option>
                                         <option value="Driver's License">Driver's License</option>
                                         <option value="SSS ID">SSS ID</option>
                                         <option value="PhilHealth ID">PhilHealth ID</option>
                                         <option value="Voter's ID">Voter's ID</option>
+                                        <option value="Voter's ID">National ID</option>
                                         <option value="Others">Others</option>
                                     </select>
                                     @error('valid_id_type')
@@ -349,8 +349,8 @@
                                             <template x-if="docPhotoPreview !== ''">
                                                 <li class="ps-0 w-100">
                                                     <div class="product-view-set">
-                                                        <div class="product-views-img" style="max-width: 100%;">
-                                                            <img :src="docPhotoPreview" alt="Valid ID Preview">
+                                                        <div class="product-views-img d-flex justify-content-center" style="max-width: 100%;">
+                                                            <img :src="docPhotoPreview" alt="Valid ID Preview" class="rounded-4">
                                                         </div>
                                                     </div>
                                                 </li>
@@ -368,7 +368,7 @@
                         <div class="row" x-data="{ docPhotoPreview: '', photoName: '' }">
                             <div class="col-lg-12">
                                 <div class="row">
-                                    <div class="col-lg-10 col-md-10">
+                                    <div class="col-lg-12 col-md-12">
                                         <div class="form-group">
                                             <div>
                                                 <label class="form-label" for="birth_certificate">Document</label>
@@ -390,15 +390,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 mb-5">
+                            <div class="col-12 mb-5 mt-3">
                                 <div class="product-list">
                                     <ul class="row" id="product-list">
                                         {{-- PREVIEW SELECTED IMAGE --}}
                                         <template x-if="docPhotoPreview !== ''">
                                             <li class="ps-0 w-100">
                                                 <div class="product-view-set">
-                                                    <div class="product-views-img" style="max-width: 100%;">
-                                                        <img :src="docPhotoPreview" alt="img">
+                                                    <div class="product-views-img d-flex justify-content-center" style="max-width: 100%;">
+                                                        <img :src="docPhotoPreview" alt="img" class="rounded-4">
                                                     </div>
                                                 </div>
                                             </li>
@@ -412,7 +412,7 @@
             </div>
             <div class="card-footer d-flex justify-content-end">
                 <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-submit">Submit</button>
+                <button type="button" class="btn btn-submit">Submit</button>
             </div>
         </form>
 
@@ -449,6 +449,10 @@
                 //     }
                 // });
             });
+
+            const showValidationError = (message) => {
+                messageAlert('Invalid Document', message);
+            }
 
 
             function populateEditForm() {
@@ -489,6 +493,27 @@
                         }
                     }
                 }
+            }
+
+            $('.btn-submit').on('click', function() {
+
+                console.log("hello");
+                confirmAlert('Are you sure you want to submit this application?', 'Submit Application', function() {
+                    showLoader();
+                    submitForm();
+                });
+            });
+
+            const submitForm = function() {
+
+                console.log("Submitting form...");
+                @this.call('submit_application').then(() => {
+                    hideLoader();
+                    let error = @this.get('error');
+                    if (error && error.valid) {
+                        messageAlert('Invalid Document', error.message);
+                    }
+                });
             }
 
             function handleInputChange(e) {

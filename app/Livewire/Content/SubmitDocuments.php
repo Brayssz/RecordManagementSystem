@@ -10,6 +10,9 @@ use App\Models\Document;
 use App\Models\ApplicationForm as Application;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use App\Services\TextractService;
+use App\Models\Applicant;
 
 class SubmitDocuments extends Component
 {
@@ -22,6 +25,7 @@ class SubmitDocuments extends Component
     public $photoPreview;
     public $message;
     public $required = ['Birth Certificate', 'Passport', 'Medical Certificate', 'NBI Clearance', 'Valid ID'];
+    public $error = [];
 
     public function getDocumentPhotoUrl()
     {
@@ -69,17 +73,22 @@ class SubmitDocuments extends Component
 
         return true;
     }
-    public function getDocument() {
+    public function getDocument()
+    {
         $this->photoPreview = $this->getDocumentPhotoUrl();
     }
 
     public function saveDocumentPhoto()
     {
-        // dd($this->photo);
+
         $this->validate([
             'photo' => 'required|string',
         ]);
-        
+
+        if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
+            $this->ValidateDocuments();
+        }
+
         $photo = $this->photo;
         $photo = str_replace('data:image/png;base64,', '', $photo);
         $photo = str_replace(' ', '+', $photo);
@@ -94,6 +103,253 @@ class SubmitDocuments extends Component
 
         return redirect()->route('applicant-documents');
     }
+
+    public function ValidateDocuments()
+    {
+        $this->error = []; 
+        $application = Application::where('application_id', $this->application_id)->first();
+        $applicant = Applicant::where('applicant_id', $application->applicant_id)->first();
+
+        $photo = $this->photo;
+        $photo = str_replace('data:image/png;base64,', '', $photo);
+        $photo = str_replace(' ', '+', $photo);
+        $photo = base64_decode($photo);
+
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'photo');
+        file_put_contents($tempFilePath, $photo);
+
+        $textractService = new TextractService();
+        $photoText = $textractService->extractText($tempFilePath);
+
+        $normalizedPhotoText = strtolower(trim(preg_replace('/\s+/', ' ', $photoText)));
+
+        if ($this->document_type == 'Medical Certificate') {
+            $this->validateMedicalCertificate($normalizedPhotoText);
+        }
+
+        if ($this->document_type == 'NBI Clearance') {
+            $this->validateNBIClearance($normalizedPhotoText);
+        }
+
+        if($this->document_type == 'Passport') {
+            $this->validatePassport($normalizedPhotoText);
+        }
+        $this->validateApplicantName($normalizedPhotoText, $applicant);
+    }
+
+    private function validatePassport($normalizedPhotoText)
+    {
+        $passportKeywords = [
+            'passport', 'travel document', 'passport number', 'issued by', 'date of issue',
+            'date of expiry', 'place of issue', 'holder\'s signature', 'nationality', 'passport type',
+            'passport holder', 'passport details', 'passport information', 'passport id', 'passport document', 'pasaporte'
+        ];
+
+        $isPassport = false;
+        foreach ($passportKeywords as $keyword) {
+            if (stripos($normalizedPhotoText, $keyword) !== false) {
+                $isPassport = true;
+                break;
+            }
+        }
+
+        if (!$isPassport) {
+            $this->error['valid'] = true;
+            $this->error['message'] = 'The uploaded document is not recognized as a passport.';
+            throw ValidationException::withMessages([
+                'photo' => 'The uploaded document is not recognized as a passport.',
+            ]);
+        }
+    }
+
+    private function validateNBIClearance($normalizedPhotoText)
+    {
+        $nbiKeywords = [
+            'nbi clearance', 'national bureau of investigation', 'criminal record', 'no criminal record',
+            'clearance certificate', 'nbi', 'investigation report', 'background check', 'no pending case',
+            'certificate of clearance', 'nbi certificate', 'nbi report'
+        ];
+
+        $isNBI = false;
+        foreach ($nbiKeywords as $keyword) {
+            if (stripos($normalizedPhotoText, $keyword) !== false) {
+                $isNBI = true;
+                break;
+            }
+        }
+
+        if (!$isNBI) {
+            $this->error['valid'] = true;
+            $this->error['message'] = 'The uploaded document is not recognized as an NBI clearance.';
+            throw ValidationException::withMessages([
+                'photo' => 'The uploaded document is not recognized as an NBI clearance.',
+            ]);
+        }
+    }
+
+    private function validateMedicalCertificate($normalizedPhotoText)
+    {
+        $medicalCertificateKeywords = [
+            'medical certificate', 'fit to work', 'fit to study', 'fit for duty', 'medical clearance',
+            'physician', 'doctor', 'clinic', 'hospital', 'health assessment', 'medical evaluation',
+            'certified by', 'medical practitioner', 'health status', 'medical report', 'physical examination',
+            'health check', 'medical fitness', 'certification of health', 'medical findings'
+        ];
+
+        $fitKeywords = [
+            'fit for duty', 'physically fit', 'fit for work/school', 'no restrictions',
+            'cleared for activity', 'medically cleared', 'healthy', 'no significant findings',
+            'able to perform tasks', 'no medical issues', 'fit to work', 'fit to study',
+            'good health', 'no health risks', 'no impairments', 'fully capable', 'no limitations',
+            'fit for employment', 'fit for physical activities', 'fit for responsibilities'
+        ];
+
+        $isMedicalCertificate = false;
+        foreach ($medicalCertificateKeywords as $keyword) {
+            if (stripos($normalizedPhotoText, $keyword) !== false) {
+                $isMedicalCertificate = true;
+                break;
+            }
+        }
+
+        if (!$isMedicalCertificate) {
+            $this->error['valid'] = true;
+            $this->error['message'] = 'The uploaded document is not recognized as a medical certificate.';
+            throw ValidationException::withMessages([
+                'photo' => 'The uploaded document is not recognized as a medical certificate.',
+            ]);
+        }
+
+        $isFit = false;
+        foreach ($fitKeywords as $keyword) {
+            if (stripos($normalizedPhotoText, $keyword) !== false) {
+                $isFit = true;
+                break;
+            }
+        }
+
+        if (!$isFit) {
+            $this->error['type'] = 'medical';
+            $this->error['message'] = 'The medical certificate does not indicate the applicant is physically fit.';
+            throw ValidationException::withMessages([
+                'photo' => 'The medical certificate does not indicate the applicant is physically fit.',
+            ]);
+        }
+    }
+
+    private function validateApplicantName($normalizedPhotoText, $applicant)
+    {
+        $expectedNameParts = array_filter([
+            strtolower(trim($applicant->first_name)),
+            strtolower(trim($applicant->middle_name)),
+            strtolower(trim($applicant->last_name)),
+        ]);
+
+        foreach ($expectedNameParts as $namePart) {
+            if (stripos($normalizedPhotoText, $namePart) === false) {
+                $this->error['valid'] = true;
+                $this->error['message'] = 'The name on the uploaded document does not match the applicant\'s name.';
+                throw ValidationException::withMessages([
+                    'photo' => 'The name on the uploaded document does not match the applicant\'s name.',
+                ]);
+            }
+        }
+    }
+
+    public function rejectApplication() 
+    {
+        $application = Application::where('application_id', $this->application_id)->first();
+        $application->status = "Rejected";
+        $application->save();
+
+        session()->flash('message', 'Application rejected successfully.');
+
+        return redirect()->route('applicant-documents');
+    }
+
+    // public function validatePersonalIDDocs()
+    // {
+    //     $this->error = []; 
+
+    //     $applicant = Auth::guard('applicant')->user();
+
+    //     $textractService = new TextractService();
+
+    //     $validIdText = $textractService->extractText($this->valid_id->getRealPath());
+    //     $birthCertText = $textractService->extractText($this->birth_certificate->getRealPath());
+
+    //     $normalizedValidIdText = strtolower(trim(preg_replace('/\s+/', ' ', $validIdText)));
+    //     $normalizedBirthCertText = strtolower(trim(preg_replace('/\s+/', ' ', $birthCertText)));
+
+    //     $idTypeKeywords = [
+    //         'Passport' => ['passport', 'travel document', 'pasaporte'],
+    //         'Driver\'s License' => ['driver\'s license', 'license', 'dl'],
+    //         'SSS ID' => ['sss id', 'social security system'],
+    //         'PhilHealth ID' => ['philhealth id', 'philhealth'],
+    //         'Voter\'s ID' => ['voter\'s id', 'voter', 'comelec'],
+    //         'National ID' => ['national id', 'philippine identification', 'phil id', 'pambansang pagkakakilanlan'],
+    //     ];
+
+    //     $birthCertKeywords = ['birth certificate', 'certificate of live birth', 'birth record'];
+
+    //     $keywords = $idTypeKeywords[$this->valid_id_type] ?? [];
+
+    //     $idTypeMatch = false;
+    //     foreach ($keywords as $keyword) {
+    //         if (stripos($normalizedValidIdText, $keyword) !== false) {
+    //             $idTypeMatch = true;
+    //             break;
+    //         }
+    //     }
+
+    //     if (!$idTypeMatch) {
+    //         $this->error['valid'] = true;
+    //         $this->error['message'] = 'The uploaded valid ID does not match the specified ID type.';
+    //         throw ValidationException::withMessages([
+    //             'valid_id' => 'The uploaded valid ID does not match the specified ID type.',
+    //         ]);
+    //     }
+
+    //     $birthCertMatch = false;
+    //     foreach ($birthCertKeywords as $keyword) {
+    //         if (stripos($normalizedBirthCertText, $keyword) !== false) {
+    //             $birthCertMatch = true;
+    //             break;
+    //         }
+    //     }
+
+    //     if (!$birthCertMatch) {
+    //         $this->error['valid'] = true;
+    //         $this->error['message'] = 'The uploaded document is not recognized as a valid birth certificate.';
+    //         throw ValidationException::withMessages([
+    //             'birth_certificate' => 'The uploaded document is not recognized as a valid birth certificate.',
+    //         ]);
+    //     }
+
+    //     $expectedNameParts = array_filter([
+    //         strtolower(trim($applicant->first_name)),
+    //         strtolower(trim($applicant->middle_name)),
+    //         strtolower(trim($applicant->last_name)),
+    //     ]);
+
+    //     foreach ($expectedNameParts as $namePart) {
+    //         if (stripos($normalizedValidIdText, $namePart) === false) {
+    //             $this->error['valid'] = true;
+    //             $this->error['message'] = 'The name on the valid ID does not match the applicant\'s name.';
+    //             throw ValidationException::withMessages([
+    //                 'valid_id' => 'The name on the valid ID does not match the applicant\'s name.',
+    //             ]);
+    //         }
+
+    //         if (stripos($normalizedBirthCertText, $namePart) === false) {
+    //             $this->error['valid'] = true;
+    //             $this->error['message'] = 'The name on the birth certificate does not match the applicant\'s name.';
+    //             throw ValidationException::withMessages([
+    //                 'birth_certificate' => 'The name on the birth certificate does not match the applicant\'s name.',
+    //             ]);
+    //         }
+    //     }
+    // }
 
     public function updateDocumentPhoto(UploadedFile $photo, $application_id, $document_type, $storagePath = 'document-photos')
     {

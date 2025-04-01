@@ -24,6 +24,27 @@ window.messageAlert = function(title, message) {
 	});
 };
 
+window.okAlert = function(title, message, operation, confirmbtn) {
+
+	Swal.fire({
+		title: title,
+		text: message,
+		icon: "question",
+		confirmButtonColor: "#643bc6",
+		denyButtonColor: "#f44336",
+		cancelButtonColor: "#999999",
+		confirmButtonText: confirmbtn,
+		customClass: {
+			popup: 'rounded-lg' // Add this line to modify the border radius
+		}
+	}).then((result) => {
+		if (result.isConfirmed) {
+			operation();
+		}
+	});
+
+}
+
 window.confirmAlert = function(title, message, operation, confirmbtn) {
 
 	Swal.fire({

@@ -18,6 +18,8 @@ use App\Models\Employee;
 use App\Notifications\NewApplicationNotification;
 use Carbon\Carbon;
 use App\Models\JobOffer;
+use App\Services\TextractService;
+use Illuminate\Validation\ValidationException;
 
 class ApplicationForm extends Component
 {
@@ -43,6 +45,8 @@ class ApplicationForm extends Component
     public $valid_id_type;
 
     public $birth_certificate;
+
+    public $error = [];
 
     public function getBranches()
     {
@@ -130,6 +134,91 @@ class ApplicationForm extends Component
         ];
     }
 
+    public function validatePersonalIDDocs()
+    {
+        $this->error = []; 
+
+        $applicant = Auth::guard('applicant')->user();
+
+        $textractService = new TextractService();
+
+        $validIdText = $textractService->extractText($this->valid_id->getRealPath());
+        $birthCertText = $textractService->extractText($this->birth_certificate->getRealPath());
+
+        $normalizedValidIdText = strtolower(trim(preg_replace('/\s+/', ' ', $validIdText)));
+        $normalizedBirthCertText = strtolower(trim(preg_replace('/\s+/', ' ', $birthCertText)));
+
+        $idTypeKeywords = [
+            'Passport' => ['passport', 'travel document', 'pasaporte'],
+            'Driver\'s License' => ['driver\'s license', 'license', 'dl'],
+            'SSS ID' => ['sss id', 'social security system'],
+            'PhilHealth ID' => ['philhealth id', 'philhealth'],
+            'Voter\'s ID' => ['voter\'s id', 'voter', 'comelec'],
+            'National ID' => ['national id', 'philippine identification', 'phil id', 'pambansang pagkakakilanlan'],
+        ];
+
+        $birthCertKeywords = ['birth certificate', 'certificate of live birth', 'birth record'];
+
+        $keywords = $idTypeKeywords[$this->valid_id_type] ?? [];
+
+        $idTypeMatch = false;
+        foreach ($keywords as $keyword) {
+            if (stripos($normalizedValidIdText, $keyword) !== false) {
+                $idTypeMatch = true;
+                break;
+            }
+        }
+
+        if (!$idTypeMatch) {
+            $this->error['valid'] = true;
+            $this->error['message'] = 'The uploaded valid ID does not match the specified ID type.';
+            throw ValidationException::withMessages([
+                'valid_id' => 'The uploaded valid ID does not match the specified ID type.',
+            ]);
+        }
+
+        $birthCertMatch = false;
+        foreach ($birthCertKeywords as $keyword) {
+            if (stripos($normalizedBirthCertText, $keyword) !== false) {
+                $birthCertMatch = true;
+                break;
+            }
+        }
+
+        if (!$birthCertMatch) {
+            $this->error['valid'] = true;
+            $this->error['message'] = 'The uploaded document is not recognized as a valid birth certificate.';
+            throw ValidationException::withMessages([
+                'birth_certificate' => 'The uploaded document is not recognized as a valid birth certificate.',
+            ]);
+        }
+
+        $expectedNameParts = array_filter([
+            strtolower(trim($applicant->first_name)),
+            strtolower(trim($applicant->middle_name)),
+            strtolower(trim($applicant->last_name)),
+        ]);
+
+        foreach ($expectedNameParts as $namePart) {
+            if (stripos($normalizedValidIdText, $namePart) === false) {
+                $this->error['valid'] = true;
+                $this->error['message'] = 'The name on the valid ID does not match the applicant\'s name.';
+                throw ValidationException::withMessages([
+                    'valid_id' => 'The name on the valid ID does not match the applicant\'s name.',
+                ]);
+            }
+
+            if (stripos($normalizedBirthCertText, $namePart) === false) {
+                $this->error['valid'] = true;
+                $this->error['message'] = 'The name on the birth certificate does not match the applicant\'s name.';
+                throw ValidationException::withMessages([
+                    'birth_certificate' => 'The name on the birth certificate does not match the applicant\'s name.',
+                ]);
+            }
+        }
+    }
+
+
     public function updateBirthCertificate(UploadedFile $photo, $application_id, $storagePath = 'birth-certificates')
     {
         $documentDisk = env('VAPOR_ARTIFACT_NAME') ? 's3' : 'public';
@@ -184,8 +273,12 @@ class ApplicationForm extends Component
         );
     }
 
+
     public function createApplication($applicant_id)
     {
+
+        $this->validatePersonalIDDocs();
+
         $application = new Application();
         $application->applicant_id = $applicant_id;
         $application->branch_id = $this->branch_id;
