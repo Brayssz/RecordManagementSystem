@@ -85,9 +85,9 @@ class SubmitDocuments extends Component
             'photo' => 'required|string',
         ]);
 
-        if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
-            $this->ValidateDocuments();
-        }
+        // if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
+        //     $this->ValidateDocuments();
+        // }
 
         $photo = $this->photo;
         $photo = str_replace('data:image/png;base64,', '', $photo);
