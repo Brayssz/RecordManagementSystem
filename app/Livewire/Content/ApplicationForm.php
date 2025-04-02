@@ -128,9 +128,9 @@ class ApplicationForm extends Component
             'branch_id' => 'required|exists:branches,branch_id',
             'schedule_id' => 'required|exists:branch_schedules,schedule_id',
             'marital_status' => 'required|string|max:255',
-            'valid_id' => 'required|image|max:2048', // Validation for valid ID
-            'valid_id_type' => 'required|string|max:255', // Validation for valid ID type
-            'birth_certificate' => 'required|image|max:2048', // Validation for birth certificate with increased resolution
+            'valid_id' => 'required|image|max:2048', 
+            'valid_id_type' => 'required|string|max:255', 
+            'birth_certificate' => 'required|image|max:2048', 
         ];
     }
 
