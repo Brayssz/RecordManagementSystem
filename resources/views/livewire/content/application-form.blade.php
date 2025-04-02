@@ -321,7 +321,7 @@
                                         <option value="SSS ID">SSS ID</option>
                                         <option value="PhilHealth ID">PhilHealth ID</option>
                                         <option value="Voter's ID">Voter's ID</option>
-                                        <option value="Voter's ID">National ID</option>
+                                        <option value="National ID">National ID</option>
                                         <option value="Others">Others</option>
                                     </select>
                                     @error('valid_id_type')
