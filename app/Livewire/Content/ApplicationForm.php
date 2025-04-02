@@ -90,7 +90,7 @@ class ApplicationForm extends Component
         $passwordRules = $this->applicant_id
             ? 'nullable|string|min:8|confirmed'
             : 'required|string|min:8|confirmed';
-        $profilePhotoRules = $this->photoPreview ? 'nullable|image|max:1024' : 'required|image|max:1024';
+        $profilePhotoRules = $this->photoPreview ? 'nullable|image|max:2048' : 'required|image|max:2048';
 
         return [
             'first_name' => 'required|string|max:255',
