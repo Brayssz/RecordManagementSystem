@@ -21,7 +21,7 @@ class ApplicationController extends Controller
     public function showMyApplications(Request $request)
     {
         if ($request->ajax()) {
-            $query = ApplicationForm::with('applicant', 'documents', 'job', 'branch')->where('applicant_id', Auth::guard("applicant")->user()->applicant_id);
+            $query = ApplicationForm::with('applicant', 'documents', 'job', 'branch', 'schedule')->where('applicant_id', Auth::guard("applicant")->user()->applicant_id);
 
             if ($request->filled('status')) {
                 $query->where('status', $request->status);

@@ -41,10 +41,17 @@
                                 <div class="form-group ">
                                     <select class="select status_filter form-control">
                                         <option value="">Status</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Canceled">Canceled</option>
+                                        <option value="Pending">Pending for Manager Interview</option>
+                                        <option value="Interviewed">Interviewed</option>
+                                        <option value="Submitting">Submitting Documents</option>
+                                        <option value="Reviewing">Reviewing Application</option>
+                                        <option value="ScheduledBranchInterview">Scheduled for Branch Interview</option>
+                                        <option value="ScheduledEmployerInterview">Scheduled for Employer Interview</option>
+                                        <option value="Waiting">Waiting to be Hired</option>
+                                        <option value="Hired">Waiting to be Deployed</option>
+                                        <option value="Deployed">Deployed With Departure Schedule</option>
+                                        <option value="Canceled">Canceled Application</option>
+                                        <option value="Rejected">Rejected Application</option>
                                     </select>
                                 </div>
                             </div>
@@ -53,7 +60,7 @@
                                     <select class="select branch_filter form-control">
                                         <option value="">Branch</option>
 
-                                        @foreach($branches as $branch)
+                                        @foreach ($branches as $branch)
                                             <option value="{{ $branch->branch_id }}">{{ $branch->municipality }}</option>
                                         @endforeach
                                     </select>
@@ -72,13 +79,13 @@
                                 <th>Job</th>
                                 <th>Country</th>
                                 <th>Branch</th>
-                                <th>Birth Certificate</th>
-                                <th>Passport</th>
-                                <th>Medical Certificate</th>
-                                <th>NBI Clearance</th>
                                 <th>Valid ID</th>
+                                <th>Birth Certificate</th>
+                                <th>NBI Clearance</th>
+                                <th>Medical Certificate</th>
+                                <th>Passport</th>
                                 <th class="no-sort">Status</th>
-                                <th class="no-sort">Cancel</th>
+                                <th class="no-sort">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,6 +99,8 @@
         </div>
     </div>
     @livewire('content.cancel-application')
+    @livewire('content.view-documents')
+    @livewire('content.view-application')
 
 @endsection
 
@@ -202,7 +211,8 @@
                                         Z: 'bg-success',
                                     };
 
-                                    const firstLetter = (row.applicant.first_name ? row.applicant.first_name.charAt(0)
+                                    const firstLetter = (row.applicant.first_name ? row.applicant
+                                        .first_name.charAt(0)
                                         .toUpperCase() : 'U'
                                     ); // Default to 'U' if first_name is missing
                                     const bgColor = colors[firstLetter] || 'bg-secondary';
@@ -236,36 +246,22 @@
                             "data": null,
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
+                                if (checkDocsExist(submittedDocs, 'Valid ID') === true) {
+                                    return `<span class="badge badge-linesuccess valid-id" data-applicationid="${row.application_id}">✓</span>`;
+                                } else {
+                                    return `<span class="badge badge-linedanger valid-id" data-applicationid="${row.application_id}">X</span>`;
+                                }
+                            }
+                        },
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Birth Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
+                                    return `<span class="badge badge-linesuccess birth-cert" data-applicationid="${row.application_id}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
+                                    return `<span class="badge badge-linedanger birth-cert" data-applicationid="${row.application_id}">X</span>`;
                                 }
-
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Passport') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-
-                            }
-                        },
-                        {
-                            "data": null,
-                            "render": function(data, type, row) {
-                                let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Medical Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
-                                } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
-                                }
-
                             }
                         },
                         {
@@ -273,21 +269,31 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'NBI Clearance') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
+                                    return `<span class="badge badge-linesuccess nbi" data-applicationid="${row.application_id}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
+                                    return `<span class="badge badge-linedanger nbi" data-applicationid="${row.application_id}">X</span>`;
                                 }
-
                             }
                         },
                         {
                             "data": null,
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
-                                if (checkDocsExist(submittedDocs, 'Valid ID') === true) {
-                                    return `<span class="badge badge-linesuccess">✓</span>`;
+                                if (checkDocsExist(submittedDocs, 'Medical Certificate') === true) {
+                                    return `<span class="badge badge-linesuccess med-cert" data-applicationid="${row.application_id}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger">X</span>`;
+                                    return `<span class="badge badge-linedanger med-cert" data-applicationid="${row.application_id}">X</span>`;
+                                }
+                            }
+                        },
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                let submittedDocs = row.documents.map(doc => doc.document_type);
+                                if (checkDocsExist(submittedDocs, 'Passport') === true) {
+                                    return `<span class="badge badge-linesuccess passport" data-applicationid="${row.application_id}">✓</span>`;
+                                } else {
+                                    return `<span class="badge badge-linedanger passport" data-applicationid="${row.application_id}">X</span>`;
                                 }
                             }
                         },
@@ -328,6 +334,9 @@
                         <div class="edit-delete-action">
                             <a class="me-2 p-2 cancel-application" data-applicationid="${row.application_id}">
                                 <i data-feather="x" class="feather-x"></i>
+                            </a>
+                            <a class="me-2 p-2 view-application" data-applicationid="${row.application_id}">
+                                <i data-feather="eye" class="feather-eye"></i>
                             </a>
                         </div>
                     `;

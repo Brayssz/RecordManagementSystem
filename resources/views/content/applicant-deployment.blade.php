@@ -320,14 +320,14 @@
 
                                 if (row.deployment === null) {
                                     actionButtons += `
-                                    <a class="me-2 p-2 deploy" data-applicationid="${row.application_id}">
-                                        <i data-feather="check" class="feather-check"></i>
+                                    <a class="btn btn-primary deploy" data-applicationid="${row.application_id}">
+                                        <i data-feather="calendar" class="feather-calendar me-1"></i> Set
                                     </a>
                                     `;
                                 } else {
                                     actionButtons += `
-                                    <a class="me-2 p-2 reschedule" data-applicationid="${row.application_id}" data-deploymentid="${row.deployment.deployment_id}">
-                                        <i data-feather="edit" class="feather-edit"></i>
+                                    <a class="btn btn-primary reschedule" data-applicationid="${row.application_id}" data-deploymentid="${row.deployment.deployment_id}">
+                                        <i data-feather="calendar" class="feather-calendar me-1"></i> Reschedule
                                     </a>
                                     `;
                                 }

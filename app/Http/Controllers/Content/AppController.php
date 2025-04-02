@@ -23,7 +23,7 @@ class AppController extends Controller
         if (!session()->has('auth_user_type')) {
             return redirect()->route('login');
         } else if (session('auth_user_type') == 'applicant') {
-            return view('content.applicant-dashboard');
+            return redirect()->route('job-offers');
         } else if (session('auth_user_type') == 'employee') {
             if (Auth::user()->position == 'Admin') {
                 return $this->adminDashboard();

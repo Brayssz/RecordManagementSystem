@@ -69,13 +69,13 @@
             <!-- Logo -->
             <div class="header-left active border-0">
                 <a href="index.html" class="logo logo-normal">
-                    <img src="assets/img/logo.jpg" alt="">
+                    <img src="img/logo.jpg" alt="">
                 </a>
                 <a href="index.html" class="logo logo-white">
-                    <img src="assets/img/logo-white.png" alt="">
+                    <img src="img/logo-white.png" alt="">
                 </a>
                 <a href="index.html" class="logo-small">
-                    <img src="assets/img/logo-small.png" alt="">
+                    <img src="img/logo-small.png" alt="">
                 </a>
                 <a id="toggle_btn" href="javascript:void(0);">
                     <i data-feather="chevrons-left" class="feather-16"></i>
@@ -192,9 +192,6 @@
         <div class="sidebar horizontal-sidebar">
             <div id="sidebar-menu-3" class="sidebar-menu">
                 <ul class="nav">
-                    <li class="{{ Request::is('applicant-dashboard') ? 'active' : '' }}">
-                        <a href="/dashboard"><i data-feather="grid"></i><span>Main Menu</span></a>
-                    </li>
                     <li class="{{ Request::is('applicant-dashboard') ? 'active' : '' }}">
                         <a href="/job-offers"><i data-feather="user"></i><span>Job Offers</span></a>
                     </li>

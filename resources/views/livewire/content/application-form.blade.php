@@ -20,7 +20,7 @@
                                 <span><img :src="photoPreview" alt=""></span>
                             </template>
                             <template x-if="!photoPreview">
-                                {{-- <span>2 x 2 <br><span class="text-muted">Passport Size</span>< ,.span> --}}
+                                <span>Passport Size<br><span>
                             </template>
                         </div>
                         <div class="input-blocks mb-0">
@@ -501,7 +501,7 @@
                 confirmAlert('Are you sure you want to submit this application?', 'Submit Application', function() {
                     showLoader();
                     submitForm();
-                });
+                }, 'Submit');
             });
 
             const submitForm = function() {
