@@ -33,7 +33,7 @@
                                             const aspectRatio = img.width / img.height;
                                             const targetRatio = 7 / 9;
                                             if (Math.abs(aspectRatio - targetRatio) > 0.2) {
-                                                messageAlert('Invalid Image', 'Please upload an image with an aspect ratio of 7:9;
+                                                messageAlert('Invalid Image', 'Please upload an image with an aspect ratio of 7:9');
                                                 $refs.photo.value = '';
                                             } else {
                                                 photoName = file.name;
