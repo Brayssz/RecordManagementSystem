@@ -327,7 +327,7 @@
                                 } else {
                                     actionButtons += `
                                     <a class="btn btn-primary reschedule" data-applicationid="${row.application_id}" data-deploymentid="${row.deployment.deployment_id}">
-                                        <i data-feather="calendar" class="feather-calendar me-1"></i> Reschedule
+                                        <i data-feather="calendar" class="feather-calendar me-1"></i> Deploy
                                     </a>
                                     `;
                                 }

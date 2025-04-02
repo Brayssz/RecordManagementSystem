@@ -63,7 +63,7 @@
                     <div class="content">
                         <div class="modal-header border-0 custom-modal-header">
                             <div class="page-title">
-                                <h4>Reschedule Departure</h4>
+                                <h4>Deploy Applicant</h4>
                             </div>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -77,7 +77,7 @@
                                         <div class="new-employee-field">
                                             <div class="card-title-head" wire:ignore>
                                                 <h6><span><i data-feather="info"
-                                                            class="feather-edit"></i></span>Schedule
+                                                            class="feather-edit"></i></span>Deployment
                                                     Information</h6>
                                             </div>
 
