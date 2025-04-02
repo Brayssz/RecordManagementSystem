@@ -30,8 +30,9 @@
                                         const file = $refs.photo.files[0];
                                         const img = new Image();
                                         img.onload = () => {
-                                            if (img.width !== img.height) {
-                                                messageAlert('Invalid Image', 'Please upload an image with equal dimesion.');
+                                            const aspectRatio = img.width / img.height;
+                                            if (aspectRatio.toFixed(2) !== (1.8 / 1.4).toFixed(2)) {
+                                                messageAlert('Invalid Image', 'Please upload a passport size image with a 1.8:1.4 aspect ratio.');
                                                 $refs.photo.value = '';
                                             } else {
                                                 photoName = file.name;
@@ -45,7 +46,7 @@
                                         img.src = URL.createObjectURL(file);
                                     ">
                                 <div class="image-uploads">
-                                    <h4>Change Image</h4>
+                                    <h4>Upload Image</h4>
                                 </div>
                             </div>
                             @error('photo')
