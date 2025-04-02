@@ -31,14 +31,15 @@
                                         const img = new Image();
                                         img.onload = () => {
                                             const aspectRatio = img.width / img.height;
-                                            if (aspectRatio.toFixed(2) !== (1.4 / 1.8).toFixed(2)) {
-                                                messageAlert('Invalid Image', 'Please upload a passport size image with a 1.4:1.8 aspect ratio.');
+                                            const targetRatio = 7 / 9;
+                                            if (Math.abs(aspectRatio - targetRatio) > 0.2) {
+                                                messageAlert('Invalid Image', 'Please upload an image with an aspect ratio of 7:9;
                                                 $refs.photo.value = '';
                                             } else {
                                                 photoName = file.name;
                                                 const reader = new FileReader();
                                                 reader.onload = (e) => {
-                                                    photoPreview = e.target.result; 
+                                                    photoPreview = e.target.result;
                                                 };
                                                 reader.readAsDataURL(file);
                                             }
