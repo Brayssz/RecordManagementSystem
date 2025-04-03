@@ -278,10 +278,7 @@ class ApplicationForm extends Component
 
     public function createApplication($applicant_id)
     {
-        dd('Available Times:', $this->getAvailableTimes());
-
-        // $this->validatePersonalIDDocs();
-       
+        $this->validatePersonalIDDocs();
 
         $application = new Application();
         $application->applicant_id = $applicant_id;
@@ -301,8 +298,7 @@ class ApplicationForm extends Component
         }
 
         $this->notifyEmployees($application);
-
-        $this->decreaseScheduleSlot();
+ 
         $this->decreaseJobOfferSlot();
 
         $this->createBranchInterview($application->application_id);
@@ -467,13 +463,6 @@ class ApplicationForm extends Component
 
 
         $this->createApplication($this->applicant->applicant_id);
-    }
-
-    public function decreaseScheduleSlot()
-    {
-        $branch_schedule = BranchSchedule::find($this->schedule_id);
-        $branch_schedule->available_slots -= 1;
-        $branch_schedule->save();
     }
 
     public function notifyEmployees($application)

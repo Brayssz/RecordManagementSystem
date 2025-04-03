@@ -715,6 +715,7 @@
 
                                     @this.call('getAvailableTimes', allowedDates[selectedDate]).then(availableTimes => {
                                         console.log(availableTimes);
+
                                         const timeSelect = $('.time-select');
                                         timeSelect.html('<option value="">Available Time</option>');
                                         availableTimes.forEach(time => {
@@ -725,7 +726,12 @@
                                                 minute: '2-digit',
                                                 hour12: true
                                             });
-                                            timeSelect.append(`<option value="${time}">${time} - ${formattedTime}</option>`);
+                                            const startTimeFormatted = new Date(1970, 0, 1, hours, minutes).toLocaleTimeString('en-US', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: true
+                                            });
+                                            timeSelect.append(`<option value="${time}">${startTimeFormatted} - ${formattedTime}</option>`);
                                         });
                                         triggerTimeModal();
                                     });
