@@ -20,6 +20,7 @@ use Carbon\Carbon;
 use App\Models\JobOffer;
 use App\Services\TextractService;
 use Illuminate\Validation\ValidationException;
+use App\Models\BranchInterview;
 
 class ApplicationForm extends Component
 {
@@ -29,7 +30,7 @@ class ApplicationForm extends Component
     public $total_applicant;
 
     public $applicant_id, $first_name, $middle_name, $last_name, $email, $contact_number, $date_of_birth, $gender, $status, $suffix;
-    public $region, $province, $municipality, $barangay, $street, $postal_code, $citizenship, $password, $password_confirmation;
+    public $region, $province, $municipality, $barangay, $street, $postal_code, $citizenship, $password, $password_confirmation, $start_time;
     public $marital_status;
 
     public $photo;
@@ -131,6 +132,7 @@ class ApplicationForm extends Component
             'valid_id' => 'required|image|max:2048', 
             'valid_id_type' => 'required|string|max:255', 
             'birth_certificate' => 'required|image|max:2048', 
+            'start_time' => 'required|date_format:H:i',
         ];
     }
 
@@ -276,8 +278,10 @@ class ApplicationForm extends Component
 
     public function createApplication($applicant_id)
     {
+        dd('Available Times:', $this->getAvailableTimes());
 
-        $this->validatePersonalIDDocs();
+        // $this->validatePersonalIDDocs();
+       
 
         $application = new Application();
         $application->applicant_id = $applicant_id;
@@ -301,6 +305,8 @@ class ApplicationForm extends Component
         $this->decreaseScheduleSlot();
         $this->decreaseJobOfferSlot();
 
+        $this->createBranchInterview($application->application_id);
+
         session()->flash('message', 'Application successfully created.');
 
         return redirect()->route('job-offers');
@@ -312,6 +318,61 @@ class ApplicationForm extends Component
         $jobOffer = JobOffer::find($this->job_id);
         $jobOffer->available_slots -= 1;
         $jobOffer->save();
+    }
+
+    public function getAvailableTimes($schedule_id)
+    {
+        $schedule = BranchSchedule::find($schedule_id);
+
+        if (!$schedule) {
+            throw ValidationException::withMessages([
+                'schedule_id' => 'The selected schedule does not exist.',
+            ]);
+        }
+
+        $availableTimes = [];
+        $startTime = Carbon::parse($schedule->available_start_time);
+        $endTime = Carbon::parse($schedule->available_end_time);
+
+        while ($startTime->copy()->addMinutes(90)->lte($endTime)) {
+            // Skip 12:00 PM to 1:00 PM
+            if ($startTime->format('H:i') === '12:00' || $startTime->format('H:i') === '12:30') {
+                $startTime->addMinutes(90);
+                continue;
+            }
+
+            $conflict = BranchInterview::whereHas('application', function ($query) use ($schedule_id) {
+                $query->where('schedule_id', $schedule_id);
+            })
+            ->where(function ($query) use ($startTime) {
+                $query->whereBetween('start_time', [$startTime, $startTime->copy()->addMinutes(90)])
+                    ->orWhereBetween('end_time', [$startTime, $startTime->copy()->addMinutes(90)])
+                    ->orWhere(function ($query) use ($startTime) {
+                        $query->where('start_time', '<=', $startTime)
+                            ->where('end_time', '>=', $startTime->copy()->addMinutes(90));
+                    });
+            })
+            ->exists();
+
+            if (!$conflict) {
+                $availableTimes[] = $startTime->format('H:i');
+            }
+
+            $startTime->addMinutes(90);
+        }
+
+        return $availableTimes;
+    }
+
+    public function createBranchInterview($application_id) {
+        $startTime = Carbon::createFromFormat('H:i', $this->start_time);
+
+        BranchInterview::create([
+            'application_id' => $application_id,
+            'start_time' => $startTime,
+            'end_time' => $startTime->copy()->addMinutes(90),
+            'status' => "Pending",
+        ]);
     }
 
     public function getProfilePhotoUrl(Applicant $applicant): string
@@ -372,6 +433,7 @@ class ApplicationForm extends Component
             'valid_id',
             'valid_id_type',
             'birth_certificate',
+            'start_time',
         ]);
     }
 
@@ -402,6 +464,7 @@ class ApplicationForm extends Component
         if (isset($this->photo)) {
             $this->updateProfilePhoto($this->photo, $this->applicant);
         }
+
 
         $this->createApplication($this->applicant->applicant_id);
     }

@@ -182,7 +182,7 @@
                 const jobId = $(this).data('jobid');
                 showLoader();
                 @this.call('checkExistingApplication').then(response => {
-                    if (response.status) {
+                    if (response.status === false) {
                         messageAlert('Warning', response.message);
                         getJobOffers();
                     } else {
