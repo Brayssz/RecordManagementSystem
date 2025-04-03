@@ -59,6 +59,12 @@ class RecordBranchInterview extends Component
                 'status' => "Completed",
             ]);
 
+            if($this->rating >= 5){
+                $this->approveApplication();
+            } else {
+                $this->rejectApplication();
+            }
+
             session()->flash('message', 'Branch interview successfully updated.');
         } else {
             BranchInterview::create([

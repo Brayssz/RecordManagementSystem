@@ -33,33 +33,13 @@
                                                 <div class="mb-3">
                                                     <label for="interview_date" class="form-label">Interview
                                                         Date</label>
-                                                    <input type="date" class="form-control interviewDate"
+                                                    <input type="date" class="form-control interview_Date"
                                                         wire:model="interview_date">
 
                                                     @error('interview_date')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
 
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-12 col-md-12">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="job_countries">Available
-                                                        Slots</label>
-
-                                                    <div class="product-quantity" wire:ignore>
-                                                        <span class="quantity-btn">+<i data-feather="plus-circle"
-                                                                class="plus-circle"></i></span>
-                                                        <input type="numbers" class="quntity-input not_pass"
-                                                            id="available_slots" wire:model.lazy="available_slots">
-                                                        <span class="quantity-btn"><i data-feather="minus-circle"
-                                                                class="feather-search"></i></span>
-                                                    </div>
-
-                                                    @error('available_slots')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
                                                 </div>
                                             </div>
 
@@ -147,7 +127,7 @@
 
                 var formattedDate = interviewDate.split(' ')[0]; // Extracts '2025-02-28'
 
-                $('.interviewDate').val(formattedDate).change(); // Set value correctly
+                $('.interview_Date').val(formattedDate).change(); // Set value correctly
 
                 console.log(formattedDate);
             }

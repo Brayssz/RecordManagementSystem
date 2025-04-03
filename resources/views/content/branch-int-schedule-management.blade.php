@@ -58,8 +58,7 @@
                             <tr>
                                 <th>Schedule Date</th>
                                 <th>Available Time</th>
-                                <th>Available Slots</th>
-                                <th>Occupied Slots</th>
+                                <th>Number of Applicant</th>
                                 <th class="no-sort">Action</th>
                             </tr>
                         </thead>
@@ -133,9 +132,6 @@
                         },
                         
                         {
-                            "data": "available_slots"
-                        },
-                        {
                             "data": "applications",
                             "render": function(data, type, row) {
                                 return data.length; 
@@ -155,7 +151,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(4).addClass('action-table-data');
+                        $(row).find('td').eq(3).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');

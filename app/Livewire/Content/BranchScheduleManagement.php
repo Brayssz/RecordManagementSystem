@@ -17,7 +17,6 @@ class BranchScheduleManagement extends Component
     public $schedule;
     public $total_schedules;
     public $interview_date;
-    public $available_slots = 0;
     public $schedule_id;
     public $available_start_time;
     public $available_end_time;
@@ -35,7 +34,6 @@ class BranchScheduleManagement extends Component
                     })
                     ->ignore($this->schedule_id, 'schedule_id'),
             ],
-            'available_slots' => 'required|integer|min:1',
             'available_start_time' => 'required|date_format:H:i',
             'available_end_time' => 'required|date_format:H:i|after:available_start_time',
         ];
@@ -50,7 +48,6 @@ class BranchScheduleManagement extends Component
     {
         $this->reset([
             'interview_date',
-            'available_slots',
             'schedule_id',
             'available_start_time',
             'available_end_time',
@@ -61,7 +58,6 @@ class BranchScheduleManagement extends Component
     {
         $this->schedule = BranchSchedule::findOrFail($scheduleID);
         $this->interview_date = $this->schedule->interview_date;
-        $this->available_slots = $this->schedule->available_slots;
         $this->schedule_id = $this->schedule->schedule_id;
         $this->available_start_time = Carbon::parse($this->schedule->available_start_time)->format('H:i');
         $this->available_end_time = Carbon::parse($this->schedule->available_end_time)->format('H:i');
@@ -74,7 +70,6 @@ class BranchScheduleManagement extends Component
         if ($this->submit_func == 'add-schedule') {
             BranchSchedule::create([
                 'interview_date' => $this->interview_date,
-                'available_slots' => $this->available_slots,
                 'branch_id' => Auth::guard('employee')->user()->branch_id,
                 'available_start_time' => $this->available_start_time,
                 'available_end_time' => $this->available_end_time,
@@ -84,7 +79,6 @@ class BranchScheduleManagement extends Component
         } elseif ($this->submit_func == 'edit-schedule') {
             $this->schedule->update([
                 'interview_date' => $this->interview_date,
-                'available_slots' => $this->available_slots,
                 'available_start_time' => $this->available_start_time,
                 'available_end_time' => $this->available_end_time,
             ]);

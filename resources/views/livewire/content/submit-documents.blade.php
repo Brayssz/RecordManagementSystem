@@ -36,9 +36,7 @@
 
                                                 <h4>Drag and drop a file to upload</h4>
                                             </div>
-                                            @error('photo')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+
                                         </div>
                                     </div>
                                 </div>
@@ -68,6 +66,9 @@
                                         </ul>
                                     </div>
                                 </div>
+                                @error('photo')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="modal-footer-btn mb-4 mt-0">
@@ -114,7 +115,7 @@
                 confirmAlert("Submit Document",
                     "Are you sure you want to submit this document?",
                     function() {
-                        // showLoader();
+                        showLoader();
                         submitDocument();
                     }, "Submit");
             });
@@ -145,7 +146,7 @@
                 @this.call('rejectApplication');
             };
 
-            
+
 
             $(document).on('click', '.submit-documents', function() {
                 const applicationId = $(this).data('applicationid');

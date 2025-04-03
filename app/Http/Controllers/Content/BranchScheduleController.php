@@ -8,6 +8,7 @@ use App\Models\BranchSchedule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Branch;
+use App\Models\BranchInterview;
 
 class BranchScheduleController extends Controller
 {
@@ -15,7 +16,7 @@ class BranchScheduleController extends Controller
     {
 
         if ($request->ajax()) {
-            $query = BranchSchedule::with('applications')->where('branch_id', Auth::guard('employee')->user()->branch_id);
+            $query = BranchSchedule::with('applications', 'applications.BranchInterview')->where('branch_id', Auth::guard('employee')->user()->branch_id);
 
             // Filter by interview date
             if ($request->filled('interview_date')) {

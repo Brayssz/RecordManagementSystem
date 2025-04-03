@@ -49,6 +49,8 @@ class ApplicationForm extends Component
 
     public $error = [];
 
+    public $progress = 0;
+
     public function getBranches()
     {
         $this->branches = Branch::where('status', 'Active')->get();

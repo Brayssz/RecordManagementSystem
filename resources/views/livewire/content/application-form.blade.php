@@ -329,36 +329,71 @@
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12">
-                                <div class="mb-3" x-data="{ docPhotoPreview: '', photoName: '' }">
-                                    <label class="form-label" for="valid_id">Upload Valid ID</label>
-                                    <input class="form-control" type="file" id="valid_id" accept="image/*"
-                                        x-ref="valid_id"
-                                        x-on:change="
-                                            photoName = $refs.valid_id.files[0].name;
-                                            const reader = new FileReader();
-                                            reader.onload = (e) => {
-                                                docPhotoPreview = e.target.result;
-                                            };
-                                            reader.readAsDataURL($refs.valid_id.files[0]);
-                                            $wire.upload('valid_id', $refs.valid_id.files[0]);
-                                        ">
-                                    @error('valid_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                    <div class="product-list mt-3">
-                                        <ul class="row" id="product-list">
-                                            <template x-if="docPhotoPreview !== ''">
-                                                <li class="ps-0 w-100">
-                                                    <div class="product-view-set">
-                                                        <div class="product-views-img d-flex justify-content-center"
-                                                            style="max-width: 100%;">
-                                                            <img :src="docPhotoPreview" alt="Valid ID Preview"
-                                                                class="rounded-4">
+                                <div class="row" x-data="{
+                                        docPhotoPreview: '',
+                                        photoName: '',
+                                        isUploading: false,
+                                        progress: 5
+                                    }"
+                                    x-on:livewire-upload-start="isUploading = true"
+                                    x-on:livewire-upload-finish="isUploading = false; progress = 100"
+                                    x-on:livewire-upload-error="isUploading = false"
+                                    x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group">
+                                                    <div>
+                                                        <label class="form-label" for="valid_id">Upload Valid
+                                                            ID</label>
+                                                        <input class="form-control" type="file" id="valid_id" wire:model="valid_id"
+                                                            accept="image/*" x-ref="valid_id"
+                                                            x-on:change="
+                                                                photoName = $refs.valid_id.files[0].name;
+                                                                const reader = new FileReader();
+                                                                reader.onload = (e) => {
+                                                                    progress = 0;
+                                                                    docPhotoPreview = e.target.result;
+                                                                };
+                                                                reader.readAsDataURL($refs.valid_id.files[0]);
+                                                                $wire.upload('valid_id', $refs.valid_id.files[0]);">
+
+                                                        <div x-show.transition="isUploading"
+                                                            class="progress progress-sm mt-2 rounded">
+                                                            <div class="progress-bar bg-primary progress-bar-striped"
+                                                                role="progressbar" aria-valuenow="40"
+                                                                aria-valuemin="0" aria-valuemax="100"
+                                                                x-bind:style="`width: ${progress}%`">
+                                                                <span class="sr-only">40% Complete (success)</span>
+                                                            </div>
                                                         </div>
+
+                                                        @error('valid_id')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
                                                     </div>
-                                                </li>
-                                            </template>
-                                        </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-5 mt-3">
+                                        <div class="product-list">
+                                            <ul class="row" id="product-list">
+                                                <!-- Show preview only when upload is finished -->
+                                                <template x-if="docPhotoPreview !== '' && progress === 100">
+                                                    <li class="ps-0 w-100">
+                                                        <div class="product-view-set">
+                                                            <div class="product-views-img d-flex justify-content-center"
+                                                                style="max-width: 100%;">
+                                                                <img :src="docPhotoPreview" alt="Valid ID Preview"
+                                                                    class="rounded-4">
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -368,7 +403,15 @@
                         <div class="card-title-head" wire:ignore>
                             <h6><span><i data-feather="info" class="feather-edit"></i></span>Birth Certificate</h6>
                         </div>
-                        <div class="row" x-data="{ docPhotoPreview: '', photoName: '' }">
+                        <div class="row" x-data="{
+                            docPhotoPreview: '',
+                            photoName: '',
+                            isUploading: false,
+                            progress: 5
+                        }" x-on:livewire-upload-start="isUploading = true"
+                            x-on:livewire-upload-finish="isUploading = false; progress = 100"
+                            x-on:livewire-upload-error="isUploading = false"
+                            x-on:livewire-upload-progress="progress = $event.detail.progress">
                             <div class="col-lg-12">
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12">
@@ -376,15 +419,27 @@
                                             <div>
                                                 <label class="form-label" for="birth_certificate">Document</label>
                                                 <input class="form-control" type="file" id="birth_certificate"
-                                                    accept="image/*" x-ref="birth_certificate"
+                                                    wire:model="birth_certificate" accept="image/*"
+                                                    x-ref="birth_certificate"
                                                     x-on:change="
-                                                        photoName = $refs.birth_certificate.files[0].name;
-                                                        const reader = new FileReader();
-                                                        reader.onload = (e) => {
-                                                            docPhotoPreview = e.target.result;
-                                                        };
-                                                        reader.readAsDataURL($refs.birth_certificate.files[0]);
-                                                        $wire.upload('birth_certificate', $refs.birth_certificate.files[0]);">
+                                                    photoName = $refs.birth_certificate.files[0].name;
+                                                    const reader = new FileReader();
+                                                    reader.onload = (e) => {
+                                                        progress = 0;
+                                                        docPhotoPreview = e.target.result;
+                                                    };
+                                                    reader.readAsDataURL($refs.birth_certificate.files[0]);
+                                                    $wire.upload('birth_certificate', $refs.birth_certificate.files[0]);">
+
+                                                <div x-show.transition="isUploading"
+                                                    class="progress progress-sm mt-2 rounded">
+                                                    <div class="progress-bar bg-primary progress-bar-striped"
+                                                        role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                        aria-valuemax="100" x-bind:style="`width: ${progress}%`">
+                                                        <span class="sr-only">40% Complete (success)</span>
+                                                    </div>
+                                                </div>
+
                                                 @error('birth_certificate')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -393,11 +448,12 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-12 mb-5 mt-3">
                                 <div class="product-list">
                                     <ul class="row" id="product-list">
-                                        {{-- PREVIEW SELECTED IMAGE --}}
-                                        <template x-if="docPhotoPreview !== ''">
+                                        <!-- Show preview only when upload is finished -->
+                                        <template x-if="docPhotoPreview !== '' && progress === 100">
                                             <li class="ps-0 w-100">
                                                 <div class="product-view-set">
                                                     <div class="product-views-img d-flex justify-content-center"
@@ -411,11 +467,12 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end">
-                <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-cancel me-2" onclick="window.location.href='{{ route('job-offers') }}'">Cancel</button>
                 <button type="button" class="btn btn-submit submit-application">Submit</button>
             </div>
         </form>
@@ -737,7 +794,7 @@
                                                         .map(Number);
                                                     const newTime = new Date(1970, 0, 1,
                                                         hours, minutes + 90
-                                                        ); // Add 1 hour and 30 minutes
+                                                    ); // Add 1 hour and 30 minutes
                                                     const formattedTime = newTime
                                                         .toLocaleTimeString('en-US', {
                                                             hour: '2-digit',
@@ -753,7 +810,7 @@
                                                         });
                                                     timeSelect.append(
                                                         `<option value="${time}">${startTimeFormatted} - ${formattedTime}</option>`
-                                                        );
+                                                    );
                                                 });
                                                 triggerTimeModal();
                                             });
@@ -769,7 +826,8 @@
                         } else {
                             $('#datepicker').attr('placeholder', 'No Available Interview Schedule');
 
-                            messageAlert('No Available  Schedule', 'No Available Interview Schedule For This Branch');
+                            messageAlert('No Available  Schedule',
+                                'No Available Interview Schedule For This Branch');
                         }
                         tooltipInit();
                     });
