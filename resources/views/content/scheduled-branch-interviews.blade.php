@@ -62,7 +62,7 @@
                                 <th>Job</th>
                                 <th>Country</th>
                                 <th>Interview Date</th>
-                                <th>Status</th>
+                                <th>Interview Time</th>
                                 <th class="no-sort">Action</th>
                             </tr>
                         </thead>
@@ -277,9 +277,10 @@
                         {
                             "data": null,
                             "render": function(data, type, row) {
-                                return row.branch_interview ?
-                                    `<span class="badge badge-linesuccess">Interviewed</span>` :
-                                    `<span class="badge badge-linewarning">Pending</span>`;
+                                if (row.branch_interview) {
+                                    return `${moment(row.branch_interview.start_time, 'HH:mm:ss').format('h:mm A')} - ${moment(row.branch_interview.end_time, 'HH:mm:ss').format('h:mm A')}`;
+                                }
+                                return 'N/A';
                             }
                         },
                         {

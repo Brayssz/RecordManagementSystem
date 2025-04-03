@@ -37,7 +37,7 @@ class RecordBranchInterview extends Component
     {
         $this->branch_interview = BranchInterview::findOrFail($bInterviewID);
         $this->remarks = $this->branch_interview->remarks;
-        $this->rating = $this->branch_interview->rating;
+        $this->rating = $this->branch_interview->rating ?? 0;
         $this->b_interview_id = $this->branch_interview->b_interview_id;
     }
 
