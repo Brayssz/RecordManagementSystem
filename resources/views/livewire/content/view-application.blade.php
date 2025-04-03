@@ -163,15 +163,6 @@
                                                         wire:model.lazy="branch_schedule" readonly>
                                                 </div>
                                             </div>
-
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Branch Interview Schedule</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Branch Interview Schedule" id="branch"
-                                                        wire:model.lazy="branch_schedule" readonly>
-                                                </div>
-                                            </div>
                                             
                                         </div>
                                     </div>

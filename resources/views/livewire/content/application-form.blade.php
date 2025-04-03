@@ -25,7 +25,8 @@
                         </div>
                         <div class="input-blocks mb-0">
                             <div class="image-upload mb-0">
-                                <input type="file" wire:model.live="photo" x-ref="photo" x-on:change="
+                                <input type="file" wire:model.live="photo" x-ref="photo"
+                                    x-on:change="
                                         const file = $refs.photo.files[0];
                                         const img = new Image();
                                         img.onload = () => {
@@ -104,8 +105,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="email">Email</label>
-                                <input type="email" class="form-control" placeholder="e.g., name@mail.com" id="email"
-                                    wire:model.lazy="email">
+                                <input type="email" class="form-control" placeholder="e.g., name@mail.com"
+                                    id="email" wire:model.lazy="email">
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -151,8 +152,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="citizenship">Citizenship</label>
-                                <input type="text" class="form-control" placeholder="Enter citizenship" id="citizenship"
-                                    wire:model.lazy="citizenship">
+                                <input type="text" class="form-control" placeholder="Enter citizenship"
+                                    id="citizenship" wire:model.lazy="citizenship">
                                 @error('citizenship')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -180,7 +181,8 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="mb-3" wire:ignore>
                                     <label class="form-label" for="region">Region</label>
-                                    <select class="form-select" id="region" name="region" wire:model.lazy="region">
+                                    <select class="form-select" id="region" name="region"
+                                        wire:model.lazy="region">
                                         <option value="">Select Region</option>
                                         @foreach ($locationData as $region => $data)
                                             <option value="{{ $region }}">
@@ -197,8 +199,8 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="mb-3" wire:ignore>
                                     <label class="form-label" for="province">Province</label>
-                                    <select class="form-select" id="province" name="province" wire:model.lazy="province"
-                                        disabled>
+                                    <select class="form-select" id="province" name="province"
+                                        wire:model.lazy="province" disabled>
                                         <option value="">Select Province</option>
                                     </select>
                                     @error('province')
@@ -223,8 +225,8 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="mb-3" wire:ignore>
                                     <label class="form-label" for="barangay">Barangay</label>
-                                    <select class="form-select" id="barangay" name="barangay" wire:model.lazy="barangay"
-                                        disabled>
+                                    <select class="form-select" id="barangay" name="barangay"
+                                        wire:model.lazy="barangay" disabled>
                                         <option value="">Select Barangay</option>
                                     </select>
                                     @error('barangay')
@@ -288,7 +290,8 @@
                                 <div class="mb-3">
                                     <label class="form-label" for="branch_id">Interview Schedule</label>
                                     <div class=" position-relative">
-                                        <input type="text" id="datepicker" class="form-control pe-5 daterange_filter"
+                                        <input type="text" id="datepicker"
+                                            class="form-control pe-5 daterange_filter"
                                             placeholder="Select a branch first" readonly>
                                         <i
                                             class="far fa-calendar position-absolute top-50 end-0 translate-middle-y pe-3"></i>
@@ -329,7 +332,8 @@
                                 <div class="mb-3" x-data="{ docPhotoPreview: '', photoName: '' }">
                                     <label class="form-label" for="valid_id">Upload Valid ID</label>
                                     <input class="form-control" type="file" id="valid_id" accept="image/*"
-                                        x-ref="valid_id" x-on:change="
+                                        x-ref="valid_id"
+                                        x-on:change="
                                             photoName = $refs.valid_id.files[0].name;
                                             const reader = new FileReader();
                                             reader.onload = (e) => {
@@ -437,8 +441,10 @@
                                     <div class="new-employee-field">
                                         <div class="row">
                                             <div class="mb-3" wire:ignore>
-                                                <label class="form-label" for="valid_id_type">Available Interview Dates</label>
-                                                <select class="form-select time-select" id="start_time" name="time-select">
+                                                <label class="form-label" for="valid_id_type">Available Interview
+                                                    Dates</label>
+                                                <select class="form-select time-select" id="start_time"
+                                                    name="time-select">
                                                     <option value="">Available Time</option>
                                                 </select>
                                             </div>
@@ -462,7 +468,7 @@
 
     @push('scripts')
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $(document).on('change', '[id]', handleInputChange);
                 populateEditForm();
                 handleLocationDropdowns();
@@ -497,9 +503,9 @@
                 messageAlert('Invalid Document', message);
             }
 
-            $('.submit-time').on('click', function () {
-                confirmAlert('Are you sure you want to submit this schedule?', 'Submit Schedule', function () {
-                    let time  = $('.time-select').val();
+            $('.submit-time').on('click', function() {
+                confirmAlert('Are you sure you want to submit this schedule?', 'Submit Schedule', function() {
+                    let time = $('.time-select').val();
                 }, 'Submit');
             });
 
@@ -527,7 +533,8 @@
                                 const municipalityHtml = Object.keys(municipalities).map(mun =>
                                     `<option value="${mun}" ${mun === municipality ? 'selected' : ''}>${mun}</option>`
                                 ).join('');
-                                $('#municipality').html(`<option value="">Select Municipality</option>${municipalityHtml}`).prop('disabled', false);
+                                $('#municipality').html(`<option value="">Select Municipality</option>${municipalityHtml}`)
+                                    .prop('disabled', false);
 
                                 if (municipality) {
                                     const barangays = municipalities[municipality]?.barangay_list || [];
@@ -535,7 +542,8 @@
                                         const barangayHtml = barangays.map(bgy =>
                                             `<option value="${bgy}" ${bgy === barangay ? 'selected' : ''}>${bgy}</option>`
                                         ).join('');
-                                        $('#barangay').html(`<option value="">Select Barangay</option>${barangayHtml}`).prop('disabled', false);
+                                        $('#barangay').html(`<option value="">Select Barangay</option>${barangayHtml}`).prop(
+                                            'disabled', false);
                                     }
                                 }
                             }
@@ -544,15 +552,15 @@
                 }
             }
 
-            $('.submit-application').on('click', function () {
+            $('.submit-application').on('click', function() {
                 console.log("hello");
-                confirmAlert('Are you sure you want to submit this application?', 'Submit Application', function () {
+                confirmAlert('Are you sure you want to submit this application?', 'Submit Application', function() {
                     showLoader();
                     submitForm();
                 }, 'Submit');
             });
 
-            const submitForm = function () {
+            const submitForm = function() {
 
                 console.log("Submitting form...");
                 @this.call('submit_application').then(() => {
@@ -578,7 +586,7 @@
             }
 
             function handleLocationDropdowns() {
-                $('#region').on('change', function () {
+                $('#region').on('change', function() {
                     const selectedRegion = $(this).val();
                     $('#province').prop('disabled', !selectedRegion);
                     $('#municipality').prop('disabled', true).html(
@@ -599,7 +607,7 @@
                     }
                 });
 
-                $('#province').on('change', function () {
+                $('#province').on('change', function() {
                     const selectedProvince = $(this).val();
                     $('#municipality').prop('disabled', !selectedProvince);
                     $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
@@ -620,7 +628,7 @@
                     }
                 });
 
-                $('#municipality').on('change', function () {
+                $('#municipality').on('change', function() {
                     const selectedMunicipality = $(this).val();
                     $('#barangay').prop('disabled', !selectedMunicipality);
 
@@ -642,7 +650,7 @@
                 });
             }
 
-            const triggerTimeModal = function () {
+            const triggerTimeModal = function() {
 
                 $('#time-modal').modal('show');
             }
@@ -672,79 +680,97 @@
                                 hour12: true
                             })}`;
                             tooltips[dateKey] =
-                                `Available: ${schedule.available_slots} slots  |  Time: ${formattedTime}`;
+                                `Branch Available Time Range: ${formattedTime}`;
                         });
 
                         console.log(allowedDates, tooltips);
 
-                        $('#datepicker').attr('placeholder', 'Select a valid date');
+                        console.log(allowedDates === null);
+                        if (allowedDates !== null) {
+                            $('#datepicker').attr('placeholder', 'Select a valid date');
 
-                        $("#datepicker").flatpickr({
-                            noCalendar: false,
-                            dateFormat: "Y-m-d",
-                            disable: [
-                                function (date) {
+                            $("#datepicker").flatpickr({
+                                noCalendar: false,
+                                dateFormat: "Y-m-d",
+                                disable: [
+                                    function(date) {
+                                        const formattedDate = date.getFullYear() + '-' +
+                                            String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                                            String(date.getDate()).padStart(2, '0');
+                                        return !Object.keys(allowedDates).includes(formattedDate);
+                                    }
+                                ],
+                                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                                    const date = dayElem.dateObj;
                                     const formattedDate = date.getFullYear() + '-' +
                                         String(date.getMonth() + 1).padStart(2, '0') + '-' +
                                         String(date.getDate()).padStart(2, '0');
-                                    return !Object.keys(allowedDates).includes(formattedDate);
-                                }
-                            ],
-                            onDayCreate: function (dObj, dStr, fp, dayElem) {
-                                const date = dayElem.dateObj;
-                                const formattedDate = date.getFullYear() + '-' +
-                                    String(date.getMonth() + 1).padStart(2, '0') + '-' +
-                                    String(date.getDate()).padStart(2, '0');
 
-                                if (tooltips[formattedDate]) {
-                                    dayElem.setAttribute('data-tippy-content', tooltips[formattedDate]);
-                                    dayElem.classList.add('has-tooltip');
-                                }
-                            },
-                            onChange: function (selectedDates, dateStr, instance) {
-                                console.log("Selected Date String:", dateStr);
-                                console.log("Allowed Dates Object:", allowedDates);
+                                    if (tooltips[formattedDate]) {
+                                        dayElem.setAttribute('data-tippy-content', tooltips[
+                                            formattedDate]);
+                                        dayElem.classList.add('has-tooltip');
+                                    }
+                                },
+                                onChange: function(selectedDates, dateStr, instance) {
+                                    console.log("Selected Date String:", dateStr);
+                                    console.log("Allowed Dates Object:", allowedDates);
 
-                                const selectedDate = dateStr.split(' ')[0];
-                                if (allowedDates[selectedDate]) {
-                                    $("#datepicker").attr("data-date-id", allowedDates[selectedDate]);
+                                    const selectedDate = dateStr.split(' ')[0];
+                                    if (allowedDates[selectedDate]) {
+                                        $("#datepicker").attr("data-date-id", allowedDates[
+                                            selectedDate]);
 
-                                    tooltipInit();
+                                        tooltipInit();
 
-                                    @this.set('schedule_id', allowedDates[selectedDate]);
+                                        @this.set('schedule_id', allowedDates[selectedDate]);
 
-                                    @this.call('getAvailableTimes', allowedDates[selectedDate]).then(availableTimes => {
-                                        console.log(availableTimes);
+                                        @this.call('getAvailableTimes', allowedDates[selectedDate])
+                                            .then(availableTimes => {
+                                                console.log(availableTimes);
 
-                                        const timeSelect = $('.time-select');
-                                        timeSelect.html('<option value="">Available Time</option>');
-                                        availableTimes.forEach(time => {
-                                            const [hours, minutes] = time.split(':').map(Number);
-                                            const newTime = new Date(1970, 0, 1, hours, minutes + 90); // Add 1 hour and 30 minutes
-                                            const formattedTime = newTime.toLocaleTimeString('en-US', {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                hour12: true
+                                                const timeSelect = $('.time-select');
+                                                timeSelect.html(
+                                                    '<option value="">Available Time</option>');
+                                                availableTimes.forEach(time => {
+                                                    const [hours, minutes] = time.split(':')
+                                                        .map(Number);
+                                                    const newTime = new Date(1970, 0, 1,
+                                                        hours, minutes + 90
+                                                        ); // Add 1 hour and 30 minutes
+                                                    const formattedTime = newTime
+                                                        .toLocaleTimeString('en-US', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        });
+                                                    const startTimeFormatted = new Date(
+                                                            1970, 0, 1, hours, minutes)
+                                                        .toLocaleTimeString('en-US', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true
+                                                        });
+                                                    timeSelect.append(
+                                                        `<option value="${time}">${startTimeFormatted} - ${formattedTime}</option>`
+                                                        );
+                                                });
+                                                triggerTimeModal();
                                             });
-                                            const startTimeFormatted = new Date(1970, 0, 1, hours, minutes).toLocaleTimeString('en-US', {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                hour12: true
-                                            });
-                                            timeSelect.append(`<option value="${time}">${startTimeFormatted} - ${formattedTime}</option>`);
-                                        });
-                                        triggerTimeModal();
-                                    });
 
-                                } else {
-                                    $("#datepicker").removeAttr("data-date-id");
-                                    console.log("Date not in allowedDates");
+                                    } else {
+                                        $("#datepicker").removeAttr("data-date-id");
+                                        console.log("Date not in allowedDates");
 
-                                    tooltipInit();
+                                        tooltipInit();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            $('#datepicker').attr('placeholder', 'No Available Interview Schedule');
 
+                            messageAlert('No Available  Schedule', 'No Available Interview Schedule For This Branch');
+                        }
                         tooltipInit();
                     });
                 }

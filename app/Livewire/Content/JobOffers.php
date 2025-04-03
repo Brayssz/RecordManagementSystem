@@ -35,6 +35,7 @@ class JobOffers extends Component
     public function checkExistingApplication()
     {
         $applications = ApplicationForm::where('applicant_id', Auth::guard('applicant')->user()->applicant_id)
+            ->whereNotIn('status', ['Rejected', 'Cancelled'])
             ->get();
 
         if ($applications->isEmpty()) {

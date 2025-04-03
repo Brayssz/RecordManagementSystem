@@ -475,11 +475,14 @@ class ApplicationForm extends Component
     }
     public function getSchedules()
     {
-        return BranchSchedule::where('available_slots', '>', 0)
-            ->whereDate('interview_date', '>=', Carbon::now('Asia/Manila'))
+        return BranchSchedule::whereDate('interview_date', '>=', Carbon::now('Asia/Manila'))
             ->where('branch_id', $this->branch_id)
-            ->get();
+            ->get()
+            ->filter(function ($schedule) {
+                return !empty($this->getAvailableTimes($schedule->schedule_id));
+            });
     }
+
     public function mount($job_id)
     {
         $this->job_id = $job_id;

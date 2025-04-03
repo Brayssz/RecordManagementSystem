@@ -50,7 +50,7 @@
                                         <option value="Waiting">Waiting to be Hired</option>
                                         <option value="Hired">Waiting to be Deployed</option>
                                         <option value="Deployed">Deployed With Departure Schedule</option>
-                                        <option value="Canceled">Canceled Application</option>
+                                        <option value="Cancelled">Canceled Application</option>
                                         <option value="Rejected">Rejected Application</option>
                                     </select>
                                 </div>

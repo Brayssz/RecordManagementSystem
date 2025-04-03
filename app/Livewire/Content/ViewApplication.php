@@ -21,7 +21,7 @@ class ViewApplication extends Component
     public $photoPreview;
 
     public function getApplication($application_id) {
-        $application = ApplicationForm::where('application_id', $application_id)->with('applicant', 'branch', 'schedule', 'employerInterview', 'hiring', 'deployment')->first();
+        $application = ApplicationForm::where('application_id', $application_id)->with('applicant', 'branch', 'schedule', 'employerInterview', 'hiring', 'deployment', 'branchInterview')->first();
 
         if ($application) {
             $this->applicant_id = $application->applicant->applicant_id;
@@ -42,7 +42,7 @@ class ViewApplication extends Component
             $this->postal_code = $application->applicant->postal_code;
             $this->citizenship = $application->applicant->citizenship;
 
-            $this->branch_schedule = $application->schedule ? Carbon::parse($application->schedule->interview_date)->format('F j, Y') . " " . Carbon::parse($application->schedule->available_start_time)->format('g:i A') . " - " . Carbon::parse($application->schedule->available_end_time)->format('g:i A') : null;
+            $this->branch_schedule = $application->schedule ? Carbon::parse($application->schedule->interview_date)->format('F j, Y') . " ( " . Carbon::parse($application->branchInterview->start_time)->format('g:i A') . " - " . Carbon::parse($application->branchInterview->end_time)->format('g:i A') . " )" : null;
             $this->employer_schedule = $application->employerInterview ? Carbon::parse($application->employerInterview->interview_date)->format('F j, Y') . " " . Carbon::parse($application->employerInterview->inhterview_time)->format('g:i A') : null;
             $this->meeting_link = $application->employerInterview ? $application->employerInterview->meeting_link : null;
             $this->referal_code = $application->hiring ? $application->hiring->confirmation_code : null;
