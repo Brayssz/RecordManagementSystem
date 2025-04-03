@@ -628,7 +628,10 @@
                         $('#datepicker').attr('placeholder', 'Select a valid date');
 
                         $("#datepicker").flatpickr({
-                            dateFormat: "Y-m-d",
+                            enableTime: true,
+                            noCalendar: false,
+                            dateFormat: "Y-m-d H:i",
+                            time_24hr: false,
                             disable: [
                                 function(date) {
                                     const formattedDate = date.getFullYear() + '-' +
@@ -652,12 +655,13 @@
                                 console.log("Selected Date String:", dateStr);
                                 console.log("Allowed Dates Object:", allowedDates);
 
-                                if (allowedDates[dateStr]) {
-                                    $("#datepicker").attr("data-date-id", allowedDates[dateStr]);
+                                const selectedDate = dateStr.split(' ')[0];
+                                if (allowedDates[selectedDate]) {
+                                    $("#datepicker").attr("data-date-id", allowedDates[selectedDate]);
 
                                     tooltipInit();
 
-                                    @this.set('schedule_id', allowedDates[dateStr]);
+                                    @this.set('schedule_id', allowedDates[selectedDate]);
                                 } else {
                                     $("#datepicker").removeAttr("data-date-id");
                                     console.log("Date not in allowedDates");
