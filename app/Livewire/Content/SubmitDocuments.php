@@ -89,9 +89,9 @@ class SubmitDocuments extends Component
         ]);
 
         
-        // if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
-        //     $this->ValidateDocuments();
-        // }
+        if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
+            $this->ValidateDocuments();
+        }
 
         if ($this->photo_upload == null && $this->photo == null) {
             throw ValidationException::withMessages([

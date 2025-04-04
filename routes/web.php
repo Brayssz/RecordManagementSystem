@@ -18,7 +18,7 @@ use App\Http\Controllers\Content\ReportController;
 use App\Http\Controllers\Content\TextractController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::middleware(['employee'])->group(function () {
