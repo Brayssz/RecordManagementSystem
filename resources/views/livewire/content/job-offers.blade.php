@@ -169,8 +169,6 @@
 
                     feather.replace();
                 });
-
-                
             };
 
             $('#searchInput').on('input', function() {
