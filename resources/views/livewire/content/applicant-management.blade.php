@@ -57,7 +57,7 @@
                                                             img.src = URL.createObjectURL(file);
                                                         ">
                                                     <div class="image-uploads">
-                                                        <h4>Change Image</h4>
+                                                        <h4>Upload Image</h4>
                                                     </div>
                                                 </div>
                                             </div>

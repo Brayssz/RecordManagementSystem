@@ -32,7 +32,12 @@ class ApplicationController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('applicant_id', 'like', '%' . $search . '%')
                         ->orWhere('branch_id', 'like', '%' . $search . '%')
-                        ->orWhere('job_id', 'like', '%' . $search . '%');
+                        ->orWhere('job_id', 'like', '%' . $search . '%')
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        });
                 });
             }
 
@@ -91,6 +96,12 @@ class ApplicationController extends Controller
                         ->orWhere('job_id', 'like', '%' . $search . '%')
                         ->orWhereHas('applicant', function ($q) use ($search) {
                             $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('job.employer', function ($q) use ($search) {
+                            $q->where('company_name', 'like', '%' . $search . '%')
+                                ->orWhere('first_name', 'like', '%' . $search . '%')
                                 ->orWhere('middle_name', 'like', '%' . $search . '%')
                                 ->orWhere('last_name', 'like', '%' . $search . '%');
                         });
@@ -152,7 +163,18 @@ class ApplicationController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('applicant_id', 'like', '%' . $search . '%')
                         ->orWhere('branch_id', 'like', '%' . $search . '%')
-                        ->orWhere('job_id', 'like', '%' . $search . '%');
+                        ->orWhere('job_id', 'like', '%' . $search . '%')
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('job.employer', function ($q) use ($search) {
+                            $q->where('company_name', 'like', '%' . $search . '%')
+                                ->orWhere('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        });
                 });
             }
 
@@ -266,7 +288,18 @@ class ApplicationController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('applicant_id', 'like', '%' . $search . '%')
                         ->orWhere('branch_id', 'like', '%' . $search . '%')
-                        ->orWhere('job_id', 'like', '%' . $search . '%');
+                        ->orWhere('job_id', 'like', '%' . $search . '%')
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('job.employer', function ($q) use ($search) {
+                            $q->where('company_name', 'like', '%' . $search . '%')
+                                ->orWhere('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        });
                 });
             }
 
@@ -390,7 +423,18 @@ class ApplicationController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('applicant_id', 'like', '%' . $search . '%')
                         ->orWhere('branch_id', 'like', '%' . $search . '%')
-                        ->orWhere('job_id', 'like', '%' . $search . '%');
+                        ->orWhere('job_id', 'like', '%' . $search . '%')
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('job.employer', function ($q) use ($search) {
+                            $q->where('company_name', 'like', '%' . $search . '%')
+                                ->orWhere('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        });
                 });
             }
 
@@ -465,6 +509,17 @@ class ApplicationController extends Controller
                         ->orWhere('job_id', 'like', '%' . $search . '%')
                         ->orWhereHas('hiring', function ($q) use ($search) {
                             $q->where('confirmation_code', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('applicant', function ($q) use ($search) {
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('job.employer', function ($q) use ($search) {
+                            $q->where('company_name', 'like', '%' . $search . '%')
+                                ->orWhere('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
                         });
                 });
             }

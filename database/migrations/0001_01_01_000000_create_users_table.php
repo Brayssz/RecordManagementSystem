@@ -58,7 +58,6 @@ return new class extends Migration
             $table->string('gender');
             $table->string('email')->unique();
             $table->string('contact_number');
-            $table->string('password');
             $table->string('industry');
             $table->string('profile_photo_path')->nullable();
             $table->string('company_name');

@@ -28,9 +28,9 @@ class AppController extends Controller
             if (Auth::user()->position == 'Admin') {
                 return $this->adminDashboard();
             } else if (Auth::user()->position == 'Manager') {
-                return view('content.manager-dashboard');
+                return $this->managerDashboard();
             } else if (Auth::user()->position == 'Clerk') {
-                return view('content.clerk-dashboard');
+                return $this->clerkDashboard();
             }
         } else if (session('auth_user_type') == 'employer') {
             return view('content.employer-dashboard');
@@ -39,6 +39,65 @@ class AppController extends Controller
         }
 
         // return view('content.admin-dashboard');
+    }
+
+    public function clerkDashboard()
+    {
+        $total_applications = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->count();
+
+        $total_scheduled_interviews = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Pending')
+            ->whereHas('schedule', function ($query) {
+                $query->whereDate('interview_date', '>=', now()->toDateString());
+            })
+            ->count();
+
+        $total_approve_applications = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Submitting')
+            ->count();
+
+        $total_rejected_applications = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Rejected')
+            ->count();
+
+
+        $applications_submitting_documents = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Submitting')
+            ->with('applicant', 'job')
+            ->get();
+
+        return view('content.clerk-dashboard', compact('total_applications', 'total_scheduled_interviews', 'total_approve_applications', 'total_rejected_applications', 'applications_submitting_documents'));
+    }
+
+    public function managerDashboard()
+    {
+        $total_applications = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->count();
+
+        $total_scheduled_interviews = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Pending')
+            ->whereHas('schedule', function ($query) {
+                $query->whereDate('interview_date', '>=', now()->toDateString());
+            })
+            ->count();
+
+        $total_approve_applications = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Submitting')
+            ->count();
+
+        $total_rejected_applications = ApplicationForm::where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Rejected')
+            ->count();
+
+        $scheduled_interviews_list = ApplicationForm::with('applicant', 'job')->where('branch_id', Auth::guard('employee')->user()->branch_id)
+            ->where('status', 'Pending')
+            ->whereHas('schedule', function ($query) {
+                $query->whereDate('interview_date', '>=', now()->toDateString());
+            })
+            ->get();
+
+        return view('content.manager-dashboard', compact('total_applications', 'total_scheduled_interviews', 'total_approve_applications', 'total_rejected_applications', 'scheduled_interviews_list'));
     }
 
 

@@ -155,32 +155,38 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive dataview">
-                            <table class="table dashboard-recent-products">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Applicant</th>
-                                        <th>Job</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($scheduled_interviews_list as $scheduled_interview)
+                        @if ($scheduled_interviews_list->isEmpty())
+                            <div class="text-center mt-4">
+                                <i class="fa fa-calendar-times" style="font-size: 2rem; color: #dc3545;"></i>
+                                <p class="mt-4">No scheduled interviews available.</p>
+                            </div>
+                        @else
+                            <div class="table-responsive dataview">
+                                <table class="table dashboard-recent-products">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td class="productimgname">
-                                                <a href="product-list.html" class="product-img">
-                                                    <img src="/storage/{{$scheduled_interview->applicant->profile_photo_path}}" alt="product" />
-                                                </a>
-                                                <a>{{ $scheduled_interview->applicant->first_name }} {{ substr($scheduled_interview->applicant->middle_name, 0, 1) }}. {{ $scheduled_interview->applicant->last_name }}</a>
-                                            </td>
-                                            <td>{{$scheduled_interview->job->job_title}}</td>
+                                            <th>#</th>
+                                            <th>Applicant</th>
+                                            <th>Job</th>
                                         </tr>
-                                    @endforeach
-                                   
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($scheduled_interviews_list as $scheduled_interview)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td class="productimgname">
+                                                    <a href="product-list.html" class="product-img">
+                                                        <img src="/storage/{{$scheduled_interview->applicant->profile_photo_path}}" alt="product" />
+                                                    </a>
+                                                    <a>{{ $scheduled_interview->applicant->first_name }} {{ substr($scheduled_interview->applicant->middle_name, 0, 1) }}. {{ $scheduled_interview->applicant->last_name }}</a>
+                                                </td>
+                                                <td>{{$scheduled_interview->job->job_title}}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

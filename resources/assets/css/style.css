@@ -24161,6 +24161,7 @@ span.badge.badges-warning {
   -ms-flex-pack: space-between;
   margin-top: -40px;
   width: 130px;
+  height: 130px;
   position: relative;
   border: 10px solid #ffffff;
   border-radius: 50%;

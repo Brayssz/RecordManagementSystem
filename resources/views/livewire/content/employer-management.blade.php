@@ -46,7 +46,7 @@
                                                             reader.readAsDataURL($refs.photo.files[0]);
                                                         ">
                                                     <div class="image-uploads">
-                                                        <h4>Change Image</h4>
+                                                        <h4>Upload Image</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -183,39 +183,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="pass-info">
-                                            <div class="card-title-head" wire:ignore>
-                                                <h6><span><i data-feather="info"
-                                                            class="feather-edit"></i></span>Password</h6>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-4 col-md-6 input-blocks">
-                                                    <label for="password">Password</label>
-                                                    <div class="mb-3 pass-group">
-                                                        <input type="password" class="pass-input" id="password"
-                                                            wire:model.lazy="password"
-                                                            placeholder="Enter your password">
-                                                        <span class="fas toggle-password fa-eye-slash"></span>
-                                                    </div>
-                                                    @error('password')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                                <div class="col-lg-4 col-md-6 input-blocks">
-                                                    <label for="password_confirmation">Confirm Password</label>
-                                                    <div class="mb-3 pass-group">
-                                                        <input type="password" class="pass-inputa"
-                                                            id="password_confirmation"
-                                                            wire:model.lazy="password_confirmation"
-                                                            placeholder="Confirm your password">
-                                                        <span class="fas toggle-passworda fa-eye-slash"></span>
-                                                    </div>
-                                                    @error('password_confirmation')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

@@ -22,7 +22,7 @@ class EmployerManagement extends Component
     public $total_employer;
 
     public $employer_id, $first_name, $middle_name, $last_name, $suffix, $email, $contact_number, $gender, $status;
-    public $industry, $company_name, $password, $password_confirmation;
+    public $industry, $company_name;
 
     public $photo;
     public $photoPreview;
@@ -45,8 +45,6 @@ class EmployerManagement extends Component
             $this->company_name = $this->employer->company_name;
             $this->photoPreview = $this->getProfilePhotoUrl($this->employer);
 
-            $this->password = null;
-            $this->password_confirmation = null;
         } else {
             session()->flash('error', 'Employer not found.');
         }
@@ -59,10 +57,6 @@ class EmployerManagement extends Component
 
     protected function rules()
     {
-        $passwordRules = $this->employer_id
-            ? 'nullable|string|min:8|confirmed'
-            : 'required|string|min:8|confirmed';
-
         return [
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -87,7 +81,6 @@ class EmployerManagement extends Component
             'gender' => 'required|in:Male,Female,Others',
             'industry' => 'required|string|max:255',
             'company_name' => 'required|string|max:255',
-            'password' => $passwordRules,
             'photo' => 'nullable|image|max:1024',
             'status' => 'nullable|string|max:255',
         ];
@@ -140,7 +133,7 @@ class EmployerManagement extends Component
         $this->reset([
             'first_name', 'middle_name', 'last_name', 'suffix', 'email', 
             'contact_number', 'gender', 'industry', 'company_name', 
-            'password', 'photo', 'status', 'photoPreview', 'employer_id'
+            'photo', 'status', 'photoPreview', 'employer_id'
         ]);
     }
 
@@ -160,7 +153,6 @@ class EmployerManagement extends Component
                 'industry' => $this->industry,
                 'company_name' => $this->company_name,
                 'status' => 'Active',
-                'password' => bcrypt($this->password), 
                 'profile_photo_path' => $photoPath ?? null,
             ]);
 
@@ -182,10 +174,6 @@ class EmployerManagement extends Component
             $this->employer->status = $this->status;
             $this->employer->industry = $this->industry;
             $this->employer->company_name = $this->company_name;
-
-            if (isset($this->password)) {
-                $this->employer->password = bcrypt($this->password);
-            }
 
             $this->employer->save();
 

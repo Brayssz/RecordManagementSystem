@@ -34,7 +34,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17/dist/sweetalert2.min.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     @vite(['resources/assets/css/style.css', 'resources/assets/css/sidebar.css'])
     {{-- @livewireStyles<!-- Styles - --}}
@@ -168,11 +168,11 @@
                                     class="user-name">{{ $user->first_name . ' ' . ($user->middle_name != null ? substr($user->middle_name, 0, 1) . '. ' : '') . $user->last_name }}</span>
                                 @if ($position == 'employee')
                                     @if ($user->position == 'Manager' || $user->position == 'Clerk')
-                                        <span class="user-role"><strong>{{$user->branch->municipality}} Branch</strong> | {{ $user->position }}</span>
+                                        <span class="user-role"><strong>{{ $user->branch->municipality }}
+                                                Branch</strong> | {{ $user->position }}</span>
                                     @else
                                         <span class="user-role">{{ $user->position }}</span>
                                     @endif
-                                   
                                 @else
                                     <span class="user-role">{{ ucfirst($position) }}</span>
                                 @endif
@@ -375,64 +375,83 @@
 
                             </ul>
                         </li>
-                        <li class="submenu-open">
-                            <h6 class="submenu-hdr">Reports</h6>
-                            <ul>
-                                @if ($position == 'employee')
-                                    @if ($user->position == 'Admin')
-                                        <li class="{{ Request::is('branch-performance-report') ? 'active' : '' }}">
-                                            <a href="branch-performance-report"><i
-                                                    data-feather="bar-chart-2"></i><span>Branch
-                                                    Performance</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('applications-report') ? 'active' : '' }}">
-                                            <a href="applications-report"><i data-feather="file"></i><span>Applications</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('applicant-deployment-report') ? 'active' : '' }}">
-                                            <a href="applicant-deployment-report"><i
-                                                    data-feather="send"></i><span>Applicant
-                                                    Deployment</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('hired-applicant-report') ? 'active' : '' }}">
-                                            <a href="hired-applicant-report"><i
-                                                    data-feather="user-check"></i><span>Hired
-                                                    Applicant</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('employer-interview-report') ? 'active' : '' }}">
-                                            <a href="employer-interview-report"><i
-                                                    data-feather="file-text"></i><span>Employer
-                                                    Interview</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('registered-applicants-report') ? 'active' : '' }}">
-                                            <a href="registered-applicants-report"><i data-feather="users"></i><span>Registered Applicants</span></a>
-                                        </li>
-                                    @endif
+                        @if ($position == 'employee')
 
-                                    @if ($user->position == 'Manager')
-                                        <li class="{{ Request::is('applications-report') ? 'active' : '' }}">
-                                            <a href="applications-report"><i data-feather="file"></i><span>Applications</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('applicant-deployment-report') ? 'active' : '' }}">
-                                            <a href="applicant-deployment-report"><i data-feather="send"></i><span>Applicant
-                                                    Deployment</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('hired-applicant-report') ? 'active' : '' }}">
-                                            <a href="hired-applicant-report"><i data-feather="user-check"></i><span>Hired
-                                                    Applicant</span></a>
-                                        </li>
-                                        <li class="{{ Request::is('branch-interview-report') ? 'active' : '' }}">
-                                            <a href="branch-interview-report"><i data-feather="file-text"></i><span>Branch
-                                                    Interview</span></a>
-                                        </li>
+                            @if ($user->position != 'Clerk')
+                                <li class="submenu-open">
+                                    <h6 class="submenu-hdr">Reports</h6>
+                                    <ul>
 
-                                        <li class="{{ Request::is('registered-applicants-report') ? 'active' : '' }}">
-                                            <a href="registered-applicants-report"><i data-feather="users"></i><span>Registered Applicants</span></a>
-                                        </li>
-                                    @endif
-                                @endif
+                                        @if ($user->position == 'Admin')
+                                            <li
+                                                class="{{ Request::is('branch-performance-report') ? 'active' : '' }}">
+                                                <a href="branch-performance-report"><i
+                                                        data-feather="bar-chart-2"></i><span>Branch
+                                                        Performance</span></a>
+                                            </li>
+                                            <li class="{{ Request::is('applications-report') ? 'active' : '' }}">
+                                                <a href="applications-report"><i
+                                                        data-feather="file"></i><span>Applications</span></a>
+                                            </li>
+                                            <li
+                                                class="{{ Request::is('applicant-deployment-report') ? 'active' : '' }}">
+                                                <a href="applicant-deployment-report"><i
+                                                        data-feather="send"></i><span>Applicant
+                                                        Deployment</span></a>
+                                            </li>
+                                            <li class="{{ Request::is('hired-applicant-report') ? 'active' : '' }}">
+                                                <a href="hired-applicant-report"><i
+                                                        data-feather="user-check"></i><span>Hired
+                                                        Applicant</span></a>
+                                            </li>
+                                            <li
+                                                class="{{ Request::is('employer-interview-report') ? 'active' : '' }}">
+                                                <a href="employer-interview-report"><i
+                                                        data-feather="file-text"></i><span>Employer
+                                                        Interview</span></a>
+                                            </li>
+                                            <li
+                                                class="{{ Request::is('registered-applicants-report') ? 'active' : '' }}">
+                                                <a href="registered-applicants-report"><i
+                                                        data-feather="users"></i><span>Registered Applicants</span></a>
+                                            </li>
+                                        @endif
 
-                            </ul>
-                        </li>
+                                        @if ($user->position == 'Manager')
+                                            <li class="{{ Request::is('applications-report') ? 'active' : '' }}">
+                                                <a href="applications-report"><i
+                                                        data-feather="file"></i><span>Applications</span></a>
+                                            </li>
+                                            <li
+                                                class="{{ Request::is('applicant-deployment-report') ? 'active' : '' }}">
+                                                <a href="applicant-deployment-report"><i
+                                                        data-feather="send"></i><span>Applicant
+                                                        Deployment</span></a>
+                                            </li>
+                                            <li class="{{ Request::is('hired-applicant-report') ? 'active' : '' }}">
+                                                <a href="hired-applicant-report"><i
+                                                        data-feather="user-check"></i><span>Hired
+                                                        Applicant</span></a>
+                                            </li>
+                                            <li class="{{ Request::is('branch-interview-report') ? 'active' : '' }}">
+                                                <a href="branch-interview-report"><i
+                                                        data-feather="file-text"></i><span>Branch
+                                                        Interview</span></a>
+                                            </li>
+
+                                            <li
+                                                class="{{ Request::is('registered-applicants-report') ? 'active' : '' }}">
+                                                <a href="registered-applicants-report"><i
+                                                        data-feather="users"></i><span>Registered Applicants</span></a>
+                                            </li>
+                                        @endif
+
+
+                                    </ul>
+                                </li>
+                            @endif
+
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -495,7 +514,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     @vite(['resources/assets/js/script.js', 'resources/assets/js/custom-select2.js', 'resources/assets/js/mask.js', 'resources/assets/js/theme-script.js', 'resources/assets/js/chart-data.js'])
     @livewireScripts

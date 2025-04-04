@@ -14,7 +14,7 @@ class Employer extends Authenticatable
 
     protected $fillable = [
         'first_name', 'middle_name', 'last_name',
-        'gender', 'email', 'password', 'industry', 'company_name', 'contact_number', 'status', 'suffix', 'profile_photo_path'
+        'gender', 'email', 'industry', 'company_name', 'contact_number', 'status', 'suffix', 'profile_photo_path'
     ];
 
     public function jobOffers()
