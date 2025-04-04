@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeProfile extends Component
 {
@@ -189,7 +190,7 @@ class EmployeeProfile extends Component
         $this->employee->postal_code = $this->postal_code;
 
         if (isset($this->password)) {
-            $this->employee->password = bcrypt($this->password);
+            $this->employee->password = Hash::make($this->password);
         }
 
         $this->employee->save();

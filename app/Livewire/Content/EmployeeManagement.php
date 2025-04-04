@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeManagement extends Component
 {
@@ -218,7 +219,7 @@ class EmployeeManagement extends Component
                 'barangay' => $this->barangay,
                 'street' => $this->street,
                 'postal_code' => $this->postal_code,
-                'password' => bcrypt($this->password),
+                'password' => Hash::make($this->password),
                 'status' => "Active",
                 'profile_photo' => $photoPath ?? null,
                 'branch_id' => $this->branch_id,
@@ -252,7 +253,7 @@ class EmployeeManagement extends Component
             $this->employee->postal_code = $this->postal_code;
 
             if (isset($this->password)) {
-                $this->employee->password = $this->password;
+                $this->employee->password = Hash::make($this->password);
             }
 
             $this->employee->save();
