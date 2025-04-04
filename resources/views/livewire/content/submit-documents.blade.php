@@ -12,26 +12,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <button class="capture btn btn-submit mb-4">Capture</button>
+                        <button class="capture btn btn-submit mb-4 w-100">
+                            <i class="fas fa-camera me-2"></i>Capture
+                        </button>
                         <form wire:submit.prevent="saveDocumentPhoto">
                             @csrf
                             <div class="row" x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
-                                <div class="col-lg-12" style="display: none;">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="image-upload ">
                                             <input class="avatar" type="file" id="file-input" accept="image/*"
-                                                wire:model.live="photo" x-ref="photo"
-                                                x-on:change="
-                                                            photoName = $refs.photo.files[0].name;
+                                                wire:model.live="photo_upload" x-ref="photo_upload"
+                                                x-on:change="photoName = $refs.photo_upload.files[0].name;
                                                             const reader = new FileReader();
                                                             reader.onload = (e) => {
                                                                 photoPreview = e.target.result;
+                                                                @this.set('photo', null);
                                                             };
-                                                            reader.readAsDataURL($refs.photo.files[0]);
+                                                            reader.readAsDataURL($refs.photo_upload.files[0]);
                                                         ">
                                             <div class="image-uploads">
                                                 <div class="d-flex justify-content-center">
-                                                    <img src="assets/img/icons/upload.svg" alt="img">
+                                                    <img src="img/icons/upload.svg" alt="img">
                                                 </div>
 
                                                 <h4>Drag and drop a file to upload</h4>
@@ -106,6 +108,7 @@
                         console.log('Captured Image:', data_uri);
                         @this.set('photoPreview', data_uri);
                         @this.set('photo', data_uri);
+                        @this.set('photo_upload', null);
                     });
                 }
             });

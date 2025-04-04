@@ -20,6 +20,8 @@ class SubmitDocuments extends Component
     use WithFileUploads;
 
     public $photo;
+
+    public $photo_upload;
     public $application_id;
     public $document_type;
     public $photoPreview;
@@ -82,24 +84,42 @@ class SubmitDocuments extends Component
     {
 
         $this->validate([
-            'photo' => 'required|string',
+            'photo' => 'nullable|string',
+            'photo_upload' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        
         // if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
         //     $this->ValidateDocuments();
         // }
 
-        $photo = $this->photo;
-        $photo = str_replace('data:image/png;base64,', '', $photo);
-        $photo = str_replace(' ', '+', $photo);
-        $photo = base64_decode($photo);
+        if ($this->photo_upload == null && $this->photo == null) {
+            throw ValidationException::withMessages([
+                'photo' => 'Please upload a photo or provide a valid photo.',
+            ]);
+        }
 
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'photo');
-        file_put_contents($tempFilePath, $photo);
+        if($this->photo_upload != null) {
+            $this->updateDocumentPhoto($this->photo_upload, $this->application_id, $this->document_type);
+        } 
 
-        $uploadedFile = new UploadedFile($tempFilePath, 'photo.png', 'image/png', null, true);
+        if ($this->photo != null) {
 
-        $this->updateDocumentPhoto($uploadedFile, $this->application_id, $this->document_type);
+            $photo = $this->photo;
+            $photo = str_replace('data:image/png;base64,', '', $photo);
+            $photo = str_replace(' ', '+', $photo);
+            $photo = base64_decode($photo);
+    
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'photo');
+            file_put_contents($tempFilePath, $photo);
+    
+            $uploadedFile = new UploadedFile($tempFilePath, 'photo.png', 'image/png', null, true);
+    
+            $this->updateDocumentPhoto($uploadedFile, $this->application_id, $this->document_type);
+        }
+
+
+     
 
         return redirect()->route('applicant-documents');
     }
