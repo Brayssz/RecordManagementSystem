@@ -167,7 +167,12 @@
                                 <span
                                     class="user-name">{{ $user->first_name . ' ' . ($user->middle_name != null ? substr($user->middle_name, 0, 1) . '. ' : '') . $user->last_name }}</span>
                                 @if ($position == 'employee')
-                                    <span class="user-role"><strong>{{$user->branch->municipality}} Branch</strong> | {{ $user->position }}</span>
+                                    @if ($user->position == 'Manager' || $user->position == 'Clerk')
+                                        <span class="user-role"><strong>{{$user->branch->municipality}} Branch</strong> | {{ $user->position }}</span>
+                                    @else
+                                        <span class="user-role">{{ $user->position }}</span>
+                                    @endif
+                                   
                                 @else
                                     <span class="user-role">{{ ucfirst($position) }}</span>
                                 @endif
