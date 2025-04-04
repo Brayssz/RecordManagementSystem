@@ -26,36 +26,38 @@
                                                 Information</h6>
                                         </div>
                                         <div class="profile-pic-upload" x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
-                                            <div class="profile-pic">
+                                            <div class="profile-pic" style="height: 160px !important;">
                                                 <template x-if="photoPreview">
-                                                    <span><img :src="photoPreview" alt=""></span>
+                                                    <span><img :src="photoPreview" alt="" class="rounded-3"></span>
                                                 </template>
                                                 <template x-if="!photoPreview">
                                                     <span>Passport Size<br></span>
-                                                    
+
                                                 </template>
                                             </div>
                                             <div class="input-blocks mb-0">
                                                 <div class="image-upload mb-0">
                                                     <input type="file" wire:model.live="photo" x-ref="photo"
                                                         x-on:change="
-                                                            const file = $refs.photo.files[0];
-                                                            const img = new Image();
-                                                            img.onload = () => {
-                                                                if (img.width !== img.height) {
-                                                                    messageAlert('Invalid Image', 'Please upload an image with equal dimesion.');
-                                                                    $refs.photo.value = '';
-                                                                } else {
-                                                                    photoName = file.name;
-                                                                    const reader = new FileReader();
-                                                                    reader.onload = (e) => {
-                                                                        photoPreview = e.target.result;
-                                                                    };
-                                                                    reader.readAsDataURL(file);
-                                                                }
-                                                            };
-                                                            img.src = URL.createObjectURL(file);
-                                                        ">
+                                                        const file = $refs.photo.files[0];
+                                                        const img = new Image();
+                                                        img.onload = () => {
+                                                            const aspectRatio = img.width / img.height;
+                                                            const targetRatio = 7 / 9;
+                                                            if (Math.abs(aspectRatio - targetRatio) > 0.2) {
+                                                                messageAlert('Invalid Image', 'Please upload an image with an aspect ratio of 7:9');
+                                                                $refs.photo.value = '';
+                                                            } else {
+                                                                photoName = file.name;
+                                                                const reader = new FileReader();
+                                                                reader.onload = (e) => {
+                                                                    photoPreview = e.target.result;
+                                                                };
+                                                                reader.readAsDataURL(file);
+                                                            }
+                                                        };
+                                                        img.src = URL.createObjectURL(file);
+                                                    ">
                                                     <div class="image-uploads">
                                                         <h4>Upload Image</h4>
                                                     </div>

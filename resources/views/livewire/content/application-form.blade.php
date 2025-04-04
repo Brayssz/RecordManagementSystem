@@ -16,8 +16,8 @@
                     </div>
                     <div class="profile-pic-upload" x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
                         <div class="profile-pic">
-                            <template x-if="photoPreview">
-                                <span><img :src="photoPreview" alt=""></span>
+                            <template x-if="photoPreview" style="height: 155px !important;">
+                                <span><img :src="photoPreview" alt="" class="rounded-3"></span>
                             </template>
                             <template x-if="!photoPreview">
                                 <span>Passport Size<br><span>

@@ -394,7 +394,7 @@
                                     return `<span class="badge badge-lineyellow">Waiting to be Deployed</span>`;
                                 } else if (row.status === "Deployed") {
                                     return `<span class="badge badge-linesuccess">Deployed With Departure Schedule</span>`;
-                                } else if (row.status === "Canceled") {
+                                } else if (row.status === "Cancelled") {
                                     return `<span class="badge badge-linedanger">Cancelled Application</span>`;
                                 } else if (row.status === "Rejected") {
                                     return `<span class="badge badge-linedanger">Rejected Application</span>`;
