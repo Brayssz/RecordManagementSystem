@@ -43,7 +43,7 @@ class ViewApplication extends Component
             $this->citizenship = $application->applicant->citizenship;
 
             $this->branch_schedule = $application->schedule ? Carbon::parse($application->schedule->interview_date)->format('F j, Y') . " ( " . Carbon::parse($application->branchInterview->start_time)->format('g:i A') . " - " . Carbon::parse($application->branchInterview->end_time)->format('g:i A') . " )" : null;
-            $this->employer_schedule = $application->employerInterview ? Carbon::parse($application->employerInterview->interview_date)->format('F j, Y') . " " . Carbon::parse($application->employerInterview->inhterview_time)->format('g:i A') : null;
+            $this->employer_schedule = $application->employerInterview ? Carbon::parse($application->employerInterview->interview_date)->format('F j, Y') . " ( " . Carbon::parse($application->employerInterview->interview_time)->format('g:i A') . " - " . Carbon::parse($application->employerInterview->interview_time)->addHour()->addMinutes(30)->format('g:i A') . " )": null;
             $this->meeting_link = $application->employerInterview ? $application->employerInterview->meeting_link : null;
             $this->referal_code = $application->hiring ? $application->hiring->confirmation_code : null;
             $this->date_hired = $application->hiring ? Carbon::parse($application->hiring->confirmation_date)->format('F j, Y') : null;

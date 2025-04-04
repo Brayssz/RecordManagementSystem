@@ -189,7 +189,7 @@ class ApplicantManagement extends Component
                 'postal_code' => $this->postal_code,
                 'citizenship' => $this->citizenship,
                 'marital_status' => $this->marital_status,
-                'password' => bcrypt($this->password), 
+                'password' => Hash::make($this->password), 
                 'profile_photo_path' => $photoPath ?? null,
             ]);
 
@@ -220,7 +220,7 @@ class ApplicantManagement extends Component
             $this->applicant->marital_status = $this->marital_status;
 
             if (isset($this->password)) {
-                $this->applicant->password = bcrypt($this->password);
+                $this->applicant->password = Hash::make($this->password);
             }
 
             $this->applicant->save();

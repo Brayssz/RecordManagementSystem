@@ -563,6 +563,11 @@
             $('.submit-time').on('click', function() {
                 confirmAlert('Are you sure you want to submit this schedule?', 'Submit Schedule', function() {
                     let time = $('.time-select').val();
+
+                    @this.set('start_time', time);
+
+                    $('#time-modal').modal('hide');
+
                 }, 'Submit');
             });
 
