@@ -39,7 +39,7 @@
             margin-bottom: 20px;
             position: absolute;
             top: 15px;
-            left: 50px;
+            left: 30px;
         }
 
         .logo img {
@@ -54,8 +54,8 @@
     </div>
 
     <h4 style="text-align: center; margin-bottom: 10px;">MMML Recruitment Agency</h4>
-    <p style="text-align: center; margin-bottom: 5px;">Koronadal City, South Cotabato</p>
-    <p style="text-align: center; margin-bottom: 20px;">Region XII</p>
+    <p style="text-align: center; margin-bottom: 5px;">GF-4F, ALA Bldg, 1112 Quirino Avenue, Malate, Manila</p>
+    <p style="text-align: center; margin-bottom: 20px;">NCR</p>
 
     <div style="border-top: 1px solid #000; margin: 20px 0;"></div>
 

@@ -77,7 +77,10 @@ class PDFController extends Controller
                 'deployed_applications' => $deployedApplications,
             ];
         }
-        $pdf = Pdf::loadView('content.branch-performance-report-pdf', compact('report', 'startDate', 'endDate'));
+
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.branch-performance-report-pdf', compact('report', 'startDate', 'endDate', 'user'));
 
         return $pdf->stream('branch_performance_report.pdf');
     }
@@ -124,7 +127,9 @@ class PDFController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('content.hired-applicant-report-pdf', compact('report', 'startDate', 'endDate', 'branch'));
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.hired-applicant-report-pdf', compact('report', 'startDate', 'endDate', 'branch', 'user'));
 
         return $pdf->stream('hired_applicants_report.pdf');
     }
@@ -175,7 +180,9 @@ class PDFController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('content.applicant-deployment-report-pdf', compact('report', 'startDate', 'endDate', 'branch'));
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.applicant-deployment-report-pdf', compact('report', 'startDate', 'endDate', 'branch', 'user'));
 
         return $pdf->stream('applicant_deployment_report.pdf');
     }
@@ -222,7 +229,9 @@ class PDFController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('content.branch-interview-report-pdf', compact('report', 'startDate', 'endDate', 'branch'));
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.branch-interview-report-pdf', compact('report', 'startDate', 'endDate', 'branch', 'user'));
 
         return $pdf->stream('branch_interview_report.pdf');
     }
@@ -269,7 +278,9 @@ class PDFController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('content.employer-interview-report-pdf', compact('report', 'startDate', 'endDate', 'branch'));
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.employer-interview-report-pdf', compact('report', 'startDate', 'endDate', 'branch', 'user'));
 
         return $pdf->stream('employer_interview_report.pdf');
     }
@@ -304,7 +315,9 @@ class PDFController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('content.registered-applicants-report-pdf', compact('report', 'startDate', 'endDate'));
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.registered-applicants-report-pdf', compact('report', 'startDate', 'endDate', 'user'));
 
         return $pdf->stream('registered_applicant_report.pdf');
     }
@@ -368,7 +381,9 @@ class PDFController extends Controller
             ];
         }
 
-        $pdf = Pdf::loadView('content.application-report-pdf', compact('report', 'startDate', 'endDate', 'branch'));
+        $user = Auth::guard('employee')->user();
+
+        $pdf = Pdf::loadView('content.application-report-pdf', compact('report', 'startDate', 'endDate', 'branch', 'user'));
 
         return $pdf->stream('applications_report.pdf');
     }
