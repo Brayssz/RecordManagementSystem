@@ -28,7 +28,7 @@
                                                 <span><i class="plus-down-add fa fa-plus"></i> Profile Photo</span>
                                             </template>
                                         </div>
-                                        
+
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-10 col-md-6">
@@ -93,9 +93,8 @@
                                         <div class="col-lg-4 col-md-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="gender">Gender</label>
-                                                <input type="gender" class="form-control"
-                                                    placeholder="No Gender" id="gender"
-                                                    wire:model.lazy="gender" readonly>
+                                                <input type="gender" class="form-control" placeholder="No Gender"
+                                                    id="gender" wire:model.lazy="gender" readonly>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-md-6">
@@ -114,7 +113,7 @@
                                                     wire:model.lazy="marital_status" readonly>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="other-info">
@@ -138,138 +137,174 @@
                                                     </div>
                                                 </div>
                                             @endforeach
+
+
+
                                         </div>
                                     </div>
-                                    <div class="pass-info">
-                                        <div class="card-title-head" wire:ignore>
-                                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Other Information
-                                            </h6>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Branch</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Branch" id="branch"
-                                                        wire:model.lazy="branch" readonly>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Branch Interview Schedule</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Branch Interview Schedule" id="branch"
-                                                        wire:model.lazy="branch_schedule" readonly>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
+                                    <div class="card-title-head" wire:ignore>
+                                        <h6><span><i data-feather="info" class="feather-edit"></i></span>Application
+                                            Information
+                                        </h6>
                                     </div>
-
-                                    <div class="pass-info">
-                                        <div class="card-title-head" wire:ignore>
-                                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Employer Interview Informations
-                                            </h6>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Employer Interview Schedule</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Interview Schedule" id="branch"
-                                                        wire:model.lazy="employer_schedule" readonly>
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Job</label>
+                                                <input type="branch" class="form-control" placeholder="No Job"
+                                                    id="branch" wire:model.lazy="job" readonly>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Meeting Link</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Meeting Link" id="branch"
-                                                        wire:model.lazy="meeting_link" readonly>
-                                                </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Agency</label>
+                                                <input type="branch" class="form-control" placeholder="No Employer"
+                                                    id="branch" wire:model.lazy="employer" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Country</label>
+                                                <input type="branch" class="form-control" placeholder="No Country"
+                                                    id="branch" wire:model.lazy="country" readonly>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="pass-info">
-                                        <div class="card-title-head" wire:ignore>
-                                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Hiring and Deployment Informations
-                                            </h6>
+                                </div>
+                                <div class="pass-info">
+                                    <div class="card-title-head" wire:ignore>
+                                        <h6><span><i data-feather="info" class="feather-edit"></i></span>Branch
+                                            Information
+                                        </h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Branch</label>
+                                                <input type="branch" class="form-control" placeholder="No Branch"
+                                                    id="branch" wire:model.lazy="branch" readonly>
+                                            </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Referal Code</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Interview Schedule" id="branch"
-                                                        wire:model.lazy="referal_code" readonly>
-                                                </div>
+
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Branch Interview
+                                                    Schedule</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Branch Interview Schedule" id="branch"
+                                                    wire:model.lazy="branch_schedule" readonly>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Date Hired</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Interview Schedule" id="branch"
-                                                        wire:model.lazy="date_hired" readonly>
-                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pass-info">
+                                    <div class="card-title-head" wire:ignore>
+                                        <h6><span><i data-feather="info" class="feather-edit"></i></span>Employer
+                                            Interview Informations
+                                        </h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Employer Interview
+                                                    Schedule</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Interview Schedule" id="branch"
+                                                    wire:model.lazy="employer_schedule" readonly>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Departure Date</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Departure Date" id="branch"
-                                                        wire:model.lazy="departure_date" readonly>
-                                                </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Meeting Link</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Meeting Link" id="branch"
+                                                    wire:model.lazy="meeting_link" readonly>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">Actual Departure Date</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No Actual Departure Date" id="branch"
-                                                        wire:model.lazy="actual_date" readonly>
-                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pass-info">
+                                    <div class="card-title-head" wire:ignore>
+                                        <h6><span><i data-feather="info" class="feather-edit"></i></span>Hiring and
+                                            Deployment Informations
+                                        </h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Referal Code</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Interview Schedule" id="branch"
+                                                    wire:model.lazy="referal_code" readonly>
                                             </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="branch">End Contract Date</label>
-                                                    <input type="branch" class="form-control"
-                                                        placeholder="No End Contract Date" id="branch"
-                                                        wire:model.lazy="end_contract_date" readonly>
-                                                </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Date Hired</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Interview Schedule" id="branch"
+                                                    wire:model.lazy="date_hired" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Departure Date</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Departure Date" id="branch"
+                                                    wire:model.lazy="departure_date" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">Actual Departure Date</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No Actual Departure Date" id="branch"
+                                                    wire:model.lazy="actual_date" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="branch">End Contract Date</label>
+                                                <input type="branch" class="form-control"
+                                                    placeholder="No End Contract Date" id="branch"
+                                                    wire:model.lazy="end_contract_date" readonly>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer-btn mb-4 mt-0">
-                            <button type="button" class="btn btn-submit" data-bs-dismiss="modal">Close</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer-btn mb-4 mt-0">
+                        <button type="button" class="btn btn-submit" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                handleApplicantActions();
+</div>
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            handleApplicantActions();
+        });
+
+
+        function handleApplicantActions() {
+            $(document).on('click', '.view-application', openEditApplicantModal);
+        }
+
+        function openEditApplicantModal() {
+            const applicationId = $(this).data('applicationid');
+
+            @this.call('getApplication', applicationId).then(() => {
+                $('#application-modal').modal('show');
             });
-
-
-            function handleApplicantActions() {
-                $(document).on('click', '.view-application', openEditApplicantModal);
-            }
-
-            function openEditApplicantModal() {
-                const applicationId = $(this).data('applicationid');
-
-                @this.call('getApplication', applicationId).then(() => {
-                    $('#application-modal').modal('show');
-                });
-            }
-           
-        </script>
-    @endpush
+        }
+    </script>
+@endpush
 </div>

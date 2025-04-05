@@ -20,6 +20,10 @@ class ViewApplication extends Component
     public $photo;
     public $photoPreview;
 
+    public $job;
+    public $employer;
+    public $country;
+
     public function getApplication($application_id) {
         $application = ApplicationForm::where('application_id', $application_id)->with('applicant', 'branch', 'schedule', 'employerInterview', 'hiring', 'deployment', 'branchInterview')->first();
 
@@ -53,6 +57,10 @@ class ViewApplication extends Component
 
             $this->branch = $application->branch->municipality;
             $this->photoPreview = $this->getProfilePhotoUrl($application->applicant);
+
+            $this->job = $application->job ? $application->job->job_title : null;
+            $this->employer = $application->job->employer ? $application->job->employer->company_name : null; 
+            $this->country = $application->job ? $application->job->country : null;
         }
     }
 
