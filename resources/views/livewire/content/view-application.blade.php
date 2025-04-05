@@ -20,9 +20,9 @@
                                             Information</h6>
                                     </div>
                                     <div class="profile-pic-upload" x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
-                                        <div class="profile-pic">
+                                        <div class="profile-pic" style="height: 160px !important;">
                                             <template x-if="photoPreview">
-                                                <span><img :src="photoPreview" alt=""></span>
+                                                <span><img :src="photoPreview" alt="" class="rounded-3"></span>
                                             </template>
                                             <template x-if="!photoPreview">
                                                 <span><i class="plus-down-add fa fa-plus"></i> Profile Photo</span>
