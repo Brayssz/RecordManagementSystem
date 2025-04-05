@@ -40,7 +40,7 @@ class ReportController extends Controller
                 $totalApplications = $totalApplicationsQuery->count();
 
                 $hiredApplicationsQuery = ApplicationForm::where('branch_id', $branch->branch_id)
-                    ->where('status', 'Hired')->with('hiring');
+                    ->whereIn('status', ['Hired', 'Deployed'])->with('hiring');
 
                 if ($request->filled('date_range')) {
                     $dates = explode(' - ', $request->date_range);
