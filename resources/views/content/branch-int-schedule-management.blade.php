@@ -36,13 +36,9 @@
                             <h6><i data-feather="home" class="feather-user"></i>Total Schedules<span
                                     class="schedule_total">21</span></h6>
                         </div>
-                        <div class="search-input text-left">
-                            <a href="" class="btn btn-searchset"><i data-feather="search"
-                                    class="feather-search"></i></a>
-                        </div>
 
                         <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
-                            <div class="col-lg-2 col-sm-12">
+                            <div class="col-lg-4 col-sm-12">
                                 <div class="form-group ">
                                     <input type="date" class="form-control interviewDate">
                                 </div>

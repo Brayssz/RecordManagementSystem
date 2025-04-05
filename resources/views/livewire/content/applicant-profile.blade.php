@@ -187,8 +187,7 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3" wire:ignore>
                                 <label class="form-label" for="region">Region</label>
-                                <select class="form-select" id="region" name="region" wire:model.lazy="region"
-                                    autofocus>
+                                <select class="form-select" id="region" name="region" wire:model.lazy="region">
                                     <option value="">Select Region</option>
                                     @foreach ($locationData as $region => $data)
                                         <option value="{{ $region }}">

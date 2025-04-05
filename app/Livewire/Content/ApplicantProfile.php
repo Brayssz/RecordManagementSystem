@@ -172,7 +172,7 @@ class ApplicantProfile extends Component
 
         session()->flash('message', 'Applicant successfully updated.');
 
-        return redirect()->route('applicant.profile');
+        return redirect()->route('profile');
     }
 
     public function mount()

@@ -282,10 +282,10 @@
                         {
                             "data": null,
                             "render": function(data, type, row) {
-                                if (row.employer_interview && row.employer_interview
-                                    .interview_time) {
-                                    return moment(row.employer_interview.interview_time, 'HH:mm:ss')
-                                        .format('h:mm A');
+                                if (row.employer_interview && row.employer_interview.interview_time) {
+                                    const startTime = moment(row.employer_interview.interview_time, 'HH:mm:ss');
+                                    const endTime = startTime.clone().add(1, 'hour').add(30, 'minutes');
+                                    return `${startTime.format('h:mm A')} - ${endTime.format('h:mm A')}`;
                                 } else {
                                     return '<span class="text-muted">No time set</span>';
                                 }
