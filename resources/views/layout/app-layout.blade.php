@@ -361,7 +361,7 @@
 
                                         <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
                                             <a href="/applicant-documents"><i
-                                                    data-feather="file"></i><span>Application Documents</span></a>
+                                                    data-feather="file"></i><span>Document Submission</span></a>
                                         </li>
 
                                         <li class="{{ Request::is('document-requests') ? 'active' : '' }}">
@@ -376,8 +376,7 @@
 
                                 @if ($user->position == 'Clerk')
                                     <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
-                                        <a href="/applicant-documents"><i data-feather="file"></i><span>Application
-                                                Documents</span></a>
+                                        <a href="/applicant-documents"><i data-feather="file"></i><span>Document Submission</span></a>
                                     </li>
                                 @endif
 

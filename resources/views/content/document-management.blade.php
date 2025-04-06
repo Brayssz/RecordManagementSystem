@@ -9,9 +9,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Applicant Transactions</h4>
-                    <h6>Review your application transactions and stay updated with the latest status of your job
-                        applications.</h6>
+                    <h4>Document Submission</h4>
+                    <h6>Submit required documents for each applications.</h6>
                 </div>
             </div>
             <ul class="table-top-head">
