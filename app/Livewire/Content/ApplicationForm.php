@@ -147,10 +147,8 @@ class ApplicationForm extends Component
         $textractService = new TextractService();
 
         $validIdText = $textractService->extractText($this->valid_id->getRealPath());
-        $birthCertText = $textractService->extractText($this->birth_certificate->getRealPath());
 
         $normalizedValidIdText = strtolower(trim(preg_replace('/\s+/', ' ', $validIdText)));
-        $normalizedBirthCertText = strtolower(trim(preg_replace('/\s+/', ' ', $birthCertText)));
 
         $idTypeKeywords = [
             'Passport' => ['passport', 'travel document', 'pasaporte'],
@@ -160,8 +158,6 @@ class ApplicationForm extends Component
             'Voter\'s ID' => ['voter\'s id', 'voter', 'comelec'],
             'National ID' => ['national id', 'philippine identification', 'phil id', 'pambansang pagkakakilanlan'],
         ];
-
-        $birthCertKeywords = ['birth certificate', 'certificate of live birth', 'birth record'];
 
         $keywords = $idTypeKeywords[$this->valid_id_type] ?? [];
 
@@ -181,22 +177,6 @@ class ApplicationForm extends Component
             ]);
         }
 
-        $birthCertMatch = false;
-        foreach ($birthCertKeywords as $keyword) {
-            if (stripos($normalizedBirthCertText, $keyword) !== false) {
-                $birthCertMatch = true;
-                break;
-            }
-        }
-
-        if (!$birthCertMatch) {
-            $this->error['valid'] = true;
-            $this->error['message'] = 'The uploaded document is not recognized as a valid birth certificate.';
-            throw ValidationException::withMessages([
-                'birth_certificate' => 'The uploaded document is not recognized as a valid birth certificate.',
-            ]);
-        }
-
         $expectedNameParts = array_filter([
             strtolower(trim($applicant->first_name)),
             strtolower(trim($applicant->middle_name)),
@@ -209,14 +189,6 @@ class ApplicationForm extends Component
                 $this->error['message'] = 'The name on the valid ID does not match the applicant\'s name.';
                 throw ValidationException::withMessages([
                     'valid_id' => 'The name on the valid ID does not match the applicant\'s name.',
-                ]);
-            }
-
-            if (stripos($normalizedBirthCertText, $namePart) === false) {
-                $this->error['valid'] = true;
-                $this->error['message'] = 'The name on the birth certificate does not match the applicant\'s name.';
-                throw ValidationException::withMessages([
-                    'birth_certificate' => 'The name on the birth certificate does not match the applicant\'s name.',
                 ]);
             }
         }
