@@ -80,6 +80,21 @@ return new class extends Migration
             $table->foreign('employer_id')->references('employer_id')->on('employers')->onDelete('set null');
         });
 
+        Schema::create('documents_request', function (Blueprint $table) {
+            $table->id('request_id');
+            $table->unsignedBigInteger('request_by')->nullable();
+            $table->unsignedBigInteger('requesting_branch')->nullable();
+            $table->unsignedBigInteger('application_id')->nullable();
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->string('status');
+            $table->timestamps();
+
+            $table->foreign('request_by')->references('employee_id')->on('employees')->onDelete('set null');
+            $table->foreign('requesting_branch')->references('branch_id')->on('branches')->onDelete('set null');
+            $table->foreign('application_id')->references('application_id')->on('application_forms')->onDelete('set null');
+            $table->foreign('approved_by')->references('employee_id')->on('employees')->onDelete('set null');
+        });
+
         Schema::create('branch_schedules', function (Blueprint $table) {
             $table->id('schedule_id');
             $table->dateTime('interview_date');

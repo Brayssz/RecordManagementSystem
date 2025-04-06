@@ -247,9 +247,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Valid ID') === true) {
-                                    return `<span class="badge badge-linesuccess valid-id" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess valid-id" data-applicationid="${row.application_id}" data-isaccessible="true">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger valid-id" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger valid-id" data-applicationid="${row.application_id}" data-isaccessible="true">X</span>`;
                                 }
                             }
                         },
@@ -258,9 +258,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Birth Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess birth-cert" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess birth-cert" data-applicationid="${row.application_id}" data-isaccessible="true">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger birth-cert" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger birth-cert" data-applicationid="${row.application_id}" data-isaccessible="true">X</span>`;
                                 }
                             }
                         },
@@ -269,9 +269,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'NBI Clearance') === true) {
-                                    return `<span class="badge badge-linesuccess nbi" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess nbi" data-applicationid="${row.application_id}" data-isaccessible="true">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger nbi" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger nbi" data-applicationid="${row.application_id}" data-isaccessible="true">X</span>`;
                                 }
                             }
                         },
@@ -280,9 +280,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Medical Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess med-cert" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess med-cert" data-applicationid="${row.application_id}" data-isaccessible="true">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger med-cert" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger med-cert" data-applicationid="${row.application_id}" data-isaccessible="true">X</span>`;
                                 }
                             }
                         },
@@ -291,9 +291,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Passport') === true) {
-                                    return `<span class="badge badge-linesuccess passport" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess passport" data-applicationid="${row.application_id}" data-isaccessible="true">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger passport" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger passport" data-applicationid="${row.application_id}" data-isaccessible="true">X</span>`;
                                 }
                             }
                         },
@@ -335,7 +335,7 @@
                             <a class="me-2 p-2 cancel-application" data-applicationid="${row.application_id}">
                                 <i data-feather="x" class="feather-x"></i>
                             </a>
-                            <a class="me-2 p-2 view-application" data-applicationid="${row.application_id}">
+                            <a class="me-2 p-2 view-application" data-applicationid="${row.application_id}" >
                                 <i data-feather="eye" class="feather-eye"></i>
                             </a>
                         </div>

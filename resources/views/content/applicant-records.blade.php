@@ -110,6 +110,7 @@
     </div>
     @livewire('content.view-documents')
     @livewire('content.view-application')
+    @livewire('content.submit-document-request')
 
 @endsection
 
@@ -323,9 +324,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Valid ID') === true) {
-                                    return `<span class="badge badge-linesuccess valid-id" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess valid-id" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger valid-id" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger valid-id" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">X</span>`;
                                 }
                             }
                         },
@@ -334,9 +335,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Birth Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess birth-cert" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess birth-cert" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger birth-cert" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger birth-cert" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">X</span>`;
                                 }
                             }
                         },
@@ -345,9 +346,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'NBI Clearance') === true) {
-                                    return `<span class="badge badge-linesuccess nbi" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess nbi" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger nbi" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger nbi" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">X</span>`;
                                 }
                             }
                         },
@@ -356,9 +357,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Medical Certificate') === true) {
-                                    return `<span class="badge badge-linesuccess med-cert" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess med-cert" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger med-cert" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger med-cert" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">X</span>`;
                                 }
                             }
                         },
@@ -367,9 +368,9 @@
                             "render": function(data, type, row) {
                                 let submittedDocs = row.documents.map(doc => doc.document_type);
                                 if (checkDocsExist(submittedDocs, 'Passport') === true) {
-                                    return `<span class="badge badge-linesuccess passport" data-applicationid="${row.application_id}">✓</span>`;
+                                    return `<span class="badge badge-linesuccess passport" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">✓</span>`;
                                 } else {
-                                    return `<span class="badge badge-linedanger passport" data-applicationid="${row.application_id}">X</span>`;
+                                    return `<span class="badge badge-linedanger passport" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">X</span>`;
                                 }
                             }
                         },
@@ -406,11 +407,23 @@
                         {
                             "data": null,
                             "render": function(data, type, row) {
+                                let actionButton = row.is_documents_accessible === true
+                                    ? `<a class="btn btn-primary download-documents" data-applicationid="${row.application_id}">
+                                            <i data-feather="check" class="feather-check me-1"></i> Accessible
+                                       </a>`
+                                    : row.is_documents_accessible === "PendingApproval"
+                                    ? `<a class="btn btn-warning requested-documents" data-applicationid="${row.application_id}">
+                                            <i data-feather="clock" class="feather-clock me-1"></i> Requested
+                                       </a>`
+                                    : `<a class="btn btn-primary request-documents" data-applicationid="${row.application_id}">
+                                            <i data-feather="mail" class="feather-mail me-1"></i> Request
+                                       </a>`;
                                 return `
                                     <div class="edit-delete-action">
                                         <a class="me-2 p-2 view-application" data-applicationid="${row.application_id}">
                                             <i data-feather="eye" class="feather-eye"></i>
                                         </a>
+                                        ${actionButton}
                                     </div>
                                 `;
                             }

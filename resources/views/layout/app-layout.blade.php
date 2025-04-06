@@ -350,7 +350,7 @@
                                             <a href="/scheduled-branch-interviews">
                                                 <i data-feather="briefcase"></i>
                                                 <span>Scheduled Interviews</span>
-                                                <span class="badge-notif">1</span>
+                                                <span class="badge-notif interview-notif">1</span>
                                             </a>
                                         </li>
                                         {{-- <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
@@ -362,6 +362,14 @@
                                         <li class="{{ Request::is('applicant-documents') ? 'active' : '' }}">
                                             <a href="/applicant-documents"><i
                                                     data-feather="file"></i><span>Application Documents</span></a>
+                                        </li>
+
+                                        <li class="{{ Request::is('document-requests') ? 'active' : '' }}">
+                                            <a href="/document-requests">
+                                                <i data-feather="file-text"></i>
+                                                <span>Document Request</span>
+                                                <span class="badge-notif request-notif">1</span>
+                                            </a>
                                         </li>
                                     @endif
                                 @endif

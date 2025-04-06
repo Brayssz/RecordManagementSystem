@@ -108,25 +108,17 @@ class ApplicationController extends Controller
                 });
             }
 
-            $totalRecords = $query->count();
-
-            $orderColumnIndex = $request->input('order')[0]['column'] ?? 0;
-            $orderColumn = $request->input('columns')[$orderColumnIndex]['data'] ?? 'application_id';
-            $orderDirection = $request->input('order')[0]['dir'] ?? 'asc';
-            $query->orderBy($orderColumn, $orderDirection);
-
-            $start = $request->input('start', 0);
-            $length = $request->input('length', 10);
-            $applications = $query->skip($start)->take($length)->get();
+            $applications = $query->get();
 
             $applications->transform(function ($application) {
+                $application->is_documents_accessible = $application->isDocumentsAccessible();
                 return $application;
             });
 
             return response()->json([
                 "draw" => intval($request->input('draw', 1)),
-                "recordsTotal" => $totalRecords,
-                "recordsFiltered" => $totalRecords,
+                "recordsTotal" => $applications->count(),
+                "recordsFiltered" => $applications->count(),
                 "data" => $applications
             ]);
         }

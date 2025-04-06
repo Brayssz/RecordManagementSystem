@@ -16,6 +16,7 @@ use App\Http\Controllers\Content\JobOfferController;
 use App\Http\Controllers\Content\PDFController;
 use App\Http\Controllers\Content\ReportController;
 use App\Http\Controllers\Content\TextractController;
+use App\Http\Controllers\Content\DocumentRequestController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -123,6 +124,8 @@ Route::get('/generate-registered-applicants-report', [PDFController::class, 'sho
 
 Route::get('/generate-applications-report', [PDFController::class, 'showApplicationsReport']);
 
+
+Route::get('/document-requests', [DocumentRequestController::class, 'showDocumentRequest'])->name('document-requests');
 
 
 Route::get('/ocr-upload', function () {

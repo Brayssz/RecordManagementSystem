@@ -87,6 +87,12 @@
 
             $(document).on('click', '.birth-cert', function() {
                 const applicationId = $(this).data('applicationid');
+                const isaccessible = $(this).data('isaccessible');
+                
+                if(isaccessible != true){
+                    messageAlert('Access Denied', 'You do not have access to this document.');
+                    return;
+                }
                 console.log('Birth Certificate:', applicationId);
 
                 getDocumentPhoto(applicationId, "Birth Certificate");
@@ -120,13 +126,28 @@
 
             $(document).on('click', '.passport', function() {
                 const applicationId = $(this).data('applicationid');
+                const isaccessible = $(this).data('isaccessible');
+                
+                if(isaccessible != true){
+                    messageAlert('Access Denied', 'You do not have access to this document.');
+                    return;
+                }
                 console.log('Passport:', applicationId);
+                console.log('Is Accessible:', isaccessible);
+
+                
 
                 getDocumentPhoto(applicationId, "Passport");
             });
 
             $(document).on('click', '.med-cert', function() {
                 const applicationId = $(this).data('applicationid');
+                const isaccessible = $(this).data('isaccessible');
+                
+                if(isaccessible != true){
+                    messageAlert('Access Denied', 'You do not have access to this document.');
+                    return;
+                }
                 console.log('Medical Certificate:', applicationId);
 
                 getDocumentPhoto(applicationId, "Medical Certificate");
@@ -134,6 +155,12 @@
 
             $(document).on('click', '.nbi', function() {
                 const applicationId = $(this).data('applicationid');
+                const isaccessible = $(this).data('isaccessible');
+                
+                if(isaccessible != true){
+                    messageAlert('Access Denied', 'You do not have access to this document.');
+                    return;
+                }
                 console.log('NBI Clearance:', applicationId);
 
                 getDocumentPhoto(applicationId, "NBI Clearance");
@@ -141,6 +168,12 @@
 
             $(document).on('click', '.valid-id', function() {
                 const applicationId = $(this).data('applicationid');
+                const isaccessible = $(this).data('isaccessible');
+                
+                if(isaccessible != true){
+                    messageAlert('Access Denied', 'You do not have access to this document.');
+                    return;
+                }
                 console.log('Valid ID:', applicationId);
 
                 getDocumentPhoto(applicationId, "Valid ID");

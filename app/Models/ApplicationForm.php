@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationForm extends Model
 {
@@ -56,5 +57,34 @@ class ApplicationForm extends Model
     public function deployment()
     {
         return $this->hasOne(Deployment::class, 'application_id');
+    }
+
+    public function isDocumentsAccessible()
+    {
+        $employee = Auth::guard('employee')->user();
+
+        if ($employee->position == 'Admin') {
+            return true;
+        }
+
+        $employeeBranchId = $employee->branch_id;
+
+        if ($this->branch_id == $employeeBranchId) {
+            return true;
+        }
+
+        $requestDocument = DocumentsRequest::where('application_id', $this->application_id)
+            ->where('requesting_branch', $employeeBranchId)
+            ->first();
+
+        if ($requestDocument) {
+            if ($requestDocument->status == 'Approved') {
+                return true;
+            } else if ($requestDocument->status == 'Pending') {
+                return 'PendingApproval';
+            }
+        }
+
+        return false;
     }
 }

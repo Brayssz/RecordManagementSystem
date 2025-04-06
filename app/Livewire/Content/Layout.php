@@ -8,6 +8,7 @@ use App\Utils\GetUserType;
 use App\Utils\GetProfilePhoto;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ApplicationForm;
+use App\Models\DocumentsRequest;
 
 class Layout extends Component
 {
@@ -24,6 +25,21 @@ class Layout extends Component
                 return $this->BranchInterviewCount();
             }
         }
+    }
+
+    public function getDocumentRequestCount() {
+
+        $employee = Auth::guard('employee')->user();
+
+        if($employee) {
+            return DocumentsRequest::where('status', 'Pending')
+                ->with('application')
+                ->whereHas('application', function($query) use ($employee) {
+                    $query->where('branch_id', $employee->branch_id);
+                })
+                ->count();
+        }
+       
     }
 
     public function BranchInterviewCount(){
