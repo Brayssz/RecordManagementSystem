@@ -25,6 +25,7 @@ class SubmitDocumentRequest extends Component
         } else {
             session()->flash('error', 'Application not found.');
         }
+        return redirect()->route('application-records');
     }
     public function render()
     {
