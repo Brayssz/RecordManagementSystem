@@ -17,10 +17,18 @@
                         </button>
                         <form wire:submit.prevent="saveDocumentPhoto">
                             @csrf
-                            <div class="row" x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
+                            <div class="row" x-data="{
+                                photoPreview: @entangle('photoPreview'),
+                                photoName: '',
+                                isUploading: false,
+                                progress: 0
+                            }" x-on:livewire-upload-start="isUploading = true"
+                                x-on:livewire-upload-finish="isUploading = false; progress = 100"
+                                x-on:livewire-upload-error="isUploading = false"
+                                x-on:livewire-upload-progress="progress = $event.detail.progress">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <div class="image-upload ">
+                                        <div class="image-upload">
                                             <input class="avatar" type="file" id="file-input" accept="image/*"
                                                 wire:model.live="photo_upload" x-ref="photo_upload"
                                                 x-on:change="photoName = $refs.photo_upload.files[0].name;
@@ -35,10 +43,15 @@
                                                 <div class="d-flex justify-content-center">
                                                     <img src="img/icons/upload.svg" alt="img">
                                                 </div>
-
                                                 <h4>Drag and drop a file to upload</h4>
                                             </div>
-
+                                        </div>
+                                        <div x-show.transition="isUploading" class="progress progress-sm mt-2 rounded">
+                                            <div class="progress-bar bg-primary progress-bar-striped" role="progressbar"
+                                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                                x-bind:style="`width: ${progress}%`">
+                                                <span class="sr-only">40% Complete (success)</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -48,18 +61,16 @@
                                             <template x-if="photoPreview !== ''">
                                                 <li class="ps-0 w-100">
                                                     <div class="productviewset">
-                                                        <div class="productviewsimg" style="max-width: 100%;">
-                                                            <img :src="photoPreview" alt="img">
+                                                        <div class="productviewsimg d-flex justify-content-center" style="max-width: 100%;">
+                                                            <img :src="photoPreview" alt="img" class="rounded-3 mt-2">
                                                         </div>
-
                                                     </div>
                                                 </li>
                                             </template>
-
                                             <template x-if="photoPreview === ''">
                                                 <li class="ps-0 w-100">
                                                     <div class="productviewset">
-                                                        <div class="productviewsimg" style="max-width: 100%;">
+                                                        <div class="productviewsimg " style="max-width: 100%;">
                                                             <div id="my_camera"></div>
                                                         </div>
                                                     </div>

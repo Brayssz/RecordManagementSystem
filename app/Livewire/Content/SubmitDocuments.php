@@ -94,10 +94,12 @@ class SubmitDocuments extends Component
         }
 
         if ($this->photo_upload != null) {
-            $this->updateDocumentPhoto($this->photo_upload, $this->application_id, $this->document_type);
+            
             if (in_array($this->document_type, ['Medical Certificate', 'NBI Clearance', 'Passport'])) {
                 $this->validateDocuments($this->photo_upload);
             }
+
+            $this->updateDocumentPhoto($this->photo_upload, $this->application_id, $this->document_type);
         }
 
         if ($this->photo != null) {
