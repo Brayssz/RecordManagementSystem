@@ -132,7 +132,7 @@ class SubmitDocuments extends Component
 
         $normalizedPhotoText = strtolower(trim(preg_replace('/\s+/', ' ', $photoText)));
 
-        dd($normalizedPhotoText);
+        // dd($normalizedPhotoText);
 
         if ($this->document_type == 'Medical Certificate') {
             $this->validateMedicalCertificate($normalizedPhotoText);
