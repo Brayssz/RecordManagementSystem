@@ -82,16 +82,10 @@ class SubmitDocuments extends Component
 
     public function saveDocumentPhoto()
     {
-
         $this->validate([
             'photo' => 'nullable|string',
             'photo_upload' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        
-        if ($this->document_type == 'Medical Certificate' || $this->document_type == 'NBI Clearance' || $this->document_type == 'Passport') {
-            $this->ValidateDocuments();
-        }
 
         if ($this->photo_upload == null && $this->photo == null) {
             throw ValidationException::withMessages([
@@ -99,49 +93,46 @@ class SubmitDocuments extends Component
             ]);
         }
 
-        if($this->photo_upload != null) {
+        if ($this->photo_upload != null) {
             $this->updateDocumentPhoto($this->photo_upload, $this->application_id, $this->document_type);
-        } 
+            if (in_array($this->document_type, ['Medical Certificate', 'NBI Clearance', 'Passport'])) {
+                $this->validateDocuments($this->photo_upload);
+            }
+        }
 
         if ($this->photo != null) {
-
             $photo = $this->photo;
             $photo = str_replace('data:image/png;base64,', '', $photo);
             $photo = str_replace(' ', '+', $photo);
             $photo = base64_decode($photo);
-    
+
             $tempFilePath = tempnam(sys_get_temp_dir(), 'photo');
             file_put_contents($tempFilePath, $photo);
-    
+
             $uploadedFile = new UploadedFile($tempFilePath, 'photo.png', 'image/png', null, true);
-    
+
+            if (in_array($this->document_type, ['Medical Certificate', 'NBI Clearance', 'Passport'])) {
+                $this->validateDocuments($uploadedFile);
+            }
+
             $this->updateDocumentPhoto($uploadedFile, $this->application_id, $this->document_type);
         }
-
-
-     
 
         return redirect()->route('applicant-documents');
     }
 
-    public function ValidateDocuments()
+    public function validateDocuments($photo)
     {
-        $this->error = []; 
+        $this->error = [];
         $application = Application::where('application_id', $this->application_id)->first();
         $applicant = Applicant::where('applicant_id', $application->applicant_id)->first();
 
-        $photo = $this->photo;
-        $photo = str_replace('data:image/png;base64,', '', $photo);
-        $photo = str_replace(' ', '+', $photo);
-        $photo = base64_decode($photo);
-
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'photo');
-        file_put_contents($tempFilePath, $photo);
-
         $textractService = new TextractService();
-        $photoText = $textractService->extractText($tempFilePath);
+        $photoText = $textractService->extractText($photo->getRealPath());
 
         $normalizedPhotoText = strtolower(trim(preg_replace('/\s+/', ' ', $photoText)));
+
+        dd($normalizedPhotoText);
 
         if ($this->document_type == 'Medical Certificate') {
             $this->validateMedicalCertificate($normalizedPhotoText);
@@ -151,9 +142,10 @@ class SubmitDocuments extends Component
             $this->validateNBIClearance($normalizedPhotoText);
         }
 
-        if($this->document_type == 'Passport') {
+        if ($this->document_type == 'Passport') {
             $this->validatePassport($normalizedPhotoText);
         }
+
         $this->validateApplicantName($normalizedPhotoText, $applicant);
     }
 

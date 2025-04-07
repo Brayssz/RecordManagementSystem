@@ -13,7 +13,7 @@ class DocumentRequestController extends Controller
     public function showDocumentRequest(Request $request)
     {
         if ($request->ajax()) {
-            $query = DocumentsRequest::with('requester', 'approver', 'branch', 'application')
+            $query = DocumentsRequest::with('requester', 'approver', 'branch', 'application', 'application.applicant')
                 ->whereHas('application', function ($q) {
                     $q->where('branch_id', Auth::guard("employee")->user()->branch_id);
                 });
@@ -28,19 +28,23 @@ class DocumentRequestController extends Controller
                     $q->where('request_id', 'like', '%' . $search . '%')
                         ->orWhere('application_id', 'like', '%' . $search . '%')
                         ->orWhereHas('application', function ($q) use ($search) {
-                            $q->where('applicant_id', 'like', '%' . $search . '%');
+                            $q->where('applicant_id', 'like', '%' . $search . '%')
+                                ->orWhereHas('applicant', function ($q) use ($search) {
+                                    $q->where('first_name', 'like', '%' . $search . '%')
+                                        ->orWhere('middle_name', 'like', '%' . $search . '%')
+                                        ->orWhere('last_name', 'like', '%' . $search . '%');
+                                });
                         })
                         ->orWhereHas('branch', function ($q) use ($search) {
                             $q->where('municipality', 'like', '%' . $search . '%');
                         })
                         ->orWhereHas('requester', function ($q) use ($search) {
-                            $q->whereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) like ?", ['%' . $search . '%']);
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
                         })
                         ->orWhereHas('approver', function ($q) use ($search) {
-                            $q->whereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) like ?", ['%' . $search . '%']);
-                        })
-                        ->orWhereHas('application.applicant', function ($q) use ($search) {
-                            $q->whereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) like ?", ['%' . $search . '%']);
+                            $q->where('first_name', 'like', '%' . $search . '%')
+                                ->orWhere('last_name', 'like', '%' . $search . '%');
                         });
                 });
             }
