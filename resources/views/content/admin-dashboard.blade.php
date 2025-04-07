@@ -175,7 +175,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td class="productimgname">
-                                                    <a href="product-list.html" class="product-img">
+                                                    <a class="product-img">
                                                         <img src="/storage/{{$scheduled_interview->applicant->profile_photo_path}}" alt="product" />
                                                     </a>
                                                     <a>{{ $scheduled_interview->applicant->first_name }} {{ substr($scheduled_interview->applicant->middle_name, 0, 1) }}. {{ $scheduled_interview->applicant->last_name }}</a>
