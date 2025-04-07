@@ -32,6 +32,15 @@ class DocumentRequestController extends Controller
                         })
                         ->orWhereHas('branch', function ($q) use ($search) {
                             $q->where('municipality', 'like', '%' . $search . '%');
+                        })
+                        ->orWhereHas('requester', function ($q) use ($search) {
+                            $q->whereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) like ?", ['%' . $search . '%']);
+                        })
+                        ->orWhereHas('approver', function ($q) use ($search) {
+                            $q->whereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) like ?", ['%' . $search . '%']);
+                        })
+                        ->orWhereHas('application.applicant', function ($q) use ($search) {
+                            $q->whereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) like ?", ['%' . $search . '%']);
                         });
                 });
             }

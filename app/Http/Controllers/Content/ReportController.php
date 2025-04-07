@@ -233,7 +233,6 @@ class ReportController extends Controller
                     'interview_date' => $application->branchInterview->created_at,
                     'interviewer' => $interviewerName,
                     'remarks' => $application->branchInterview->remarks,
-                    'referral_code' => $application->hiring->confirmation_code? $application->hiring->confirmation_code : 'N/A',
                 ];
 
                 $totalRecords++;

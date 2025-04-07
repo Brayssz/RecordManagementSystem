@@ -262,7 +262,7 @@
                                             </a>
                                             <div>
                                                 <a href="javascript:void(0);">${row.approver.first_name} ${row.approver.middle_name ? `${row.approver.middle_name} ` : ""}${row.approver.last_name}</a>
-                                                <span class="emp-team">Approver</span>
+                                                <span class="emp-team">${row.approver.position}</span>
                                             </div>
                                         </div>
                                     `;
