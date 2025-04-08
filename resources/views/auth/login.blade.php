@@ -18,7 +18,7 @@
                         <div class="login-userset">
                             <div class="login-userheading">
                                 <h3>Sign In</h3>
-                                <h4>Access the Dreamspos panel using your email and passcode.</h4>
+                                <h4>Access the MMML account using your email and passcode.</h4>
                             </div>
                             @if ($errors->any())
                                 @foreach ($errors->all() as $error)
