@@ -255,7 +255,7 @@
                                             </a>
                                             <div>
                                                 <a href="javascript:void(0);">${row.applicant.first_name || "Unknown"} ${row.applicant.middle_name ? `${row.applicant.middle_name} ` : ""}${row.applicant.last_name || "User"}</a>
-                                                <span class="emp-team">${moment(row.created_at).fromNow()}</span>
+                                                <span class="">${moment(row.created_at).fromNow()}</span>
                                             </div>
                                         </div>
                                     `;
