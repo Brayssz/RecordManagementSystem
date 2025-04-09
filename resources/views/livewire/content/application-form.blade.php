@@ -162,8 +162,15 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label" for="marital_status">Marital Status</label>
-                                <input type="text" class="form-control" placeholder="Enter marital status"
-                                    id="marital_status" wire:model.lazy="marital_status">
+                                <div wire:ignore>
+                                    <select class="select" id="marital_status" name="marital_status" wire:model="marital_status">
+                                        <option value="">Choose</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Seperated">Seperated</option>
+                                        <option value="Widowed">Widowed</option>
+                                    </select>
+                                </div>
                                 @error('marital_status')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

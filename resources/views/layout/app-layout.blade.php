@@ -350,7 +350,7 @@
                                             <a href="/scheduled-branch-interviews">
                                                 <i data-feather="briefcase"></i>
                                                 <span>Scheduled Interviews</span>
-                                                <span class="badge-notif interview-notif">1</span>
+                                                <span class="badge-notif interview-notif">0</span>
                                             </a>
                                         </li>
                                         {{-- <li class="{{ Request::is('approve-applications') ? 'active' : '' }}">
