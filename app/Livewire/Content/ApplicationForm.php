@@ -434,8 +434,7 @@ class ApplicationForm extends Component
         if (isset($this->photo)) {
             $this->updateProfilePhoto($this->photo, $this->applicant);
         }
-
-
+        
         $this->createApplication($this->applicant->applicant_id);
     }
 

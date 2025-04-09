@@ -246,7 +246,7 @@
                             "data": null,
                             "render": function(data, type, row) {
                                 let avatarSrc = 'assets/img/no-profile.png';
-                                if (row.applicant && row.applicant.profile_photo_path) {
+                                if (row.applicant.profile_photo_path) {
                                     avatarSrc = `/storage/${row.applicant.profile_photo_path}`;
                                     return `
                                         <div class="userimgname">
@@ -259,7 +259,7 @@
                                             </div>
                                         </div>
                                     `;
-                                } else if (row.applicant) {
+                                } else {
                                     const colors = {
                                         A: 'bg-primary',
                                         B: 'bg-success',
