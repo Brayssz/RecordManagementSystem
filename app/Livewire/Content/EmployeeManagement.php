@@ -31,6 +31,8 @@ class EmployeeManagement extends Component
 
     public $branches;
 
+    public $branch;
+
     public function getEmployee($employeeId)
     {
         $this->employee = Employee::where('employee_id', $employeeId)->first();
@@ -59,6 +61,8 @@ class EmployeeManagement extends Component
 
             $this->password = null;
             $this->password_confirmation = null;
+
+            $this->branch = $this->employee->branch->municipality;
         } else {
             session()->flash('error', 'Employee not found.');
         }

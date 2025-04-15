@@ -168,6 +168,9 @@
                                         <a class="me-2 p-2 edit-branch" data-branchid="${row.branch_id}">
                                             <i data-feather="edit" class="feather-edit"></i>
                                         </a>
+                                         <a class="me-2 p-2 view-branch" data-branchid="${row.branch_id}" >
+                                            <i data-feather="eye" class="feather-eye"></i>
+                                        </a>
                                     </div>
                                 `;
                             }

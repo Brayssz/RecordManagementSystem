@@ -1,374 +1,678 @@
-<div class="modal fade" id="add-employee-modal" wire:ignore.self>
-    <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
-        <div class="modal-content">
-            <div class="page-wrapper-new p-0">
-                <div class="content">
-                    <div class="modal-header border-0 custom-modal-header">
-                        <div class="page-title">
-                            @if ($submit_func == 'add-employee')
-                                <h4>Add Employee</h4>
-                            @else
-                                <h4>Edit Employee</h4>
-                            @endif
+<div>
+    <div class="modal fade" id="add-employee-modal" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="content">
+                        <div class="modal-header border-0 custom-modal-header">
+                            <div class="page-title">
+                                @if ($submit_func == 'add-employee')
+                                    <h4>Add Employee</h4>
+                                @else
+                                    <h4>Edit Employee</h4>
+                                @endif
+                            </div>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form wire:submit.prevent="submit_employee">
-                            @csrf
-                            <div class="card mb-0">
-                                <div class="card-body">
-                                    <div class="new-employee-field">
-                                        <div class="card-title-head" wire:ignore>
-                                            <h6><span><i data-feather="info" class="feather-edit"></i></span>Personal
-                                                Information</h6>
-                                        </div>
-                                        <div class="profile-pic-upload" x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
-                                            <div class="profile-pic">
-                                                <template x-if="photoPreview">
-                                                    <span><img :src="photoPreview" alt=""></span>
-                                                </template>
-                                                <template x-if="!photoPreview">
-                                                    <span><i class="plus-down-add fa fa-plus"></i> Profile Photo</span>
-                                                </template>
-                                            </div>
-                                            <div class="input-blocks mb-0">
-                                                <div class="image-upload mb-0">
-                                                    <input type="file" wire:model.live="photo" x-ref="photo"
-                                                        x-on:change="
-                                                            photoName = $refs.photo.files[0].name;
-                                                            const reader = new FileReader();
-                                                            reader.onload = (e) => {
-                                                                photoPreview = e.target.result;
-                                                            };
-                                                            reader.readAsDataURL($refs.photo.files[0]);
-                                                        ">
-                                                    <div class="image-uploads">
-                                                        <h4>Upload Image</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-10 col-md-6">
-                                                <div class="row">
-                                                    <div class="col-lg-4 col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="first_name">First
-                                                                Name</label>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Enter first name" id="first_name"
-                                                                wire:model.lazy="first_name">
-                                                            @error('first_name')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-4 col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="middle_name">Middle
-                                                                Name</label>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Enter middle name" id="middle_name"
-                                                                wire:model.lazy="middle_name">
-                                                            @error('middle_name')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-4 col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="last_name">Last Name</label>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Enter last name" id="last_name"
-                                                                wire:model.lazy="last_name">
-                                                            @error('last_name')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-2 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="suffix">Suffix</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="e.g., Jr., Sr., III, Ph.D." id="suffix"
-                                                        wire:model.lazy="suffix">
-                                                    @error('suffix')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="email">Email</label>
-                                                    <input type="email" class="form-control"
-                                                        placeholder="e.g., name@mail.com" id="email"
-                                                        wire:model.lazy="email">
-                                                    @error('email')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="username">Username</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Enter your username" id="username"
-                                                        wire:model.lazy="username">
-                                                    @error('username')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="contact_number">Contact
-                                                        Number</label>
-                                                    <input type="text" id="contact_number"
-                                                        class="form-control phMobile not_pass"
-                                                        placeholder="e.g., +63 999 999 9999"
-                                                        wire:model.lazy="contact_number">
-                                                    @error('contact_number')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="date_of_birth" class="form-label">Date of
-                                                        Birth</label>
-                                                    <input type="date" class="form-control"
-                                                        wire:model="date_of_birth">
-                                                    @error('date_of_birth')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="gender">Gender</label>
-                                                    <div wire:ignore>
-                                                        <select class="select" id="gender" name="gender"
-                                                            wire:model="gender">
-                                                            <option value="">Choose</option>
-                                                            <option value="Male">Male</option>
-                                                            <option value="Female">Female</option>
-                                                            <option value="Others">Others..</option>
-                                                        </select>
-                                                    </div>
-                                                    @error('gender')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            @if (Auth::user()->position != 'Manager')
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="branch_id">Branch</label>
-                                                        <div wire:ignore>
-                                                            <select class="select" id="branch_id" name="branch_id"
-                                                                wire:model.lazy="branch_id">
-                                                                <option value="">Choose a branch</option>
-                                                                @foreach ($branches as $branch)
-                                                                    <option value="{{ $branch->branch_id }}">
-                                                                        {{ $branch->municipality }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        @error('branch_id')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="position">Position</label>
-                                                    <div wire:ignore>
-                                                        <select class="select" id="position" name="position"
-                                                            wire:model.lazy="position">
-                                                            <option value="">Choose a position</option>
-                                                            @if (Auth::user()->position != 'Manager')
-                                                                <option value="Admin">Admin</option>
-                                                            @endif
-                                                            <option value="Manager">Branch Manager</option>
-                                                            <option value="Clerk">Branch Clerk</option>
-                                                        </select>
-                                                    </div>
-                                                    @error('position')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            @if ($submit_func == 'edit-employee')
-                                                <div class="col-lg-4 col-md-6 status-group">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="status">Status</label>
-                                                        <div wire:ignore>
-                                                            <select class="select" id="status" name="status"
-                                                                wire:model="status">
-                                                                <option value="">Choose</option>
-                                                                <option value="Active">Active</option>
-                                                                <option value="Inactive">Inactive</option>
-                                                            </select>
-                                                        </div>
-                                                        @error('status')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                        <div class="other-info">
-                                            <div class="card-title-head" wire:ignore>
-                                                <h6><span><i data-feather="info" class="feather-edit"></i></span>Other
-                                                    Information</h6>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3" wire:ignore>
-                                                        <label class="form-label" for="region">Region</label>
-                                                        <select class="form-select" id="region" name="region"
-                                                            wire:model.lazy="region" autofocus>
-                                                            <option value="">Select Region</option>
-                                                            @foreach ($locationData as $region => $data)
-                                                                <option value="{{ $region }}">
-                                                                    {{ $data['region_name'] }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('region')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3" wire:ignore>
-                                                        <label class="form-label" for="province">Province</label>
-                                                        <select class="form-select" id="province" name="province"
-                                                            wire:model.lazy="province" disabled>
-                                                            <option value="">Select Province</option>
-                                                        </select>
-                                                        @error('province')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3" wire:ignore>
-                                                        <label class="form-label"
-                                                            for="municipality">Municipality</label>
-                                                        <select class="form-select" id="municipality"
-                                                            name="municipality" wire:model.lazy="municipality"
-                                                            disabled>
-                                                            <option value="">Select Municipality</option>
-                                                        </select>
-                                                        @error('municipality')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3" wire:ignore>
-                                                        <label class="form-label" for="barangay">Barangay</label>
-                                                        <select class="form-select" id="barangay" name="barangay"
-                                                            wire:model.lazy="barangay" disabled>
-                                                            <option value="">Select Barangay</option>
-                                                        </select>
-                                                        @error('barangay')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="street">Street</label>
-                                                        <input type="text" class="form-control" id="street"
-                                                            name="street" wire:model.lazy="street" autofocus
-                                                            autocomplete="street" placeholder="Enter your street">
-                                                        @error('street')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-lg-4 col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="postal_code">Postal
-                                                            Code</label>
-                                                        <input type="text" class="form-control" id="postal_code"
-                                                            name="postal_code" wire:model.lazy="postal_code" autofocus
-                                                            autocomplete="postal_code"
-                                                            placeholder="Enter your postal code">
-                                                        @error('postal_code')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="pass-info">
+                        <div class="modal-body">
+                            <form wire:submit.prevent="submit_employee">
+                                @csrf
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        <div class="new-employee-field">
                                             <div class="card-title-head" wire:ignore>
                                                 <h6><span><i data-feather="info"
-                                                            class="feather-edit"></i></span>Password</h6>
+                                                            class="feather-edit"></i></span>Personal
+                                                    Information</h6>
+                                            </div>
+                                            <div class="profile-pic-upload"
+                                                x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
+                                                <div class="profile-pic">
+                                                    <template x-if="photoPreview">
+                                                        <span><img :src="photoPreview" alt=""></span>
+                                                    </template>
+                                                    <template x-if="!photoPreview">
+                                                        <span><i class="plus-down-add fa fa-plus"></i> Profile
+                                                            Photo</span>
+                                                    </template>
+                                                </div>
+                                                <div class="input-blocks mb-0">
+                                                    <div class="image-upload mb-0">
+                                                        <input type="file" wire:model.live="photo" x-ref="photo"
+                                                            x-on:change="
+                                                                photoName = $refs.photo.files[0].name;
+                                                                const reader = new FileReader();
+                                                                reader.onload = (e) => {
+                                                                    photoPreview = e.target.result;
+                                                                };
+                                                                reader.readAsDataURL($refs.photo.files[0]);
+                                                            ">
+                                                        <div class="image-uploads">
+                                                            <h4>Upload Image</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-4 col-md-6 input-blocks">
-                                                    <label for="password">Password</label>
-                                                    <div class="mb-3 pass-group">
-                                                        <input type="password" class="pass-input" id="password"
-                                                            wire:model.lazy="password"
-                                                            placeholder="Enter your password">
-                                                        <span class="fas toggle-password fa-eye-slash"></span>
+                                                <div class="col-lg-10 col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="first_name">First
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter first name" id="first_name"
+                                                                    wire:model.lazy="first_name">
+                                                                @error('first_name')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="middle_name">Middle
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter middle name" id="middle_name"
+                                                                    wire:model.lazy="middle_name">
+                                                                @error('middle_name')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="last_name">Last
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter last name" id="last_name"
+                                                                    wire:model.lazy="last_name">
+                                                                @error('last_name')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    @error('password')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
                                                 </div>
-                                                <div class="col-lg-4 col-md-6 input-blocks">
-                                                    <label for="password_confirmation">Confirm Password</label>
-                                                    <div class="mb-3 pass-group">
-                                                        <input type="password" class="pass-inputa"
-                                                            id="password_confirmation"
-                                                            wire:model.lazy="password_confirmation"
-                                                            placeholder="Confirm your password">
-                                                        <span class="fas toggle-passworda fa-eye-slash"></span>
+
+                                                <div class="col-lg-2 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="suffix">Suffix</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="e.g., Jr., Sr., III, Ph.D." id="suffix"
+                                                            wire:model.lazy="suffix">
+                                                        @error('suffix')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
                                                     </div>
-                                                    @error('password_confirmation')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="email">Email</label>
+                                                        <input type="email" class="form-control"
+                                                            placeholder="e.g., name@mail.com" id="email"
+                                                            wire:model.lazy="email">
+                                                        @error('email')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="username">Username</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Enter your username" id="username"
+                                                            wire:model.lazy="username">
+                                                        @error('username')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="contact_number">Contact
+                                                            Number</label>
+                                                        <input type="text" id="contact_number"
+                                                            class="form-control phMobile not_pass"
+                                                            placeholder="e.g., +63 999 999 9999"
+                                                            wire:model.lazy="contact_number">
+                                                        @error('contact_number')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="date_of_birth" class="form-label">Date of
+                                                            Birth</label>
+                                                        <input type="date" class="form-control"
+                                                            wire:model="date_of_birth">
+                                                        @error('date_of_birth')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="gender">Gender</label>
+                                                        <div wire:ignore>
+                                                            <select class="select" id="gender" name="gender"
+                                                                wire:model="gender">
+                                                                <option value="">Choose</option>
+                                                                <option value="Male">Male</option>
+                                                                <option value="Female">Female</option>
+                                                                <option value="Others">Others..</option>
+                                                            </select>
+                                                        </div>
+                                                        @error('gender')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                @if (Auth::user()->position != 'Manager')
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="branch_id">Branch</label>
+                                                            <div wire:ignore>
+                                                                <select class="select" id="branch_id" name="branch_id"
+                                                                    wire:model.lazy="branch_id">
+                                                                    <option value="">Choose a branch</option>
+                                                                    @foreach ($branches as $branch)
+                                                                        <option value="{{ $branch->branch_id }}">
+                                                                            {{ $branch->municipality }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            @error('branch_id')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="position">Position</label>
+                                                        <div wire:ignore>
+                                                            <select class="select" id="position" name="position"
+                                                                wire:model.lazy="position">
+                                                                <option value="">Choose a position</option>
+                                                                @if (Auth::user()->position != 'Manager')
+                                                                    <option value="Admin">Admin</option>
+                                                                @endif
+                                                                <option value="Manager">Branch Manager</option>
+                                                                <option value="Clerk">Branch Clerk</option>
+                                                            </select>
+                                                        </div>
+                                                        @error('position')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                @if ($submit_func == 'edit-employee')
+                                                    <div class="col-lg-4 col-md-6 status-group">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="status">Status</label>
+                                                            <div wire:ignore>
+                                                                <select class="select" id="status" name="status"
+                                                                    wire:model="status">
+                                                                    <option value="">Choose</option>
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Inactive">Inactive</option>
+                                                                </select>
+                                                            </div>
+                                                            @error('status')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="other-info">
+                                                <div class="card-title-head" wire:ignore>
+                                                    <h6><span><i data-feather="info"
+                                                                class="feather-edit"></i></span>Other
+                                                        Information</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3" wire:ignore>
+                                                            <label class="form-label" for="region">Region</label>
+                                                            <select class="form-select" id="region" name="region"
+                                                                wire:model.lazy="region" autofocus>
+                                                                <option value="">Select Region</option>
+                                                                @foreach ($locationData as $region => $data)
+                                                                    <option value="{{ $region }}">
+                                                                        {{ $data['region_name'] }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('region')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3" wire:ignore>
+                                                            <label class="form-label" for="province">Province</label>
+                                                            <select class="form-select" id="province" name="province"
+                                                                wire:model.lazy="province" disabled>
+                                                                <option value="">Select Province</option>
+                                                            </select>
+                                                            @error('province')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3" wire:ignore>
+                                                            <label class="form-label"
+                                                                for="municipality">Municipality</label>
+                                                            <select class="form-select" id="municipality"
+                                                                name="municipality" wire:model.lazy="municipality"
+                                                                disabled>
+                                                                <option value="">Select Municipality</option>
+                                                            </select>
+                                                            @error('municipality')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3" wire:ignore>
+                                                            <label class="form-label" for="barangay">Barangay</label>
+                                                            <select class="form-select" id="barangay" name="barangay"
+                                                                wire:model.lazy="barangay" disabled>
+                                                                <option value="">Select Barangay</option>
+                                                            </select>
+                                                            @error('barangay')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="street">Street</label>
+                                                            <input type="text" class="form-control" id="street"
+                                                                name="street" wire:model.lazy="street" autofocus
+                                                                autocomplete="street" placeholder="Enter your street">
+                                                            @error('street')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="postal_code">Postal
+                                                                Code</label>
+                                                            <input type="text" class="form-control" id="postal_code"
+                                                                name="postal_code" wire:model.lazy="postal_code"
+                                                                autofocus autocomplete="postal_code"
+                                                                placeholder="Enter your postal code">
+                                                            @error('postal_code')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="pass-info">
+                                                <div class="card-title-head" wire:ignore>
+                                                    <h6><span><i data-feather="info"
+                                                                class="feather-edit"></i></span>Password</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-6 input-blocks">
+                                                        <label for="password">Password</label>
+                                                        <div class="mb-3 pass-group">
+                                                            <input type="password" class="pass-input" id="password"
+                                                                wire:model.lazy="password"
+                                                                placeholder="Enter your password">
+                                                            <span class="fas toggle-password fa-eye-slash"></span>
+                                                        </div>
+                                                        @error('password')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 input-blocks">
+                                                        <label for="password_confirmation">Confirm Password</label>
+                                                        <div class="mb-3 pass-group">
+                                                            <input type="password" class="pass-inputa"
+                                                                id="password_confirmation"
+                                                                wire:model.lazy="password_confirmation"
+                                                                placeholder="Confirm your password">
+                                                            <span class="fas toggle-passworda fa-eye-slash"></span>
+                                                        </div>
+                                                        @error('password_confirmation')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="modal-footer-btn mb-4 mt-0">
-                                <button type="button" class="btn btn-cancel me-2"
-                                    data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-submit">Submit</button>
+                                <div class="modal-footer-btn mb-4 mt-0">
+                                    <button type="button" class="btn btn-cancel me-2"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-submit">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="view-employee-modal" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="content">
+                        <div class="modal-header border-0 custom-modal-header">
+                            <div class="page-title">
+                                <h4>View Employee</h4>
                             </div>
-                        </form>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form wire:submit.prevent="submit_employee">
+                                @csrf
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        <div class="new-employee-field">
+                                            <div class="card-title-head" wire:ignore>
+                                                <h6><span><i data-feather="info"
+                                                            class="feather-edit"></i></span>Personal
+                                                    Information</h6>
+                                            </div>
+                                            <div class="profile-pic-upload"
+                                                x-data="{ photoPreview: @entangle('photoPreview'), photoName: '' }">
+                                                <div class="profile-pic">
+                                                    <template x-if="photoPreview">
+                                                        <span><img :src="photoPreview" alt=""></span>
+                                                    </template>
+                                                    <template x-if="!photoPreview">
+                                                        <span><img src="/img/no-profile.png" alt="/img/no-profile.png"></span>
+                                                    </template>
+                                                </div>
+                                              
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-10 col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="first_name">First
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter first name" id="first_name"
+                                                                    wire:model.lazy="first_name" readonly>
+                                                                @error('first_name')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="middle_name">Middle
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter middle name" id="middle_name"
+                                                                    wire:model.lazy="middle_name" readonly>
+                                                                @error('middle_name')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-md-6">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="last_name">Last
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Enter last name" id="last_name"
+                                                                    wire:model.lazy="last_name" readonly>
+                                                                @error('last_name')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-2 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="suffix">Suffix</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="e.g., Jr., Sr., III, Ph.D." id="suffix"
+                                                            wire:model.lazy="suffix" readonly>
+                                                        @error('suffix')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="email">Email</label>
+                                                        <input type="email" class="form-control"
+                                                            placeholder="e.g., name@mail.com" id="email"
+                                                            wire:model.lazy="email" readonly>
+                                                        @error('email')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="username">Username</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Enter your username" id="username"
+                                                            wire:model.lazy="username" readonly>
+                                                        @error('username')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="contact_number">Contact
+                                                            Number</label>
+                                                        <input type="text" id="contact_number"
+                                                            class="form-control phMobile not_pass"
+                                                            placeholder="e.g., +63 999 999 9999"
+                                                            wire:model.lazy="contact_number" readonly>
+                                                        @error('contact_number')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="date_of_birth" class="form-label">Date of
+                                                            Birth</label>
+                                                        <input type="date" class="form-control"
+                                                            wire:model="date_of_birth" readonly>
+                                                        @error('date_of_birth')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="gender">Gender</label>
+                                                        <input type="text" class="form-control" id="gender"
+                                                            name="gender" wire:model.lazy="gender"
+                                                            placeholder="Enter gender" readonly>
+                                                        @error('gender')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                                @if (Auth::user()->position != 'Manager')
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="branch">Branch</label>
+                                                            <input type="text" class="form-control" id="branch"
+                                                                name="branch" wire:model.lazy="branch"
+                                                                placeholder="Enter branch" readonly>
+                                                            @error('branch_id')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="position">Position</label>
+                                                        <input type="text" class="form-control" id="position"
+                                                            name="position" wire:model.lazy="position"
+                                                            placeholder="Enter position" readonly>
+                                                        @error('position')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                @if ($submit_func == 'edit-employee')
+                                                    <div class="col-lg-4 col-md-6 status-group">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="status">Status</label>
+                                                            <div wire:ignore>
+                                                                <select class="select" id="status" name="status"
+                                                                    wire:model="status" disabled>
+                                                                    <option value="">Choose</option>
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Inactive">Inactive</option>
+                                                                </select>
+                                                            </div>
+                                                            @error('status')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="other-info">
+                                                <div class="card-title-head" wire:ignore>
+                                                    <h6><span><i data-feather="info"
+                                                                class="feather-edit"></i></span>Other
+                                                        Information</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="region">Region</label>
+                                                            <input type="text" class="form-control" id="region"
+                                                                name="region" wire:model.lazy="region"
+                                                                placeholder="Enter your region" readonly>
+                                                            @error('region')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="province">Province</label>
+                                                            <input type="text" class="form-control" id="province"
+                                                                name="province" wire:model.lazy="province"
+                                                                placeholder="Enter your province" readonly>
+                                                            @error('province')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="municipality">Municipality</label>
+                                                            <input type="text" class="form-control" id="municipality"
+                                                                name="municipality" wire:model.lazy="municipality"
+                                                                placeholder="Enter your municipality" readonly>
+                                                            @error('municipality')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="barangay">Barangay</label>
+                                                            <input type="text" class="form-control" id="barangay"
+                                                                name="barangay" wire:model.lazy="barangay"
+                                                                placeholder="Enter your barangay" readonly>
+                                                            @error('barangay')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="street">Street</label>
+                                                            <input type="text" class="form-control" id="street"
+                                                                name="street" wire:model.lazy="street"
+                                                                placeholder="Enter your street" readonly>
+                                                            @error('street')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="postal_code">Postal
+                                                                Code</label>
+                                                            <input type="text" class="form-control" id="postal_code"
+                                                                name="postal_code" wire:model.lazy="postal_code"
+                                                                autofocus autocomplete="postal_code"
+                                                                placeholder="Enter your postal code" readonly>
+                                                            @error('postal_code')
+                                                                <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer-btn mb-4 mt-0">
+                                    <button type="button" class="btn btn-cancel me-2"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -402,6 +706,14 @@
                 $(document).on('change', '[id]', handleInputChange);
                 $(document).on('click', '.add-employee', openAddEmployeeModal);
                 $(document).on('click', '.edit-employee', openEditEmployeeModal);
+                $(document).on('click', '.view-employee', openViewEmployeeModal);
+            }
+
+            const openViewEmployeeModal = function() {
+                const employeeId = $(this).data('employeeid');
+                @this.call('getEmployee', employeeId).then(() => {
+                    $('#view-employee-modal').modal('show');
+                });
             }
 
             function handleInputChange(e) {
@@ -488,7 +800,7 @@
             }
 
             function handleLocationDropdowns() {
-                $('#region').on('change', function() {
+                $('#region').on('change', function () {
                     const selectedRegion = $(this).val();
                     $('#province').prop('disabled', !selectedRegion);
                     $('#municipality').prop('disabled', true).html(
@@ -509,7 +821,7 @@
                     }
                 });
 
-                $('#province').on('change', function() {
+                $('#province').on('change', function () {
                     const selectedProvince = $(this).val();
                     $('#municipality').prop('disabled', !selectedProvince);
                     $('#barangay').prop('disabled', true).html('<option value="">Select Barangay</option>');
@@ -530,7 +842,7 @@
                     }
                 });
 
-                $('#municipality').on('change', function() {
+                $('#municipality').on('change', function () {
                     const selectedMunicipality = $(this).val();
                     $('#barangay').prop('disabled', !selectedMunicipality);
 

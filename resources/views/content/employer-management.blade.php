@@ -37,8 +37,7 @@
                                     class="employer_total">21</span></h6>
                         </div>
                         <div class="search-input text-left">
-                            <a href="" class="btn btn-searchset"><i data-feather="search"
-                                    class="feather-search"></i></a>
+                            <a href="" class="btn btn-searchset"><i data-feather="search" class="feather-search"></i></a>
                         </div>
 
                         <div class="row mt-sm-3 mt-xs-3 mt-lg-0 w-sm-100 flex-grow-1">
@@ -71,7 +70,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                           
+
                         </tbody>
                     </table>
                 </div>
@@ -83,7 +82,7 @@
 @endsection
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             @if (session('message'))
                 toastr.success("{{ session('message') }}", "Success", {
@@ -93,7 +92,7 @@
             @endif
 
 
-            if ($('.employer-table').length > 0) {
+                if ($('.employer-table').length > 0) {
                 var table = $('.employer-table').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -116,7 +115,7 @@
                         "headers": {
                             "Accept": "application/json"
                         },
-                        "data": function(d) {
+                        "data": function (d) {
                             d.status = $('.status_filter').val();
                         },
                         "dataSrc": "data"
@@ -124,21 +123,21 @@
                     "columns": [
                         {
                             "data": null,
-                            "render": function(data, type, row) {
+                            "render": function (data, type, row) {
                                 let avatarSrc = 'assets/img/no-profile.png';
                                 if (row.profile_photo_path) {
                                     avatarSrc = `/storage/${row.profile_photo_path}`;
                                     return `
-                                        <div class="userimgname">
-                                            <a href="javascript:void(0);" class="product-img">
-                                                <img src="${avatarSrc}" alt="product" loading="lazy">
-                                            </a>
-                                            <div>
-                                                <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
-                                                <span class="emp-team">Employer</span>
+                                            <div class="userimgname">
+                                                <a href="javascript:void(0);" class="product-img">
+                                                    <img src="${avatarSrc}" alt="product" loading="lazy">
+                                                </a>
+                                                <div>
+                                                    <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
+                                                    <span class="emp-team">Employer</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                                 } else {
                                     const colors = {
                                         A: 'bg-primary',
@@ -173,24 +172,24 @@
                                     const bgColor = colors[firstLetter] || 'bg-secondary';
 
                                     return `
-                                        <div class="userimgname">
-                                            <a href="javascript:void(0);" class="product-img">
-                                                <span class="avatar ${bgColor} avatar-rounded">
-                                                    <span class="avatar-title">${row.first_name.charAt(0).toUpperCase() + row.last_name.charAt(0).toUpperCase()}</span>
-                                                </span>
-                                            </a>
-                                            <div>
-                                                <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
-                                                <span class="emp-team">Employer</span>
+                                            <div class="userimgname">
+                                                <a href="javascript:void(0);" class="product-img">
+                                                    <span class="avatar ${bgColor} avatar-rounded">
+                                                        <span class="avatar-title">${row.first_name.charAt(0).toUpperCase() + row.last_name.charAt(0).toUpperCase()}</span>
+                                                    </span>
+                                                </a>
+                                                <div>
+                                                    <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
+                                                    <span class="emp-team">Employer</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                                 }
                             }
                         },
                         {
                             "data": "email",
-                            "render": function(data, type, row) {
+                            "render": function (data, type, row) {
                                 return `<a href="mailto:${data}">${data}</a>`;
                             }
                         },
@@ -205,7 +204,7 @@
                         },
                         {
                             "data": null,
-                            "render": function(data, type, row) {
+                            "render": function (data, type, row) {
                                 if (row.status === "Active") {
                                     return `<span class="badge badge-linesuccess">Active</span>`;
                                 } else {
@@ -215,30 +214,33 @@
                         },
                         {
                             "data": null,
-                            "render": function(data, type, row) {
+                            "render": function (data, type, row) {
                                 return `
-                        <div class="edit-delete-action">
-                            <a class="me-2 p-2 edit-employer" data-employerid="${row.employer_id}">
-                                <i data-feather="edit" class="feather-edit"></i>
-                            </a>
-                        </div>
-                    `;
+                            <div class="edit-delete-action">
+                                <a class="me-2 p-2 edit-employer" data-employerid="${row.employer_id}">
+                                    <i data-feather="edit" class="feather-edit"></i>
+                                </a>
+                                <a class="me-2 p-2 view-employer" data-employerid="${row.employer_id}">
+                                    <i data-feather="eye" class="feather-eye"></i>
+                                </a>    
+                            </div>
+                        `;
                             }
                         }
                     ],
-                    "createdRow": function(row, data, dataIndex) {
+                    "createdRow": function (row, data, dataIndex) {
                         $(row).find('td').eq(6).addClass('action-table-data');
                     },
-                    "initComplete": function(settings, json) {
+                    "initComplete": function (settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');
                         $('.dataTables_filter').appendTo('.search-input');
                         feather.replace();
 
-                        $('.status_filter').on('change', function() {
+                        $('.status_filter').on('change', function () {
                             table.draw();
                         });
                     },
-                    "drawCallback": function(settings) {
+                    "drawCallback": function (settings) {
                         feather.replace();
                     },
                 });

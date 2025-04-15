@@ -90,7 +90,7 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Applicants Submitting Documents</h4>
                         <div class="view-all-link">
-                            <a href="scheduled-branch-interviews" class="view-all d-flex align-items-center">
+                            <a href="applicant-documents" class="view-all d-flex align-items-center">
                                 View All<span class="ps-2 d-flex align-items-center"><i data-feather="arrow-right"
                                         class="feather-16"></i></span>
                             </a>
@@ -137,7 +137,6 @@
             </div>
             </div>
         </div>
-
     </div>
 @endsection
 @push('scripts')

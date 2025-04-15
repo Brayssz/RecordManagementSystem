@@ -120,7 +120,7 @@
             @endif
 
 
-                if ($('.employee-table').length > 0) {
+                    if ($('.employee-table').length > 0) {
                 var table = $('.employee-table').DataTable({
                     "processing": true,
                     "serverSide": true,
@@ -157,16 +157,16 @@
                             if (row.profile_photo_path) {
                                 avatarSrc = `/storage/${row.profile_photo_path}`;
                                 return `
-                                <div class="userimgname">
-                                    <a href="javascript:void(0);" class="product-img">
-                                        <img src="${avatarSrc}" alt="profile" loading="lazy">
-                                    </a>
-                                    <div>
-                                        <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
-                                        <span class="emp-team">${row.position}</span>
+                                    <div class="userimgname">
+                                        <a href="javascript:void(0);" class="product-img">
+                                            <img src="${avatarSrc}" alt="profile" loading="lazy">
+                                        </a>
+                                        <div>
+                                            <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
+                                            <span class="emp-team">${row.position}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            `;
+                                `;
                             } else {
                                 const colors = {
                                     A: 'bg-primary',
@@ -204,18 +204,18 @@
                                 const bgColor = colors[firstLetter] || 'bg-secondary';
 
                                 return `
-                                <div class="userimgname">
-                                    <a href="javascript:void(0);" class="product-img">
-                                        <span class="avatar ${bgColor} avatar-rounded">
-                                            <span class="avatar-title">${firstLetter}${lastLetter}</span>
-                                        </span>
-                                    </a>
-                                    <div>
-                                        <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
-                                        <span class="emp-team">${row.position}</span>
+                                    <div class="userimgname">
+                                        <a href="javascript:void(0);" class="product-img">
+                                            <span class="avatar ${bgColor} avatar-rounded">
+                                                <span class="avatar-title">${firstLetter}${lastLetter}</span>
+                                            </span>
+                                        </a>
+                                        <div>
+                                            <a href="javascript:void(0);">${row.first_name} ${row.middle_name ? `${row.middle_name} ` : ""}${row.last_name}</a>
+                                            <span class="emp-team">${row.position}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            `;
+                                `;
                             }
                         }
                     },
@@ -253,12 +253,15 @@
                         "data": null,
                         "render": function (data, type, row) {
                             return `
-                            <div class="edit-delete-action">
-                                <a class="me-2 p-2 edit-employee" data-employeeid="${row.employee_id}">
-                                    <i data-feather="edit" class="feather-edit"></i>
-                                </a>
-                            </div>
-                        `;
+                                <div class="edit-delete-action">
+                                    <a class="me-2 p-2 edit-employee" data-employeeid="${row.employee_id}">
+                                        <i data-feather="edit" class="feather-edit"></i>
+                                    </a>
+                                    <a class="me-2 p-2 view-employee" data-employeeid="${row.employee_id}" >
+                                        <i data-feather="eye" class="feather-eye"></i>
+                                    </a>
+                                </div>
+                            `;
                         }
                     }
                     ],
