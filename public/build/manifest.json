@@ -14,9 +14,29 @@
     "isEntry": true
   },
   "resources/assets/css/flaticon.css": {
-    "file": "assets/flaticon-Dt5WWPtI.css",
+    "file": "assets/flaticon-MPfQHsvU.css",
     "src": "resources/assets/css/flaticon.css",
     "isEntry": true
+  },
+  "resources/assets/css/fonts/Flaticon.eot": {
+    "file": "assets/Flaticon-DUgmTsL1.eot",
+    "src": "resources/assets/css/fonts/Flaticon.eot"
+  },
+  "resources/assets/css/fonts/Flaticon.svg": {
+    "file": "assets/Flaticon-DLEEVSfq.svg",
+    "src": "resources/assets/css/fonts/Flaticon.svg"
+  },
+  "resources/assets/css/fonts/Flaticon.ttf": {
+    "file": "assets/Flaticon-Dxx-VFle.ttf",
+    "src": "resources/assets/css/fonts/Flaticon.ttf"
+  },
+  "resources/assets/css/fonts/Flaticon.woff": {
+    "file": "assets/Flaticon-BUpyw5tC.woff",
+    "src": "resources/assets/css/fonts/Flaticon.woff"
+  },
+  "resources/assets/css/fonts/Flaticon.woff2": {
+    "file": "assets/Flaticon-DIQgJB5g.woff2",
+    "src": "resources/assets/css/fonts/Flaticon.woff2"
   },
   "resources/assets/css/main.css": {
     "file": "assets/main-7OeGwgoU.css",
@@ -282,7 +302,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-avuPrB9W.css",
+    "file": "assets/app-3dc0z7Za.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
