@@ -17,4 +17,9 @@ class JobOffer extends Model
     {
         return $this->belongsTo(Employer::class, 'employer_id');
     }
+
+    public function applications()
+    {
+        return $this->hasMany(ApplicationForm::class, 'job_id');
+    }
 }

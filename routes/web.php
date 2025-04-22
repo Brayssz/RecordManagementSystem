@@ -18,9 +18,7 @@ use App\Http\Controllers\Content\ReportController;
 use App\Http\Controllers\Content\TextractController;
 use App\Http\Controllers\Content\DocumentRequestController;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [AppController::class, 'getFeaturedJobs']);
 
 Route::middleware(['employee'])->group(function () {
     Route::get('/applicant-documents', [DocumentController::class, 'showApplicantDocuments'])->name('applicant-documents');
@@ -133,3 +131,5 @@ Route::get('/ocr-upload', function () {
 });
 
 Route::post('/ocr', [TextractController::class, 'processImage']);
+
+Route::get('/test', [AppController::class, 'getFeaturedJobs'])->name('test');

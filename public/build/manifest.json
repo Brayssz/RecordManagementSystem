@@ -13,9 +13,29 @@
     "src": "resources/assets/css/applicant-sidebar.css",
     "isEntry": true
   },
+  "resources/assets/css/flaticon.css": {
+    "file": "assets/flaticon-Dt5WWPtI.css",
+    "src": "resources/assets/css/flaticon.css",
+    "isEntry": true
+  },
+  "resources/assets/css/main.css": {
+    "file": "assets/main-7OeGwgoU.css",
+    "src": "resources/assets/css/main.css",
+    "isEntry": true
+  },
+  "resources/assets/css/price_rangs.css": {
+    "file": "assets/price_rangs-DRq_8mTk.css",
+    "src": "resources/assets/css/price_rangs.css",
+    "isEntry": true
+  },
   "resources/assets/css/sidebar.css": {
     "file": "assets/sidebar-Cb-l3zIO.css",
     "src": "resources/assets/css/sidebar.css",
+    "isEntry": true
+  },
+  "resources/assets/css/slicknav.css": {
+    "file": "assets/slicknav-Cybe0854.css",
+    "src": "resources/assets/css/slicknav.css",
     "isEntry": true
   },
   "resources/assets/css/style.css": {
@@ -81,6 +101,12 @@
     "src": "resources/assets/js/chart-data.js",
     "isEntry": true
   },
+  "resources/assets/js/contact.js": {
+    "file": "assets/contact-5G6seS13.js",
+    "name": "contact",
+    "src": "resources/assets/js/contact.js",
+    "isEntry": true
+  },
   "resources/assets/js/custom-select2.js": {
     "file": "assets/custom-select2-CP0N5BcD.js",
     "name": "custom-select2",
@@ -141,6 +167,12 @@
     "src": "resources/assets/js/jquery.maskedinput.min.js",
     "isEntry": true
   },
+  "resources/assets/js/jquery.scrollUp.min.js": {
+    "file": "assets/jquery.scrollUp.min-DUHaThVc.js",
+    "name": "jquery.scrollUp.min",
+    "src": "resources/assets/js/jquery.scrollUp.min.js",
+    "isEntry": true
+  },
   "resources/assets/js/jquery.slimscroll.min.js": {
     "file": "assets/jquery.slimscroll.min-yPAKQZ2W.js",
     "name": "jquery.slimscroll.min",
@@ -165,6 +197,18 @@
     "src": "resources/assets/js/leaflet.js",
     "isEntry": true
   },
+  "resources/assets/js/mail-script.js": {
+    "file": "assets/mail-script-nQuP9mW_.js",
+    "name": "mail-script",
+    "src": "resources/assets/js/mail-script.js",
+    "isEntry": true
+  },
+  "resources/assets/js/main.js": {
+    "file": "assets/main-B1_DFqqz.js",
+    "name": "main",
+    "src": "resources/assets/js/main.js",
+    "isEntry": true
+  },
   "resources/assets/js/mask.js": {
     "file": "assets/mask-DribkbRa.js",
     "name": "mask",
@@ -181,6 +225,18 @@
     "file": "assets/moment.min-1SyU7vT8.js",
     "name": "moment.min",
     "src": "resources/assets/js/moment.min.js",
+    "isEntry": true
+  },
+  "resources/assets/js/plugins.js": {
+    "file": "assets/plugins-t6-e9t-m.js",
+    "name": "plugins",
+    "src": "resources/assets/js/plugins.js",
+    "isEntry": true
+  },
+  "resources/assets/js/price_rangs.js": {
+    "file": "assets/price_rangs-LxDCIh6S.js",
+    "name": "price_rangs",
+    "src": "resources/assets/js/price_rangs.js",
     "isEntry": true
   },
   "resources/assets/js/ratings.js": {
@@ -226,7 +282,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-CDsLwc-E.css",
+    "file": "assets/app-avuPrB9W.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },

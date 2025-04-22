@@ -173,6 +173,18 @@ class AppController extends Controller
             'hired' => $hiredData,
             'deployed' => $deployedData,
         ]);
+    }7n
+
+    public function getFeaturedJobs()
+    {
+        $featuredJobs = JobOffer::where('status', 'Active')
+            ->withCount('applications')
+            ->orderBy('applications_count', 'desc')
+            ->with('employer')
+            ->take(10)
+            ->get();
+
+        return view('content.home', compact('featuredJobs'));
     }
 
     public function showCapture(Request $request)
