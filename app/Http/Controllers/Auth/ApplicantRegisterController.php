@@ -8,16 +8,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Utils\JsonUtil;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use App\Notifications\ApplicantEmailVerification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicantRegisterController extends Controller
 {
     public function showRegistrationForm()
     {
         $jsonResponse = JsonUtil::getJsonFromPublic('location.json');
-        $locationData = $jsonResponse->getData(true); 
+        $locationData = $jsonResponse->getData(true);
 
         // return($locationData);
-    
+
         return view('auth.applicant-registration', compact('locationData'));
     }
 
@@ -47,29 +52,49 @@ class ApplicantRegisterController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $applicant = Applicant::create([
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'gender' => $request->gender,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'contact_number' => $request->contact_number,
-            'date_of_birth' => $request->date_of_birth,
-            'region' => $request->region,
-            'province' => $request->province,
-            'municipality' => $request->municipality,
-            'barangay' => $request->barangay,
-            'street' => $request->street,
-            'postal_code' => $request->postal_code,
-            'citizenship' => $request->citizenship,
+        $token = Str::uuid()->toString();
+        Cache::put('applicant_register_' . $token, $request->all(), now()->addMinutes(30));
+
+        $verificationUrl = route('applicant.verify.email', ['token' => $token]);
+
+        Notification::route('mail', $request->email)
+            ->notify(new ApplicantEmailVerification($verificationUrl));
+
+        return view('auth.check-your-email');
+        
+    }
+
+    public function verifyEmail($token)
+    {
+        $data = Cache::get('applicant_register_' . $token);
+
+        if (!$data) {
+            return redirect()->route('login')->with('error', 'Verification link expired or invalid.');
+        }
+
+        // Create applicant
+        $user = Applicant::create([
+            'first_name' => $data['first_name'],
+            'middle_name' => $data['middle_name'],
+            'last_name' => $data['last_name'],
+            'gender' => $data['gender'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'contact_number' => $data['contact_number'],
+            'date_of_birth' => $data['date_of_birth'],
+            'region' => $data['region'],
+            'province' => $data['province'],
+            'municipality' => $data['municipality'],
+            'barangay' => $data['barangay'],
+            'street' => $data['street'],
+            'postal_code' => $data['postal_code'],
+            'citizenship' => $data['citizenship'],
             'status' => 'Active',
-            'marital_status' => $request->marital_status,
+            'marital_status' => $data['marital_status'],
         ]);
 
-        // Optionally, log the user in after registration
-        // Auth::login($applicant);
+        Cache::forget('applicant_register_' . $token);
 
-        return redirect()->route('login')->with('success', 'Registration successful. Please log in.');
+        return view('auth.verified');
     }
 }

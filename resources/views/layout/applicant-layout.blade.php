@@ -110,7 +110,7 @@
                     <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
                         <span class="user-info">
                             <span class="user-letter">
-                                @if ($user->profile_photo_path != null)
+                                @if ($user && $user->profile_photo_path != null)
                                     <img src="{{ $profilePhoto }}" alt="" class="img-fluid" />
                                 @else
                                     <span class="avatar avatar bg-success h-100">

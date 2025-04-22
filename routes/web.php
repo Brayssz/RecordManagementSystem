@@ -132,4 +132,10 @@ Route::get('/ocr-upload', function () {
 
 Route::post('/ocr', [TextractController::class, 'processImage']);
 
-Route::get('/test', [AppController::class, 'getFeaturedJobs'])->name('test');
+Route::get('/applicant/verify/{token}', [ApplicantRegisterController::class, 'verifyEmail'])->name('applicant.verify.email');
+
+
+
+Route::get('/test', function () {
+    return view('auth.verified');
+});
