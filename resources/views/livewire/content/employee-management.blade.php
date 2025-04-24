@@ -211,7 +211,7 @@
                                                                 @if (Auth::user()->position != 'Manager')
                                                                     <option value="Admin">Admin</option>
                                                                 @endif
-                                                                {{-- <option value="Manager">Branch Manager</option> --}}
+                                                                <option value="Manager">Branch Manager</option>
                                                                 <option value="Clerk">Branch Clerk</option>
                                                             </select>
                                                         </div>
