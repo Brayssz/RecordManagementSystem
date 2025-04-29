@@ -278,7 +278,7 @@ class ReportController extends Controller
                 $query->whereBetween('interview_date', [$startDate, $endDate]);
             }
 
-            $interviews = $query->get();
+            $interviews = $query->whereNotNull('employer_id')->get();
 
             $report = [];
             $totalRecords = 0;
