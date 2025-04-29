@@ -216,6 +216,10 @@ class ReportController extends Controller
                 });
             }
 
+            $query->whereHas('branchInterview', function ($q) {
+                $q->whereNotNull('branch_id');
+            });
+
             $applications = $query->get();
 
             $report = [];
