@@ -208,7 +208,7 @@ class PDFController extends Controller
                 $q->whereBetween('created_at', [$startDate, $endDate]);
             });
         }
-        
+
         $query->whereHas('branchInterview', function ($q) {
             $q->whereNotNull('branch_id');
         });
@@ -241,7 +241,7 @@ class PDFController extends Controller
 
     public function showEmployerInterviewReport(Request $request)
     {
-        $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer');
+        $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer')->whereNotNull('employer_id');
 
         $branch = null;
         if ($request->filled('branch_id')) {
@@ -260,6 +260,8 @@ class PDFController extends Controller
             $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
             $query->whereBetween('interview_date', [$startDate, $endDate]);
         }
+
+        
 
         $interviews = $query->get();
 
