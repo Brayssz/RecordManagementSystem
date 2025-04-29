@@ -208,6 +208,10 @@ class PDFController extends Controller
                 $q->whereBetween('created_at', [$startDate, $endDate]);
             });
         }
+        
+        $query->whereHas('branchInterview', function ($q) {
+            $q->whereNotNull('branch_id');
+        });
 
         $applications = $query->get();
 
