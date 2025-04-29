@@ -241,7 +241,7 @@ class PDFController extends Controller
 
     public function showEmployerInterviewReport(Request $request)
     {
-        $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer')->whereNotNull('employer_id');
+        $query = EmployerInterview::query()->with('application.applicant', 'application.branch', 'application.job', 'application.hiring', 'employer');
 
         $branch = null;
         if ($request->filled('branch_id')) {
@@ -263,7 +263,7 @@ class PDFController extends Controller
 
         
 
-        $interviews = $query->get();
+        $interviews = $query->whereNotNull('employer_id')->get();
 
         $report = [];
 
