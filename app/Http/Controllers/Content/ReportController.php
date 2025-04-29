@@ -295,7 +295,6 @@ class ReportController extends Controller
                     'interview_date' => $interview->interview_date,
                     'interviewer' => $employer->first_name . ' ' . ($employer->middle_name ? substr($employer->middle_name, 0, 1) . '. ' : '') . $employer->last_name,
                     'remarks' => $interview->remarks,
-                    'referral_code' => $application->hiring? $application->hiring->confirmation_code : 'N/A',
                 ];
 
                 $totalRecords++;
