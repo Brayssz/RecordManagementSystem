@@ -733,7 +733,7 @@
                         const allowedDates = {};
                         const tooltips = {};
 
-                        schedules.forEach(schedule => {
+                        Object.values(schedules).forEach(schedule => {
                             const dateKey = schedule.interview_date.split(' ')[0];
                             allowedDates[dateKey] = schedule.schedule_id;
 

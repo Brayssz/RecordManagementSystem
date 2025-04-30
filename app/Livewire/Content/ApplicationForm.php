@@ -446,7 +446,7 @@ class ApplicationForm extends Component
             $employee->notify(new NewApplicationNotification($application->application_id));
         }
     }
-    
+
     public function getSchedules()
     {
         return BranchSchedule::whereDate('interview_date', '>=', Carbon::now('Asia/Manila'))
