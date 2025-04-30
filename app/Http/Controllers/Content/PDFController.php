@@ -260,9 +260,6 @@ class PDFController extends Controller
             $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
             $query->whereBetween('interview_date', [$startDate, $endDate]);
         }
-
-        
-
         $interviews = $query->whereNotNull('employer_id')->get();
 
         $report = [];
