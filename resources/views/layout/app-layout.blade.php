@@ -141,9 +141,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="topnav-dropdown-footer">
-                                <a href="activities.html">View all Notifications</a>
-                            </div>
+                          
                         </div>
                     </li>
                     <!-- /Notifications -->
