@@ -8,6 +8,8 @@ use App\Models\Hiring;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\HireApplicant as HireApplicantNotification;
+use App\Notifications\HiredApplicantBranchNotification;
+use App\Models\Employee;
 
 class HireApplicant extends Component
 {
@@ -22,9 +24,24 @@ class HireApplicant extends Component
         session()->flash('message', 'Application approved.');
 
         $this->hiring();
+        $this->sendHiredNotification();
         $this->sendHiredEmail();
 
         return redirect()->route('hire-applicants');
+    }
+
+
+    public function sendHiredNotification()
+    {
+        $application = ApplicationForm::with('applicant')->find($this->application_id);
+
+        $branch_managers = Employee::where('branch_id', $application->branch_id)
+            ->where('position', 'Manager')
+            ->get();
+
+        foreach ($branch_managers as $manager) {
+            $manager->notify(new HiredApplicantBranchNotification($this->application_id));
+        }
     }
 
     public function sendHiredEmail()

@@ -24,7 +24,7 @@
                             return false;
                         }
 
-                        var type = notification.data.type === "Approved" ? "Approved" : notification.data
+                        var type = notification.data.type === "HireApplicant" ? "Approved" : notification.data
                             .type === "Rejected" ? "Rejected" : notification.data.type === "NewApplication" ? "Info" :
                             "Info";
 

@@ -106,7 +106,7 @@ class EmployeeManagement extends Component
                 Rule::unique('applicants', 'contact_number'),
                 Rule::unique('employers', 'contact_number'),
             ],
-            'date_of_birth' => 'required|date|before:today',
+            'date_of_birth' => 'required|date|before:today|after_or_equal:' . now()->subYears(60)->toDateString() . '|before_or_equal:' . now()->subYears(15)->toDateString(),
             'gender' => 'required|in:Male,Female,Others',
             'region' => 'required|string|max:255',
             'province' => 'required|string|max:255',

@@ -47,9 +47,15 @@
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="country">Country</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Enter country" id="country"
-                                                        wire:model.lazy="country">
+                                                    <div wire:ignore>
+                                                        <select class="select" id="country" name="country"
+                                                            wire:model="country">
+                                                            <option value="">Choose</option>
+                                                            @foreach ($countries as $country)
+                                                                <option value="{{ $country }}">{{ $country }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                     @error('country')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror

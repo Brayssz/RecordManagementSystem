@@ -65,7 +65,7 @@ Route::get('/verification', [LoginController::class, 'showVerification'])->name(
 Route::get('/email-verification', [PasswordResetController::class, 'showEmailVerification'])->name('email-verification');
 Route::get('/reset-password', [PasswordResetController::class, 'showPasswordReset'])->name('reset-password');
 
-Route::get('/dashboard', [AppController::class, 'showDashboard'])->name('dashboard')->name('dashboard');
+Route::get('/dashboard', [AppController::class, 'showDashboard'])->name('dashboard');
 
 Route::get('/register', [ApplicantRegisterController::class, 'showRegistrationForm'])->name('register');
 

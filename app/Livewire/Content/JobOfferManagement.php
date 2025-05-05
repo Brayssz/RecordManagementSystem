@@ -25,6 +25,8 @@ class JobOfferManagement extends Component
 
     public $employers;
 
+    public $countries = [];
+
     public function getEmployers()
     {
         $this->employers = Employer::where('status', 'Active')->get();
@@ -107,6 +109,59 @@ class JobOfferManagement extends Component
             'employer_id', 'country', 'job_title', 'range_from', 'range_to', 
             'job_description', 'status', 'job_id', 'job_qualifications', 'available_slots'
         ]);
+    }
+
+    public function mount()
+    {
+        $this->countries = [
+            // Middle East
+            "Saudi Arabia",
+            "United Arab Emirates (UAE)",
+            "Qatar",
+            "Kuwait",
+            "Bahrain",
+            "Oman",
+            "Jordan",
+            "Israel",
+        
+            // Asia
+            "Singapore",
+            "Hong Kong",
+            "Japan",
+            "Taiwan",
+            "Malaysia",
+            "South Korea",
+            "Brunei",
+        
+            // Europe
+            "United Kingdom (UK)",
+            "Italy",
+            "Germany",
+            "Poland",
+            "Czech Republic",
+            "Malta",
+            "Cyprus",
+        
+            // North America
+            "Canada",
+            "United States",
+        
+            // Oceania
+            "Australia",
+            "New Zealand",
+            "Papua New Guinea",
+        
+            // Africa
+            "Libya",
+            "Mauritius",
+            "Morocco",
+            "Algeria",
+        
+            // Caribbean
+            "Turks and Caicos Islands",
+            "Cayman Islands"
+        ];
+        
     }
 
     public function submit_job_offer()

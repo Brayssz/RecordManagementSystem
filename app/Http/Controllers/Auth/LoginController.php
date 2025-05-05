@@ -24,28 +24,37 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
+
         $user = $this->getUser($request->email);
-    
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return back()->withErrors(['message' => 'Invalid credentials']);
         }
-    
+
+        // Check if the device is already verified
+        $deviceKey = 'device_' . md5($request->ip() . $request->userAgent());
+        if (Session::has($deviceKey) && Session::get($deviceKey) === $user->email) {
+            session(['auth_user_type' => $user->user_type]);
+            Auth::guard($user->user_type)->login($user);
+            return redirect()->route('dashboard');
+        }
+
         $otp = mt_rand(100000, 999999);
         unset($user->user_type);
         $user->two_factor_code = $otp;
         $user->two_factor_expires_at = Carbon::now()->addMinutes(5);
-        $user->save(); 
-    
+        $user->save();
+
         Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
             $message->to($request->email)->subject('Your OTP Code');
         });
 
         Session::put('verification_email', $user->email);
-    
-        return redirect()->route('verification')->with('success', 'Login successful!');
+
+        return redirect()->route('verification')->with('success', 'OTP sent to your email!');
     }
-    
+
+
     
     public function showVerification()
     {
@@ -101,6 +110,9 @@ class LoginController extends Controller
         Auth::guard($user->user_type)->login($user);
 
         Session::forget('verification_email');
+
+        $deviceKey = 'device_' . md5($request->ip() . $request->userAgent());
+        Session::put($deviceKey, $user->email);
 
         unset($user->user_type);
         $user->two_factor_code = null;
