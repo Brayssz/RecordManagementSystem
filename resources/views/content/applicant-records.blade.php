@@ -94,6 +94,7 @@
                                 <th>NBI Clearance</th>
                                 <th>Medical Certificate</th>
                                 <th>Passport</th>
+                                <th>Others</th>
                                 <th>Status</th>
                                 <th class="no-sort">View</th>
                             </tr>
@@ -377,6 +378,17 @@
                         {
                             "data": null,
                             "render": function(data, type, row) {
+                                let submittedDocs = row.documents.map(doc => doc.document_type);
+                                if (checkDocsExist(submittedDocs, 'Others') === true) {
+                                    return `<span class="badge badge-linesuccess others" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">✓</span>`;
+                                } else {
+                                    return `<span class="badge badge-linedanger others" data-applicationid="${row.application_id}" data-isaccessible="${row.is_documents_accessible}">X</span>`;
+                                }
+                            }
+                        },
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
                                 if (row.status === "Pending") {
                                     return `<span class="badge badge-linewarning">Pending for Manager Interview</span>`;
                                 } else if (row.status === "Interviewed") {
@@ -430,7 +442,7 @@
                         }
                     ],
                     "createdRow": function(row, data, dataIndex) {
-                        $(row).find('td').eq(11).addClass('action-table-data');
+                        $(row).find('td').eq(12).addClass('action-table-data');
                     },
                     "initComplete": function(settings, json) {
                         $('.dataTables_filter').appendTo('#tableSearch');

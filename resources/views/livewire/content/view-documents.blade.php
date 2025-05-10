@@ -178,6 +178,19 @@
 
                 getDocumentPhoto(applicationId, "Valid ID");
             });
+
+            $(document).on('click', '.others', function() {
+                const applicationId = $(this).data('applicationid');
+                const isaccessible = $(this).data('isaccessible');
+                
+                if(isaccessible != true){
+                    messageAlert('Access Denied', 'You do not have access to this document.');
+                    return;
+                }
+                console.log('Valid ID:', applicationId);
+
+                getDocumentPhoto(applicationId, "Others");
+            });
         </script>
     @endpush
 </div>

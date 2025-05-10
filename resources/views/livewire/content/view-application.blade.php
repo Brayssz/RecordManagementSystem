@@ -197,6 +197,14 @@
                                                     wire:model.lazy="branch_schedule" readonly>
                                             </div>
                                         </div>
+
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="remarks">Remarks</label>
+                                                <textarea class="form-control" id="remarks" rows="3" 
+                                                    placeholder="No Available Remarks" wire:model.lazy="branch_remarks" readonly></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -222,6 +230,14 @@
                                                 <input type="branch" class="form-control"
                                                     placeholder="No Meeting Link" id="branch"
                                                     wire:model.lazy="meeting_link" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="employer_remarks">Remarks</label>
+                                                <textarea class="form-control" id="remarks" rows="3" 
+                                                    placeholder="No Available Remarks" wire:model.lazy="employer_remarks" readonly></textarea>
                                             </div>
                                         </div>
                                     </div>

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Services\TextractService;
+use Illuminate\Support\Facades\Route;
 use App\Models\Applicant;
 
 class SubmitDocuments extends Component
@@ -119,8 +120,9 @@ class SubmitDocuments extends Component
 
             $this->updateDocumentPhoto($uploadedFile, $this->application_id, $this->document_type);
         }
+        // dd(url()->current());
 
-        return redirect()->route('applicant-documents');
+        $this->js('window.location.reload()');
     }
 
     public function validateDocuments($photo)
@@ -386,7 +388,7 @@ class SubmitDocuments extends Component
             ],
             [
                 'file_name' => $photo->storeAs($storagePath, $fileName, ['disk' => $documentDisk]),
-                'employee_id' => Auth::guard("employee")->user()->employee_id,
+                'employee_id' => 1,
                 'upload_date' => now(),
                 'status' => 'Updated',
             ]

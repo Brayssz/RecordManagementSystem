@@ -31,7 +31,6 @@ class LoginController extends Controller
             return back()->withErrors(['message' => 'Invalid credentials']);
         }
 
-        // Check if the device is already verified
         $deviceKey = 'device_' . md5($request->ip() . $request->userAgent());
         if (Session::has($deviceKey) && Session::get($deviceKey) === $user->email) {
             session(['auth_user_type' => $user->user_type]);
@@ -45,9 +44,9 @@ class LoginController extends Controller
         $user->two_factor_expires_at = Carbon::now()->addMinutes(5);
         $user->save();
 
-        Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
-            $message->to($request->email)->subject('Your OTP Code');
-        });
+        // Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
+        //     $message->to($request->email)->subject('Your OTP Code');
+        // });
 
         Session::put('verification_email', $user->email);
 

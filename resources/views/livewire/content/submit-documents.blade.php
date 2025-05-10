@@ -196,6 +196,13 @@
                 getDocumentPhoto(applicationId, "Birth Certificate");
             });
 
+            $(document).on('click', '.others', function() {
+                const applicationId = $(this).data('applicationid');
+                console.log('Others:', applicationId);
+
+                getDocumentPhoto(applicationId, "Others");
+            });
+
             function getDocumentPhoto(application_id, document_type) {
                 @this.set('application_id', application_id);
                 @this.set('document_type', document_type);
