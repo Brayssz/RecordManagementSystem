@@ -51,6 +51,7 @@
                                 <th>Medical Certificate</th>
                                 <th>Passport</th>
                                 <th class="no-sort">Submit</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -260,14 +261,18 @@
                       
                         {
                             "data": null,
+                            "visible": @json(Auth::guard('employee')->user()->position === "Manager"),
                             "render": function(data, type, row) {
-                                return `
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2 submit-documents" data-applicationid="${row.application_id}">
-                                            <i data-feather="check" class="feather-check"></i>
-                                        </a>
-                                    </div>
-                                `;
+                                if (row.employee_position === "Manager") {
+                                    return `
+                                        <div class="edit-delete-action">
+                                            <a class="me-2 p-2 submit-documents" data-applicationid="${row.application_id}">
+                                                <i data-feather="check" class="feather-check"></i>
+                                            </a>
+                                        </div>
+                                    `;
+                                }
+                                return '';
                             }
                         }
                     ],

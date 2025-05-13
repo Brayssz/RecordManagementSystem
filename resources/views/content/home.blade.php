@@ -98,7 +98,7 @@
                
                 <div class="col-xl-10">
                     @foreach ($featuredJobs as $featuredJob)
-                        <div class="single-job-items mb-30 rounded-4 shadow-md">
+                        <div class="single-job-items mb-30 rounded-4 shadow-md position-relative" style="border: 1px solid #ddd;">
                             <div class="job-items">
                                 <div class="company-img">
                                     <a href="job_details.html">
@@ -114,13 +114,20 @@
                                         <li><i class="fas fa-map-marker-alt"></i>{{$featuredJob->country}}</li>
                                         <li>₱ {{$featuredJob->salary}}</li>
                                     </ul>
+                                    <p class="mt-2 text-muted">Available Slots: {{$featuredJob->available_slots}}</p>
                                 </div>
+                             
                             </div>
                             <div class="items-link f-right">
-                                <a href="job-offers">View All</a>
+                                <a href="job-offers">Apply Now</a>
                                 <span>{{ $featuredJob->created_at->diffForHumans() }}</span>
                             </div>
+                            <p class="mt-3 w-100">
+                                This position offers a unique opportunity to work in a dynamic and innovative environment, where your skills and expertise will be highly valued. As part of our team, you will have the chance to contribute to meaningful projects, collaborate with talented professionals, and grow your career in a supportive and inclusive workplace. We are committed to fostering a culture of excellence, creativity, and continuous learning, ensuring that every team member has the resources and encouragement needed to succeed. Join us and be a part of a company that is making a difference in the industry and beyond.
+                            </p>
                         </div>
+
+                      
                     @endforeach
                 </div>
             </div>

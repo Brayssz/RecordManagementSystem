@@ -54,6 +54,7 @@ class DocumentController extends Controller
             $applications = $query->skip($start)->take($length)->get();
 
             $applications->transform(function ($application) {
+                $application->employee_position = Auth::guard('employee')->user()->position ?? null;
                 return $application;
             });
 
