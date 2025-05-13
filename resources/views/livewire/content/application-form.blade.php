@@ -329,6 +329,10 @@
                                         <option value="PhilHealth ID">PhilHealth ID</option>
                                         <option value="Voter's ID">Voter's ID</option>
                                         <option value="National ID">National ID</option>
+                                        <option value="Philippine Passport">Philippine Passport</option>
+                                        <option value="Unified Multi-Purpose ID (UMID)">Unified Multi-Purpose ID (UMID)</option>
+                                        <option value="Professional Regulation Commission (PRC) ID">Professional Regulation Commission (PRC) ID</option>
+                                        <option value="Postal ID">Postal ID</option>
                                     </select>
                                     @error('valid_id_type')
                                         <span class="text-danger">{{ $message }}</span>

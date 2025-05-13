@@ -157,6 +157,10 @@ class ApplicationForm extends Component
             'PhilHealth ID' => ['philhealth id', 'philhealth'],
             'Voter\'s ID' => ['voter\'s id', 'voter', 'comelec'],
             'National ID' => ['national id', 'philippine identification', 'phil id', 'pambansang pagkakakilanlan'],
+            'Philippine Passport' => ['philippine passport', 'passport', 'pasaporte'],
+            'Unified Multi-Purpose ID (UMID)' => ['unified multi-purpose id', 'umid', 'multi-purpose id'],
+            'Professional Regulation Commission (PRC) ID' => ['prc id', 'professional regulation commission'],
+            'Postal ID' => ['postal id', 'postal'],
         ];
 
         $keywords = $idTypeKeywords[$this->valid_id_type] ?? [];
