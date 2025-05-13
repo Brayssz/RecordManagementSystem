@@ -21,7 +21,13 @@
                                 photoPreview: @entangle('photoPreview'),
                                 photoName: '',
                                 isUploading: false,
-                                progress: 0
+                                progress: 0,
+                                rotation: 0,
+                                rotateImage() {
+                                    this.rotation = (this.rotation + 90) % 360;
+                                    @this.set('rotation', this.rotation);
+                                },
+                                calculatedHeight: 300,
                             }" x-on:livewire-upload-start="isUploading = true"
                                 x-on:livewire-upload-finish="isUploading = false; progress = 100"
                                 x-on:livewire-upload-error="isUploading = false"
@@ -61,8 +67,27 @@
                                             <template x-if="photoPreview !== ''">
                                                 <li class="ps-0 w-100">
                                                     <div class="productviewset">
-                                                        <div class="productviewsimg d-flex justify-content-center" style="max-width: 100%;">
-                                                            <img :src="photoPreview" alt="img" class="rounded-3 mt-2">
+                                                        <div class="productviewsimg d-flex justify-content-center p-6"
+                                                            x-data="{ }" x-bind:style="{ height: calculatedHeight }" x-init="$watch('photoPreview', value => {
+                                                                console.log('Photo Preview:', value);
+                                                                if (value) {
+                                                                    const img = new Image();
+                                                                    img.src = value;
+                                                                    img.onload = () => {
+                                                                        const maxSize = Math.max(img.width, img.height);
+                                                                        calculatedHeight = `${maxSize + 150}px`; // Store height in reactive property
+                                                                        console.log('Image loaded:', img.width, img.height);
+                                                                    };
+                                                                }
+                                                            })"
+                                                            :style="{ height: calculatedHeight, maxWidth: '100%', padding: '0', overflow: 'hidden', position: 'relative' }" >
+                                                            <img :src="photoPreview" alt="img"
+                                                                class="rounded-3 mt-2"
+                                                                x-bind:style="`transform: rotate(${rotation}deg); max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(${rotation}deg); transform-origin: center center;`">
+                                                        </div>
+                                                        <div class="d-flex justify-content-center mt-2">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                x-on:click="rotateImage()">Rotate</button>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -87,7 +112,7 @@
                             <div class="modal-footer-btn mb-4 mt-0">
                                 <button type="button" class="btn btn-cancel me-2 "
                                     data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-submit save-document">Submit</button>
+                                <button type="submit" class="btn btn-submit save-document">Submit</button>
                             </div>
 
                         </form>
@@ -116,8 +141,10 @@
                     @this.set('photo', '');
                 } else {
                     Webcam.snap(function(data_uri) {
-                        console.log('Captured Image:', data_uri);
+                        // console.log('Captured Image:', data_uri);
                         @this.set('photoPreview', data_uri);
+
+                        console.log('Captured Image:', @this.get('photoPreview'));
                         @this.set('photo', data_uri);
                         @this.set('photo_upload', null);
                     });

@@ -44,9 +44,9 @@ class LoginController extends Controller
         $user->two_factor_expires_at = Carbon::now()->addMinutes(5);
         $user->save();
 
-        // Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
-        //     $message->to($request->email)->subject('Your OTP Code');
-        // });
+        Mail::raw("Your login OTP is: $otp", function ($message) use ($request) {
+            $message->to($request->email)->subject('Your OTP Code');
+        });
 
         Session::put('verification_email', $user->email);
 
@@ -93,13 +93,13 @@ class LoginController extends Controller
         $user = $this->getUser($email);
 
         
-        // if (!$user || $user->two_factor_code !== $request->otp) {
-        //     return response()->json(['message' => 'Invalid OTP' .  $email], 400);
-        // }
+        if (!$user || $user->two_factor_code !== $request->otp) {
+            return response()->json(['message' => 'Invalid OTP' .  $email], 400);
+        }
 
-        // if (Carbon::now()->gt($user->two_factor_expires_at)) {
-        //     return response()->json(['message' => 'OTP expired'], 400);
-        // }
+        if (Carbon::now()->gt($user->two_factor_expires_at)) {
+            return response()->json(['message' => 'OTP expired'], 400);
+        }
 
         
         // dd($user->user_type);

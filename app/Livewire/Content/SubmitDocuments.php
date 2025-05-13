@@ -26,6 +26,7 @@ class SubmitDocuments extends Component
     public $application_id;
     public $document_type;
     public $photoPreview;
+    public $rotation;
     public $message;
     public $required = ['Birth Certificate', 'Passport', 'Medical Certificate', 'NBI Clearance', 'Valid ID'];
     public $error = [];
@@ -88,7 +89,7 @@ class SubmitDocuments extends Component
             'photo_upload' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        if ($this->photo_upload == null && $this->photo == null) {
+        if ($this->photo_upload == null && $this->photo == null && $this->photoPreview == null) {
             throw ValidationException::withMessages([
                 'photo' => 'Please upload a photo or provide a valid photo.',
             ]);
@@ -100,10 +101,20 @@ class SubmitDocuments extends Component
                 $this->validateDocuments($this->photo_upload);
             }
 
-            $this->updateDocumentPhoto($this->photo_upload, $this->application_id, $this->document_type);
-        }
+            if ($this->rotation) {
+                $image = imagecreatefromstring(file_get_contents($this->photo_upload->getRealPath()));
+                $rotatedImage = imagerotate($image, -$this->rotation, 0);
+                $tempFilePath = tempnam(sys_get_temp_dir(), 'rotated_photo');
+                imagepng($rotatedImage, $tempFilePath);
+                imagedestroy($image);
+                imagedestroy($rotatedImage);
 
-        if ($this->photo != null) {
+                $rotatedFile = new UploadedFile($tempFilePath, $this->photo_upload->getClientOriginalName(), $this->photo_upload->getMimeType(), null, true);
+                $this->updateDocumentPhoto($rotatedFile, $this->application_id, $this->document_type);
+            } else {
+                $this->updateDocumentPhoto($this->photo_upload, $this->application_id, $this->document_type);
+            }
+        } else if ($this->photo != null) {
             $photo = $this->photo;
             $photo = str_replace('data:image/png;base64,', '', $photo);
             $photo = str_replace(' ', '+', $photo);
@@ -117,8 +128,38 @@ class SubmitDocuments extends Component
             if (in_array($this->document_type, ['Medical Certificate', 'NBI Clearance', 'Passport'])) {
                 $this->validateDocuments($uploadedFile);
             }
+          
 
-            $this->updateDocumentPhoto($uploadedFile, $this->application_id, $this->document_type);
+            if ($this->rotation) {
+                $image = imagecreatefromstring(file_get_contents($uploadedFile->getRealPath()));
+                $rotatedImage = imagerotate($image, -$this->rotation, 0);
+                $rotatedTempFilePath = tempnam(sys_get_temp_dir(), 'rotated_photo');
+                imagepng($rotatedImage, $rotatedTempFilePath);
+                imagedestroy($image);
+                imagedestroy($rotatedImage);
+
+                $rotatedFile = new UploadedFile($rotatedTempFilePath, $uploadedFile->getClientOriginalName(), $uploadedFile->getMimeType(), null, true);
+                $this->updateDocumentPhoto($rotatedFile, $this->application_id, $this->document_type);
+            } else {
+                $this->updateDocumentPhoto($uploadedFile, $this->application_id, $this->document_type);
+            }
+        } else {
+          
+            if ($this->rotation) {
+                $photoPath = str_replace(Storage::url(''), storage_path('app/public/'), $this->photoPreview);
+                $image = imagecreatefromstring(file_get_contents($photoPath));
+                $rotatedImage = imagerotate($image, -$this->rotation, 0); // Negate rotation for clockwise
+                $tempFilePath = tempnam(sys_get_temp_dir(), 'rotated_photo_preview');
+                imagepng($rotatedImage, $tempFilePath);
+                imagedestroy($image);
+                imagedestroy($rotatedImage);
+            
+                $rotatedFile = new UploadedFile($tempFilePath, 'rotated_photo_preview.png', 'image/png', null, true);
+                $this->updateDocumentPhoto($rotatedFile, $this->application_id, $this->document_type);
+            } else {
+                $photoPath = str_replace(Storage::url(''), storage_path('app/public/'), $this->photoPreview);
+                $this->updateDocumentPhoto(new UploadedFile($photoPath, basename($photoPath)), $this->application_id, $this->document_type);
+            }
         }
         // dd(url()->current());
 
