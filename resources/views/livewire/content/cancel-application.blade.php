@@ -22,7 +22,7 @@
                   } else {
                     confirmAlert("Cancel Application?", "Are you sure you want to cancel this application?", function() {
                       @this.call('cancelApplication');
-                    }, 'Cancel');
+                    }, 'Yes, I want to cancel it');
                   }
                 });
               }

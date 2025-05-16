@@ -94,6 +94,7 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -283,9 +284,51 @@
                             "data": null,
                             "render": function(data, type, row) {
                                 if (row.employer_interview && row.employer_interview.interview_time) {
-                                    const startTime = moment(row.employer_interview.interview_time, 'HH:mm:ss');
+                                    const timezones = {
+                                        "Saudi Arabia": "Asia/Riyadh",
+                                        "United Arab Emirates (UAE)": "Asia/Dubai",
+                                        "Qatar": "Asia/Qatar",
+                                        "Kuwait": "Asia/Kuwait",
+                                        "Bahrain": "Asia/Bahrain",
+                                        "Oman": "Asia/Muscat",
+                                        "Jordan": "Asia/Amman",
+                                        "Israel": "Asia/Jerusalem",
+                                        "Singapore": "Asia/Singapore",
+                                        "Hong Kong": "Asia/Hong_Kong",
+                                        "Japan": "Asia/Tokyo",
+                                        "Taiwan": "Asia/Taipei",
+                                        "Malaysia": "Asia/Kuala_Lumpur",
+                                        "South Korea": "Asia/Seoul",
+                                        "Brunei": "Asia/Brunei",
+                                        "United Kingdom (UK)": "Europe/London",
+                                        "Italy": "Europe/Rome",
+                                        "Germany": "Europe/Berlin",
+                                        "Poland": "Europe/Warsaw",
+                                        "Czech Republic": "Europe/Prague",
+                                        "Malta": "Europe/Malta",
+                                        "Cyprus": "Asia/Nicosia",
+                                        "Canada": "America/Toronto",
+                                        "United States": "America/New_York",
+                                        "Australia": "Australia/Sydney",
+                                        "New Zealand": "Pacific/Auckland",
+                                        "Papua New Guinea": "Pacific/Port_Moresby",
+                                        "Libya": "Africa/Tripoli",
+                                        "Mauritius": "Indian/Mauritius",
+                                        "Morocco": "Africa/Casablanca",
+                                        "Algeria": "Africa/Algiers",
+                                        "Turks and Caicos Islands": "America/Grand_Turk",
+                                        "Cayman Islands": "America/Cayman"
+                                    };
+
+                                    const country = row.job.country;
+                                    const timezone = timezones[country] || "Asia/Manila";
+
+                                    const today = moment().format('YYYY-MM-DD');
+                                    const interviewDateTime = `${today} ${row.employer_interview.interview_time}`;
+                                    const startTime = moment(interviewDateTime).tz(timezone);
                                     const endTime = startTime.clone().add(1, 'hour').add(30, 'minutes');
-                                    return `${startTime.format('h:mm A')} - ${endTime.format('h:mm A')}`;
+
+                                    return `${startTime.format('h:mm A')} - ${endTime.format('h:mm A')} (${timezone})`;
                                 } else {
                                     return '<span class="text-muted">No time set</span>';
                                 }
